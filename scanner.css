@@ -49,6 +49,15 @@ button.scan-step-item:hover { color: var(--offwhite); }
 .scanner-steps .is-current .scan-step-item::before { content: ""; position: absolute; left: -16px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--cobalt); box-shadow: 0 0 10px rgba(30, 79, 255, .9); }
 .scanner-privacy { margin-top: var(--space-4); display: flex; gap: 10px; max-width: 30em; font-size: 13px; line-height: 1.55; color: var(--slate-light); }
 .scanner-privacy .ico { margin-top: 2px; color: var(--cobalt-soft); }
+.scanner-details { margin-top: 14px; max-width: 30em; font-size: 13px; line-height: 1.55; color: var(--slate-light); }
+.scanner-details summary { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding-left: 26px; font-weight: 600; color: rgba(250, 250, 248, .78); list-style: none; }
+.scanner-details summary::-webkit-details-marker { display: none; }
+.scanner-details summary::after { content: ""; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: translateY(-2px) rotate(45deg); transition: transform .3s var(--ease); }
+.scanner-details[open] summary::after { transform: translateY(1px) rotate(-135deg); }
+.scanner-details summary:hover { color: var(--offwhite); }
+.scanner-details ul { margin-top: 8px; padding-left: 26px; display: grid; gap: 8px; }
+.scanner-details li { position: relative; padding-left: 14px; }
+.scanner-details li::before { content: ""; position: absolute; left: 0; top: .72em; width: 6px; height: 1px; background: var(--cobalt-soft); }
 
 .scanner-panel { position: relative; align-self: start; background: var(--graphite-2); border: 1px solid var(--line-dark); border-radius: 3px; padding: clamp(24px, 4vw, 56px); min-height: 420px; }
 .scanner-meter { position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; background: rgba(250, 250, 248, .08); overflow: hidden; }

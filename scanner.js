@@ -66,6 +66,7 @@
   let report = null;
   let busy = false;
   let started = false;
+  let showingReport = false;
 
   const draft = storage.read();
   if (draft && draft.answers) {
@@ -74,7 +75,7 @@
     furthest = Math.min(Math.max(step, draft.furthest | 0), QUESTIONS.length - 1);
     skipped = new Set(Array.isArray(draft.skipped) ? draft.skipped : []);
   }
-  const save = () => storage.write({ answers, step, furthest, skipped: [...skipped] });
+  const save = () => storage.write({ answers, step, furthest, skipped: [...skipped], showReport: showingReport });
 
   /* ---------- Questionnaire ---------- */
   const steps = $('scanSteps');
@@ -322,7 +323,7 @@
     const more = el('div', 'op-more');
     more.id = `op-more-${o.id}`;
     more.appendChild(block('How it would work', list('ol', o.how, 'op-list op-list-num')));
-    more.appendChild(block('Expected benefits', [list('ul', o.benefits, 'op-list'), el('p', 'op-fine', 'Described qualitatively. No savings or returns were estimated, because the scan does not collect financial inputs.')]));
+    more.appendChild(block('Possible benefits to validate', [list('ul', o.benefits, 'op-list'), el('p', 'op-fine', 'These are outcomes to test with the first experiment, not measured results. No savings or returns were estimated, because the scan does not collect financial inputs.')]));
 
     const meter = el('div', 'meter');
     meter.dataset.level = o.complexity.level;
@@ -490,7 +491,13 @@
     const selfBody = [r.headline, '', ...r.opportunities.map(o => `${o.rank}. ${o.title}\n   First experiment: ${o.experiment}`), '', `Full report: ${shareUrl()}`].join('\n');
     $('saveEmail').href = mailto('', 'My AI Business Opportunity report', selfBody);
 
-    try { history.replaceState(null, '', `#r=${engine.encodeAnswers(r.answers)}`); } catch (e) { /* file:// or sandboxed */ }
+    // Answers never stay in the address bar, so page analytics cannot record them.
+    // The draft (with showReport) keeps the report across a reload of this tab.
+    if (location.hash) {
+      try { history.replaceState(null, '', location.pathname); } catch (e) { /* file:// or sandboxed */ }
+    }
+    showingReport = true;
+    save();
     scanner.hidden = true;
     reportSection.hidden = false;
     window.scrollTo(0, 0);
@@ -540,6 +547,7 @@
     }
     step = 0;
     report = null;
+    showingReport = false;
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* ignore */ }
     reportSection.hidden = true;
     scanner.hidden = false;
@@ -572,6 +580,13 @@
     } catch (error) {
       track('error', { stage: 'link' });
       showFail('This report link could not be opened.', `${error.message} You can start a new scan; it takes about two minutes.`, false);
+    }
+  } else if (draft && draft.showReport) {
+    try {
+      report = engine.generateReport(answers);
+      showReport(false);
+    } catch (error) {
+      renderStep(false);
     }
   } else {
     renderStep(false);

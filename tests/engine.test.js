@@ -91,7 +91,36 @@ test('recommendations are labelled as generated, not verified', () => {
   assert.match(r.method, /rule-based/i);
   assert.match(r.method, /No AI model, market research/);
   assert.match(r.limits, /not verified analysis/);
-  assert.match(r.limits, /not a guaranteed outcome|Nothing here is a guaranteed outcome/);
+  assert.match(r.limits, /nothing here is a guaranteed outcome/i);
+});
+
+test('benefits are framed as possible outcomes, not typical or proven results', () => {
+  E.LIBRARY.forEach(o => {
+    o.benefits.forEach(b => {
+      assert.match(b, /^(Could|Would|Keeps|Lets)\b/, `${o.id}: ${b}`);
+      assert.ok(!/\b(typically|typical|proven|always|guarantee)/i.test(b), `${o.id}: ${b}`);
+    });
+    const text = JSON.stringify(o);
+    assert.ok(!/\b(typically|proven|mature|most needs|will go back)\b/i.test(text), `${o.id} uses certain or typical wording`);
+  });
+});
+
+test('every opportunity states costs and dependencies, and AI options require human review', () => {
+  E.LIBRARY.forEach(o => {
+    const deps = o.dependencies.join(' ');
+    assert.ok(o.dependencies.length >= 3, o.id);
+    assert.match(deps, /cost|subscription|budget|software|tool|platform/i, `${o.id} names something that costs money`);
+    if (o.kind === 'AI') assert.match(`${deps} ${o.risks.join(' ')} ${o.how.join(' ')}`, /review|person|human/i, `${o.id} needs human review`);
+  });
+});
+
+test('report explains it ranks a fixed library from the visitor\'s answers and may miss opportunities', () => {
+  const r = E.generateReport(base);
+  assert.match(r.method, new RegExp(`fixed library of ${E.LIBRARY.length}`));
+  assert.match(r.method, /against the answers you gave/);
+  assert.match(r.limits, /may miss opportunities/);
+  assert.match(r.limits, /possible outcomes to test, not measured results/);
+  assert.match(r.limits, /human review/);
 });
 
 test('report generation is deterministic', () => {
@@ -166,6 +195,6 @@ test('matchBrief returns related items and sanitises links', () => {
 
 test('plain-text export contains every report section', () => {
   const text = E.toPlainText(E.generateReport({ ...base, context: 'notes here' }, { now: NOW }));
-  ['ABOUT THIS REPORT', 'YOUR ANSWERS', 'Why this was selected', 'Problem:', 'Proposed solution:', 'Expected benefits', 'Implementation complexity', 'Dependencies', 'Risks and limitations', 'Suggested first experiment', 'Indicative sequence', 'INDICATIVE PLAN', 'Notes: notes here']
+  ['ABOUT THIS REPORT', 'YOUR ANSWERS', 'Why this was selected', 'Problem:', 'Proposed solution:', 'Possible benefits to validate', 'Implementation complexity', 'Dependencies', 'Risks and limitations', 'Suggested first experiment', 'Indicative sequence', 'INDICATIVE PLAN', 'Notes: notes here']
     .forEach(s => assert.ok(text.includes(s), s));
 });

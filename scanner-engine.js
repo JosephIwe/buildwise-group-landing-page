@@ -151,10 +151,10 @@
         'Follow-ups are scheduled until the lead replies or is closed.',
         'Everyone can see the status of each lead.'
       ],
-      benefits: ['Faster first replies to new {customers}', 'Fewer leads lost to forgotten follow-ups', 'A clearer picture of where enquiries come from and what happens to them'],
+      benefits: ['Could shorten the time new {customers} wait for a first reply', 'Could reduce leads lost to forgotten follow-ups', 'Could give a clearer picture of where enquiries come from and what happens to them'],
       complexity: { level: 'medium', why: 'It uses standard tools, but your lead sources need connecting and reply templates need agreeing.', easierWith: ['crm'] },
       integrates: true, digital: true,
-      dependencies: ['One place to hold leads (a CRM or a well-structured spreadsheet)', 'Access to the channels enquiries arrive through', 'Agreed reply templates and a named owner for each lead'],
+      dependencies: ['One place to hold leads (a CRM or a well-structured spreadsheet)', 'Access to the channels enquiries arrive through', 'Agreed reply templates and a named owner for each lead', 'A person to review AI-drafted replies, and an AI model provider whose cost grows with usage'],
       risks: ['Generic automated replies can put people off, so keep a person reviewing drafts at first', 'Enquiries contain personal data that must be handled in line with privacy law, such as UK GDPR', 'Too many follow-ups annoy people, so set sensible limits'],
       experiment: 'For two weeks, route every new enquiry from one channel into a single list and send a drafted first reply within the hour. Compare reply times before and after, and count how many enquiries turned into a conversation.',
       sequence: ['Map where enquiries arrive today and who answers them', 'Centralise one channel and agree reply templates', 'Add drafted replies with human approval', 'Add automated follow-ups and connect the remaining channels'],
@@ -175,10 +175,10 @@
         'Anything outside that content, or anything sensitive, goes to a person.',
         'You review conversations weekly and add missing answers.'
       ],
-      benefits: ['Quicker answers for {customers}, including outside working hours', 'Less repetitive work for the team', 'A written record of what {customers} actually ask'],
-      complexity: { level: 'medium', why: 'The technology is mature. The work is in writing good source content and deciding when to hand over to a person.' },
+      benefits: ['Could give {customers} answers to routine questions outside working hours', 'Could reduce repetitive replies for the team', 'Would build a written record of what {customers} actually ask'],
+      complexity: { level: 'medium', why: 'Tools for this are widely available. The work is in writing good source content, deciding when to hand over to a person and reviewing conversations.' },
       integrates: false, digital: true,
-      dependencies: ['An up-to-date set of approved answers', 'A chosen channel: website chat, email drafts or messaging', 'An AI model provider, whose running cost grows with usage'],
+      dependencies: ['An up-to-date set of approved answers', 'A chosen channel: website chat, email drafts or messaging', 'An AI model provider, whose running cost grows with usage', 'A person to take handovers and review conversation logs'],
       risks: ['AI models can give confident but wrong answers, so restrict them to approved content and log every conversation', 'Some {customers} prefer a person, so make handover easy', 'Questions about health, money or legal matters need strict limits'],
       experiment: 'Pull your last 50 customer questions, group them and write approved answers for the top ten. Use them as suggested replies in your inbox for two weeks and count how many needed editing.',
       sequence: ['Collect and group recent questions', 'Write approved answers and handover rules', 'Pilot as suggested replies that staff review', 'Open a customer-facing channel once accuracy is consistently acceptable'],
@@ -200,10 +200,10 @@
         'Confirmations and reminders go out automatically by email or text.',
         'Bookings appear in your team’s calendars and in any system that needs them.'
       ],
-      benefits: ['Less time spent arranging {work}', 'Fewer double bookings and, typically, fewer missed appointments', 'Easier booking for {customers} at any hour'],
-      complexity: { level: 'low', why: 'Off-the-shelf booking tools cover most needs. The work is configuring your rules and connecting calendars.', easierWith: ['booking'] },
+      benefits: ['Could cut the time spent arranging {work}', 'Could reduce double bookings, and reminders may reduce missed appointments', 'Would let {customers} book at any hour'],
+      complexity: { level: 'low', why: 'Off-the-shelf booking tools may cover your needs. The work is configuring your rules and connecting calendars.', easierWith: ['booking'] },
       integrates: true, digital: true,
-      dependencies: ['A booking tool that fits how you work', 'Shared calendars for the people being booked', 'Clear rules for availability and cancellations'],
+      dependencies: ['A booking tool that fits how you work', 'Shared calendars for the people being booked', 'Clear rules for availability and cancellations', 'A booking tool subscription, which is an ongoing cost'],
       risks: ['Rigid rules can frustrate {customers} with unusual needs, so keep a way to contact a person', 'Reminder messages need consent and an easy opt-out', 'Calendar sync must be reliable or double bookings return'],
       experiment: 'Offer online booking for one service or one team member for a month, with an automatic reminder the day before. Note how much scheduling back-and-forth disappears and whether missed appointments change.',
       sequence: ['Write down your booking rules and exceptions', 'Set up a booking tool for one service', 'Add reminders and calendar sync', 'Roll out to the remaining services and connect payments if useful'],
@@ -224,10 +224,10 @@
         'Uncertain fields are flagged for a quick human check.',
         'Approved data goes into your accounting software, spreadsheet or database.'
       ],
-      benefits: ['Less manual retyping', 'Fewer keying errors reaching your records', 'Capacity to handle more volume without adding admin time'],
-      complexity: { level: 'medium', why: 'It is reliable for consistent document types. Mixed layouts or handwriting need more testing and review.', easierWith: ['accounting'] },
+      benefits: ['Could reduce manual retyping', 'Could reduce keying errors reaching your records, provided flagged fields are checked', 'Could help you handle more documents without the same growth in admin time'],
+      complexity: { level: 'medium', why: 'Consistent document types are the easiest place to start. Mixed layouts or handwriting need more testing, and every batch needs human review.', easierWith: ['accounting'] },
       integrates: true, digital: true,
-      dependencies: ['Examples of each document type you receive', 'A destination system with a way to import data', 'A person to review flagged fields'],
+      dependencies: ['Examples of each document type you receive', 'A destination system with a way to import data', 'A person to review flagged fields', 'An extraction service or AI model provider, charged by volume or subscription'],
       risks: ['Extraction is never perfect, so keep a review step for anything financial', 'Documents can contain personal or sensitive data, so storage and retention need care', 'Unusual layouts need extra examples before they extract reliably'],
       experiment: 'Run 30 recent documents of a single type through an extraction tool. Compare the output with what your team typed and note which fields came out right every time.',
       sequence: ['List document types by volume and pain', 'Test extraction on one type against real examples', 'Add a review queue and export to your system', 'Extend to further document types'],
@@ -249,10 +249,10 @@
         'An AI model drafts the written sections in your style from your best past examples.',
         'A person reviews, edits and sends the final version.'
       ],
-      benefits: ['Faster turnaround on proposals and quotes', 'More consistent quality and pricing', 'More time for the conversations that win work'],
-      complexity: { level: 'medium', why: 'It needs well-organised templates and pricing rules. Drafting text is a strength of current AI models.', easierWith: ['crm'] },
+      benefits: ['Could shorten the time to produce proposals and quotes', 'Could make quality and pricing more consistent', 'Could free time for conversations with prospective {customers}'],
+      complexity: { level: 'medium', why: 'It needs well-organised templates and pricing rules. Current AI models can draft text, but every draft needs a person to review it.', easierWith: ['crm'] },
       integrates: false, digital: true,
-      dependencies: ['A few strong past proposals to learn your style from', 'An up-to-date price list or pricing rules', 'An AI model provider with suitable data terms'],
+      dependencies: ['A few strong past proposals to learn your style from', 'An up-to-date price list or pricing rules', 'An AI model provider with suitable data terms, whose cost grows with usage', 'A person to review every draft and check every price before sending'],
       risks: ['Pricing mistakes are costly, so calculate prices with rules and check them', 'Every draft must be reviewed before it is sent', 'Confidential client details should only go to providers with suitable data terms'],
       experiment: 'Write a short brief for your next three proposals and generate drafts from your best past examples. Time each one against your usual process and note how much editing was needed.',
       sequence: ['Gather strong examples and tidy the price list', 'Define the brief and draft template', 'Pilot on live proposals with full review', 'Connect to your CRM so briefs fill themselves'],
@@ -273,10 +273,10 @@
         'Paid invoices stop the reminders automatically.',
         'Accounts that stay overdue are flagged for a personal call.'
       ],
-      benefits: ['Invoices sent promptly and consistently', 'Less time spent chasing', 'Clearer visibility of what is owed'],
-      complexity: { level: 'low', why: 'Most accounting software supports this already. The work is setting the rules and the tone.', harderWithout: ['accounting'], harderNote: 'You did not mention accounting software, so setting that up comes first.' },
+      benefits: ['Could get invoices out more promptly and consistently', 'Could reduce the time spent chasing payments', 'Would give clearer visibility of what is owed'],
+      complexity: { level: 'low', why: 'Many accounting tools include this. The work is setting the rules and the tone.', harderWithout: ['accounting'], harderNote: 'You did not mention accounting software, so setting that up comes first.' },
       integrates: true, digital: true,
-      dependencies: ['Accounting or invoicing software', 'Agreed payment terms and reminder wording', 'A link between completed work and invoicing'],
+      dependencies: ['Accounting or invoicing software', 'Agreed payment terms and reminder wording', 'A link between completed work and invoicing', 'A person to handle exceptions and disputes'],
       risks: ['Reminders must reflect the real account status or they damage relationships', 'Some {customers} need a personal approach, so allow exceptions', 'Payment details should never be sent by plain email'],
       experiment: 'Switch on scheduled payment reminders in your accounting software for one month. Compare the number of overdue invoices and the time spent chasing with the previous month.',
       sequence: ['Agree payment terms and reminder wording', 'Turn on reminders in your accounting tool', 'Trigger invoices from completed work', 'Add online payment links and an overdue report'],
@@ -298,11 +298,11 @@
         'Define each measure once so everyone uses the same figure.',
         'Reports and alerts are produced automatically and shared with the right people.'
       ],
-      benefits: ['Hours of manual report building handed back to the team', 'One agreed version of the numbers', 'Earlier warning when something drifts'],
+      benefits: ['Could reduce the time spent building reports by hand', 'Could give the team one agreed version of the numbers', 'Could flag problems earlier once alerts are set up'],
       complexity: { level: 'medium', why: 'It depends on how many sources there are and how clean the data is.' },
       integrates: true, digital: true,
-      dependencies: ['Access to the systems that hold the data', 'Agreed definitions for each measure', 'Someone who owns the reports and acts on them'],
-      risks: ['Automating a report built on messy data spreads the mess faster, so agree definitions first', 'Dashboards nobody uses are a common failure, so start from the decisions you need to make', 'Financial and personal data need proper access permissions'],
+      dependencies: ['Access to the systems that hold the data', 'Agreed definitions for each measure', 'Someone who owns the reports and acts on them', 'A reporting or data tool, which may carry a subscription cost'],
+      risks: ['Automating a report built on messy data spreads the mess faster, so agree definitions first', 'A dashboard nobody uses adds no value, so start from the decisions you need to make', 'Financial and personal data need proper access permissions'],
       experiment: 'Choose the report you produce most often. Write down where each number comes from and how it is defined, then automate just that report and run it alongside the manual version for a month.',
       sequence: ['Choose the decisions and measures that matter', 'Connect the first data sources', 'Automate one report and check it against the manual version', 'Add further reports, alerts and sources'],
       questions: ['Which decisions are you making without the numbers you need?', 'Which report takes the longest to produce?', 'Where do the numbers disagree today?']
@@ -322,11 +322,11 @@
         'Use an integration platform or small custom connectors to pass changes between systems.',
         'Transfers are logged, and failures alert a named person.'
       ],
-      benefits: ['Less copying and retyping', 'Records that agree across systems', 'A foundation that later reporting and AI work can build on'],
-      complexity: { level: 'medium', why: 'Most popular tools connect through standard integrations. Older or in-house systems may need custom work.' },
+      benefits: ['Could reduce copying and retyping', 'Could keep records consistent across systems', 'Could create a foundation for later reporting and AI work'],
+      complexity: { level: 'medium', why: 'Many popular tools offer standard integrations. Older or in-house systems may need custom work.' },
       integrates: true, digital: true,
-      dependencies: ['Admin access to the tools involved', 'A clear source of truth for each record', 'An integration platform or a developer for custom connectors'],
-      risks: ['Badly mapped fields can corrupt data quickly, so test on copies first', 'Integrations need monitoring and break when tools change', 'Each connected tool widens who can see your data'],
+      dependencies: ['Admin access to the tools involved', 'A clear source of truth for each record', 'An integration platform (an ongoing subscription) or a developer for custom connectors', 'Someone to monitor and fix failed transfers'],
+      risks: ['Badly mapped fields can corrupt data quickly, so test on copies first', 'Integrations need monitoring and can break when tools change', 'Each connected tool widens who can see your data'],
       experiment: 'List every place one piece of information, such as a new customer, gets typed. Automate the most frequent transfer with an integration tool and count how many manual entries it replaces over two weeks.',
       sequence: ['Map the flow of your key records', 'Automate the single highest-volume transfer', 'Add monitoring and failure alerts', 'Connect the remaining systems one at a time'],
       questions: ['Which piece of information do you type most often?', 'Which system should be the master copy?', 'What breaks when two systems disagree?']
@@ -347,11 +347,11 @@
         'Each answer links to its source so people can check it.',
         'Gaps the assistant cannot answer become a list of documents to write.'
       ],
-      benefits: ['Fewer interruptions for your most experienced people', 'Faster onboarding for new team members', 'Less risk when a key person is away'],
+      benefits: ['Could reduce interruptions for your most experienced people', 'Could help new team members get up to speed sooner', 'Could lower the disruption when a key person is away'],
       complexity: { level: 'medium', why: 'The assistant itself is straightforward. Capturing and maintaining the knowledge is the real work.' },
       integrates: false, digital: true,
-      dependencies: ['Time from experienced staff to capture what they know', 'A place to keep documents current', 'An AI model provider with suitable data terms'],
-      risks: ['Answers are only as good as the documents behind them, and outdated content gives outdated answers', 'Access must respect who is allowed to see what', 'AI can still misread documents, so answers should cite their sources'],
+      dependencies: ['Time from experienced staff to capture what they know', 'A place to keep documents current, and someone responsible for it', 'An AI model provider with suitable data terms, whose cost grows with usage'],
+      risks: ['Answers are only as good as the documents behind them, and outdated content gives outdated answers', 'Access must respect who is allowed to see what', 'AI can still misread documents, so answers should cite their sources and a person should review the ones staff flag'],
       experiment: 'Ask your most interrupted person to list the ten questions they answer most. Document the answers, load them into an assistant restricted to those documents and let two colleagues use it for two weeks.',
       sequence: ['List the questions people ask most', 'Document the answers and processes', 'Pilot the assistant with a small group', 'Expand coverage and set a routine for keeping content current'],
       questions: ['Who gets interrupted most, and with which questions?', 'How long does a new starter take to work independently?', 'Which documents already exist, and are they current?']
@@ -371,10 +371,10 @@
         'Forms and document requests go out on schedule, with reminders.',
         'The team sees what is complete and what is blocked.'
       ],
-      benefits: ['A consistent, professional first experience', 'Fewer missed steps', 'Less time spent chasing forms and documents'],
-      complexity: { level: 'low', why: 'Workflow and form tools handle most of this without custom software.', easierWith: ['crm', 'pm'] },
+      benefits: ['Could make the first experience more consistent', 'Could reduce missed steps', 'Could cut time spent chasing forms and documents'],
+      complexity: { level: 'low', why: 'Workflow and form tools may handle this without custom software.', easierWith: ['crm', 'pm'] },
       integrates: true, digital: true,
-      dependencies: ['A written list of your onboarding steps', 'A form or workflow tool', 'Secure storage for the documents you collect'],
+      dependencies: ['A written list of your onboarding steps', 'A form or workflow tool, which may carry a subscription cost', 'Secure storage for the documents you collect'],
       risks: ['Identity and employment documents are sensitive, so store them securely', 'An overly rigid flow can feel impersonal, so keep a personal welcome', 'Steps change over time and the checklist must keep up'],
       experiment: 'Write your onboarding steps as a checklist and run your next three new {customers} or hires through an automated version with a form and scheduled reminders. Note what was still missed.',
       sequence: ['Document the current steps and pain points', 'Build the checklist and forms', 'Pilot with the next few starts', 'Connect it to your other systems'],
@@ -396,11 +396,11 @@
         'Alerts flag low stock and slow movers.',
         'With enough clean history, a forecast suggests order quantities for a person to approve.'
       ],
-      benefits: ['Fewer stock-outs of the items that matter', 'Less cash and space tied up in slow stock', 'Ordering decisions based on data rather than memory'],
-      complexity: { level: 'medium', why: 'Visibility and reorder rules are achievable with common tools. Forecasting needs clean, sufficient history.', easierWith: ['ecommerce'] },
+      benefits: ['Could reduce stock-outs of the items that matter', 'Could reduce cash and space tied up in slow stock', 'Would put ordering decisions on recorded data rather than memory'],
+      complexity: { level: 'medium', why: 'Visibility and reorder rules can be built with widely available tools. Forecasting needs clean, sufficient history.', easierWith: ['ecommerce'] },
       integrates: true, digital: true,
-      dependencies: ['Accurate stock counts to start from', 'Sales history for your key items', 'Supplier lead times'],
-      risks: ['Forecasts depend on clean history and are never certain', 'Promotions, seasons and supply shocks still need human judgement', 'Supplier data often arrives in inconsistent formats'],
+      dependencies: ['Accurate stock counts to start from', 'Sales history for your key items', 'Supplier lead times', 'Stock or forecasting software, which may carry a subscription cost', 'A person to approve suggested orders'],
+      risks: ['Forecasts depend on clean history and are never certain', 'Promotions, seasons and supply shocks still need human judgement', 'Supplier data may arrive in inconsistent formats'],
       experiment: 'Track stock, sales and reorder dates for your 20 most important items in one shared view for a month. Note each stock-out or overstock and whether a simple reorder rule would have caught it.',
       sequence: ['Choose key items and verify stock counts', 'Build one shared stock view', 'Add reorder rules and alerts', 'Introduce forecasting once the history is reliable'],
       questions: ['Which items run out most often?', 'How do you decide what to order today?', 'How reliable are your current stock counts?']
@@ -421,11 +421,11 @@
         'Failed or overdue checks alert the right person.',
         'Records are searchable and ready for audits.'
       ],
-      benefits: ['Records that are easy to find when an auditor asks', 'Problems spotted sooner', 'Less paper handling and filing'],
-      complexity: { level: 'low', why: 'Digital checklist tools are mature. The effort is in adapting your existing checks and getting staff using them.' },
+      benefits: ['Could make records easier to find when an auditor asks', 'Could surface failed or missed checks sooner', 'Could reduce paper handling and filing'],
+      complexity: { level: 'low', why: 'Digital checklist tools are widely available. The effort is in adapting your existing checks and getting staff using them.' },
       integrates: false, digital: false,
-      dependencies: ['Your current checklists and standards', 'Phones or tablets for the people doing the checks', 'A named owner for follow-up actions'],
-      risks: ['Software does not make you compliant; your process and the people following it do', 'Regulated records may have specific retention rules', 'Staff will go back to paper if the tool is not simple'],
+      dependencies: ['Your current checklists and standards', 'Phones or tablets for the people doing the checks', 'A named owner for follow-up actions', 'A checklist app subscription, which is an ongoing cost'],
+      risks: ['Software does not make you compliant; your process and the people following it do', 'Regulated records may have specific retention rules', 'Staff may go back to paper if the tool is not simple'],
       experiment: 'Digitise one check that happens at least weekly. Run it on phones for a month and compare completion rates and the time needed to find records with the paper version.',
       sequence: ['List recurring checks and their rules', 'Digitise the most frequent check', 'Add alerts and audit-ready exports', 'Move the remaining checks across'],
       questions: ['Which check is most often missed or late?', 'What does an auditor or inspector ask to see?', 'Who acts when a check fails?']
@@ -445,10 +445,10 @@
         'An AI model drafts posts, emails or listings from that material.',
         'A person edits, fact-checks and approves before anything is published.'
       ],
-      benefits: ['A steadier publishing rhythm', 'Less time from blank page to draft', 'Content grounded in your real expertise'],
-      complexity: { level: 'low', why: 'The tools are inexpensive and easy to start with. Quality depends on a clear voice and a review step.' },
+      benefits: ['Could support a steadier publishing rhythm', 'Could shorten the time from blank page to draft', 'Keeps content grounded in your own expertise, provided a person edits it'],
+      complexity: { level: 'low', why: 'Starting is straightforward. Tools carry subscription or usage costs, and quality depends on a clear voice and a human review step.' },
       integrates: false, digital: true,
-      dependencies: ['A brand voice guide, even a short one', 'Regular raw material from people who know the subject', 'A reviewer with time set aside'],
+      dependencies: ['A brand voice guide, even a short one', 'Regular raw material from people who know the subject', 'A reviewer with time set aside to edit and fact-check every piece', 'AI writing tools, which carry a subscription or usage cost'],
       risks: ['Unedited AI content reads as generic and can contain errors', 'Check the accuracy of any claim, and your rights to any material used', 'Audiences and search engines reward original insight, which AI alone does not provide'],
       experiment: 'Record a 20-minute conversation about a topic you know well and use it to draft four posts and one email. Track the editing time and compare how the posts perform against your usual content.',
       sequence: ['Write a brand voice guide and calendar', 'Pilot drafting from recorded material', 'Set up review and scheduling', 'Repurpose content across channels'],
@@ -461,17 +461,17 @@
         keywords: ['launch', 'new product', 'new service', 'idea', 'mvp', 'startup', 'prototype', 'mobile app', 'saas']
       },
       problem: 'You have an idea for a new product or service, but building the full version before knowing whether people will use it or pay for it is expensive and risky.',
-      solution: 'Define the riskiest assumption, then build the smallest working version, often a prototype or a manually run service behind a simple interface, and test it with real prospective {customers}.',
+      solution: 'Define the riskiest assumption, then build the smallest working version, such as a prototype or a manually run service behind a simple interface, and test it with real prospective {customers}.',
       how: [
         'Write down who it is for, the problem it solves and the assumption most likely to be wrong.',
         'Test demand with conversations or a simple landing page before building.',
         'Build a narrow prototype that delivers the core value, doing some steps by hand if needed.',
         'Put it in front of a small group and let what they do decide the next step.'
       ],
-      benefits: ['Evidence about demand before committing a large budget', 'A focused first version that is quicker to ship', 'Learning from real users rather than assumptions'],
-      complexity: { level: 'medium', why: 'A focused prototype is achievable quickly. A production product with AI features needs careful engineering, security and support.' },
+      benefits: ['Could give you evidence about demand before committing a large budget', 'Keeps the first version focused and smaller to build', 'Lets real users, rather than assumptions, shape what comes next'],
+      complexity: { level: 'medium', why: 'A focused prototype is a much smaller build than a full product. A production product with AI features needs careful engineering, security and support.' },
       integrates: false, digital: true,
-      dependencies: ['Access to people who match your target {customers}', 'A clear statement of the problem and the riskiest assumption', 'Engineering capacity for the prototype'],
+      dependencies: ['Access to people who match your target {customers}', 'A clear statement of the problem and the riskiest assumption', 'Engineering capacity for the prototype', 'Budget for build, hosting and any AI usage costs'],
       risks: ['Early interest does not guarantee paying demand', 'AI features add running costs and accuracy risks that must be designed for', 'Scope tends to grow, so protect the experiment’s focus'],
       experiment: 'Write one sentence on who the product is for and the problem it solves. Speak to ten people who match that description before building anything, and note how many describe the problem without being prompted.',
       sequence: ['Frame the problem, audience and riskiest assumption', 'Test demand with conversations or a landing page', 'Build a narrow working prototype', 'Pilot with a small group and decide what to build next'],
@@ -494,10 +494,10 @@
         'Simple changes and requests are handled through forms with clear rules.',
         'Anything unusual goes to your team with the context attached.'
       ],
-      benefits: ['Fewer routine status enquiries', 'A more professional, always-available experience', 'Clearer records of requests and changes'],
+      benefits: ['Could reduce routine status enquiries, if {customers} adopt it', 'Would give {customers} access at any hour', 'Would keep clearer records of requests and changes'],
       complexity: { level: 'high', why: 'A portal involves sign-in, security and integration with your systems, so it is a larger build.' },
       integrates: true, digital: true,
-      dependencies: ['Systems that hold status and documents, with a way to read from them', 'Secure authentication', 'Ongoing hosting, support and maintenance'],
+      dependencies: ['Systems that hold status and documents, with a way to read from them', 'Secure authentication', 'Budget for the build plus ongoing hosting, support and maintenance'],
       risks: ['Security matters: a portal exposes customer data if built carelessly', 'Low adoption if {customers} are not shown why it helps', 'Ongoing maintenance costs as systems change'],
       experiment: 'List the five status questions you are asked most. Send automatic status updates for one month as a stand-in for a portal, and track whether those enquiries fall.',
       sequence: ['Identify the most common self-service needs', 'Pilot proactive status updates', 'Build a narrow portal for one need', 'Add documents, requests and further integrations'],
@@ -629,7 +629,7 @@
     if (stage && stage.points >= 2) reasons.push(`It suits a business at your stage (${lower(labelFor('stage', a.stage))}).`);
     const keywords = of('keyword');
     if (keywords.length) reasons.push(`Your notes mention ${listJoin(keywords.map(k => `“${k.detail}”`))}.`);
-    if (!reasons.length) reasons.push('Your answers did not point strongly to one area, so this is included as a broadly useful starting point.');
+    if (!reasons.length) reasons.push('Your answers did not point strongly to one area, so this is included as a general starting point.');
     return reasons;
   }
 
@@ -663,7 +663,7 @@
     return LIBRARY.map(opp => {
       const { score, parts } = scoreOpportunity(opp, a);
       const complexity = assessComplexity(opp, a);
-      // Small preference for options that are quicker to start when matches are close.
+      // Small preference for lower-complexity options when matches are close.
       const priority = score - LEVELS.indexOf(complexity.level) * 0.75;
       return { opp, score, parts, complexity, priority };
     }).sort((x, y) => y.priority - x.priority || x.opp.id.localeCompare(y.opp.id));
@@ -671,10 +671,10 @@
 
   function rankNote(rank, item, next) {
     if (rank === 1) {
-      const quick = item.complexity.level === 'low' ? ' and it is relatively quick to start' : '';
-      return `Start here. It is the closest match to your answers${quick}.`;
+      const quick = item.complexity.level === 'low' ? ' and is rated low complexity' : '';
+      return `Suggested starting point. It is the closest match to your answers${quick}.`;
     }
-    if (rank === 2) return 'A strong second step, and often easier once the first is in place.';
+    if (rank === 2) return 'A possible second step, which may be easier once the first is in place.';
     return next ? '' : 'Worth scoping once the first two are under way.';
   }
 
@@ -739,12 +739,12 @@
         ? `Three opportunities for a business focused on ${focusFor(a.objective)}`
         : `Three opportunities for ${article(industryLabel)} ${lower(industryLabel)} business focused on ${focusFor(a.objective)}`,
       summary: general
-        ? 'Your answers did not point strongly to one area, so these are broadly useful starting points. Adding repetitive tasks or a short note will sharpen the result.'
+        ? 'Your answers did not point strongly to one area, so these are general starting points. Adding repetitive tasks or a short note may sharpen the result.'
         : `Based mainly on where work gets stuck (${lower(profile.bottleneck)}) and your objective of ${focusFor(a.objective)}.`,
       opportunities,
       roadmap: buildRoadmap(opportunities),
-      method: 'These recommendations were generated in your browser by a rule-based engine. It matches your answers against a library of common AI, automation and software patterns written by BuildWise Group. No AI model, market research or data about your business beyond your answers was used.',
-      limits: 'This is a starting point for a conversation, not verified analysis. Benefits are described qualitatively because no financial inputs were collected. Nothing here is a guaranteed outcome.'
+      method: `These recommendations were generated in your browser by a rule-based engine. It ranks a fixed library of ${LIBRARY.length} AI, automation and software patterns, written by BuildWise Group, against the answers you gave. No AI model, market research or data about your business beyond your answers was used.`,
+      limits: 'Because the library is fixed and the ranking depends only on your answers, it may miss opportunities that suit your business. Treat this as a starting point for a conversation, not verified analysis. Benefits are possible outcomes to test, not measured results, and nothing here is a guaranteed outcome. Every option has costs, and the AI-based ones need human review.'
     };
   }
 
@@ -814,7 +814,7 @@
       if (o.rankNote) lines.push(o.rankNote);
       lines.push('', 'Why this was selected:', ...o.reasons.map(r => `- ${r}`));
       lines.push('', `Problem: ${o.problem}`, '', `Proposed solution: ${o.solution}`, '', 'How it would work:', ...o.how.map((h, i) => `${i + 1}. ${h}`));
-      lines.push('', 'Expected benefits (qualitative):', ...o.benefits.map(b => `- ${b}`));
+      lines.push('', 'Possible benefits to validate (not measured results):', ...o.benefits.map(b => `- ${b}`));
       lines.push('', `Implementation complexity: ${o.complexity.label}`, ...o.complexity.notes.map(n => `- ${n}`));
       lines.push('', 'Dependencies:', ...o.dependencies.map(d => `- ${d}`), '', 'Risks and limitations:', ...o.risks.map(r => `- ${r}`));
       lines.push('', `Suggested first experiment: ${o.experiment}`, '', 'Indicative sequence:', ...o.sequence.map((s, i) => `${i + 1}. ${s}`));

@@ -132,7 +132,7 @@ test('report contains every required section and honest labelling', opts, async 
   await completeScan(page, { context: 'Our stock counts are always wrong.' });
   const first = page.locator('.op').first();
   const text = await first.textContent();
-  ['Why this was selected for you', 'The problem it addresses', 'Proposed solution', 'How it would work', 'Expected benefits', 'Implementation complexity', 'Main dependencies', 'Risks and limitations', 'Suggested first experiment', 'Indicative implementation sequence']
+  ['Why this was selected for you', 'The problem it addresses', 'Proposed solution', 'How it would work', 'Possible benefits to validate', 'Implementation complexity', 'Main dependencies', 'Risks and limitations', 'Suggested first experiment', 'Indicative implementation sequence']
     .forEach(h => assert.ok(text.includes(h), h));
   assert.match(await page.locator('.basis-method').textContent(), /Generated recommendation.*rule-based/s);
   assert.match(await page.locator('#reportMeta').textContent(), /Not verified analysis/);
@@ -167,7 +167,8 @@ test('report contains every required section and honest labelling', opts, async 
 test('report links reopen the report, and broken links show an error state', opts, async () => {
   const { page, context, errors } = await open('/scan.html');
   await completeScan(page, { context: 'secret detail' });
-  const url = page.url();
+  assert.ok(!page.url().includes('#'), 'answers are never left in the address bar');
+  const url = decodeURIComponent(await page.locator('#saveEmail').getAttribute('href')).match(/Full report: (\S+)/)[1];
   assert.match(url, /#r=v1\./);
   const title = await page.locator('#reportTitle').textContent();
   await page.goto('about:blank');
@@ -175,6 +176,7 @@ test('report links reopen the report, and broken links show an error state', opt
   await page.waitForSelector('#report:not([hidden])');
   assert.equal(await page.locator('#reportTitle').textContent(), title);
   assert.match(await page.locator('#reportMeta').textContent(), /Opened from a link/);
+  assert.ok(!page.url().includes('#r='), 'the link token is removed from the address bar after opening');
   assert.ok(!(await page.locator('#reportAnswers').textContent()).includes('secret detail'), 'notes are not in links');
 
   await page.goto(`${origin}/scan.html#r=v1.broken!`);
@@ -254,4 +256,69 @@ test('reduced motion: the flow still works without animation', opts, async () =>
   assert.equal(await page.locator('.op').first().getAttribute('data-rank'), '1');
   assert.deepEqual(errors(), []);
   await context.close();
+});
+
+test('a refresh keeps the report without putting answers in the address bar', opts, async () => {
+  const { page, context } = await open('/scan.html');
+  await completeScan(page);
+  const title = await page.locator('#reportTitle').textContent();
+  await page.reload();
+  await page.waitForSelector('#report:not([hidden])');
+  assert.equal(await page.locator('#reportTitle').textContent(), title);
+  assert.equal(new URL(page.url()).hash, '');
+  await context.close();
+});
+
+test('privacy notice explains how answers and analytics are handled', opts, async () => {
+  const { page, context } = await open('/scan.html');
+  await page.click('.scanner-details summary');
+  const text = await page.locator('.scanner-details').textContent();
+  assert.match(text, /processed in this browser only/);
+  assert.match(text, /Cloudflare Web Analytics/);
+  assert.match(text, /never your answers, notes or report/);
+  await context.close();
+});
+
+async function withBeacon(urlPath, token) {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const beacon = [];
+  const leaked = [];
+  await page.route(/fonts\.(googleapis|gstatic)\.com/, route => route.abort());
+  await page.route('**/static.cloudflareinsights.com/**', route => { beacon.push(route.request().url()); route.fulfill({ status: 200, contentType: 'text/javascript', body: '' }); });
+  if (token) {
+    const source = fs.readFileSync(path.join(ROOT, 'analytics.js'), 'utf8').replace("const TOKEN = '';", `const TOKEN = '${token}';`);
+    await page.route('**/analytics.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: source }));
+  }
+  page.on('request', req => { if (!req.url().startsWith(origin) && /retail|stock|Our%20notes/i.test(req.url() + (req.postData() || ''))) leaked.push(req.url()); });
+  await page.goto(origin + urlPath);
+  await page.waitForLoadState('load');
+  return { page, context, beacon, leaked };
+}
+
+test('analytics stays off until a token is set', opts, async () => {
+  const { context, beacon } = await withBeacon('/scan.html', '');
+  assert.deepEqual(beacon, []);
+  await context.close();
+});
+
+test('analytics counts page views but never receives answers', opts, async () => {
+  const home = await withBeacon('/index.html', 'test-token');
+  assert.equal(home.beacon.length, 1, 'beacon loads on the homepage');
+  const tag = await home.page.locator('script[data-cf-beacon]').getAttribute('data-cf-beacon');
+  assert.deepEqual(JSON.parse(tag), { token: 'test-token', spa: false });
+  await home.context.close();
+
+  const scan = await withBeacon('/scan.html', 'test-token');
+  assert.equal(scan.beacon.length, 1, 'beacon loads on the scanner page');
+  await completeScan(scan.page, { context: 'Our notes' });
+  assert.equal(new URL(scan.page.url()).hash, '');
+  assert.deepEqual(scan.leaked, []);
+  const link = decodeURIComponent(await scan.page.locator('#saveEmail').getAttribute('href')).match(/Full report: (\S+)/)[1];
+  await scan.context.close();
+
+  const shared = await withBeacon(new URL(link).pathname + new URL(link).hash, 'test-token');
+  await shared.page.waitForSelector('#report:not([hidden])');
+  assert.deepEqual(shared.beacon, [], 'no beacon on a page opened from a report link');
+  await shared.context.close();
 });
