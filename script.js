@@ -5,8 +5,7 @@
   const menuToggle = document.getElementById('menuToggle');
   const menuLabel = document.getElementById('menuLabel');
   const mobileNav = document.getElementById('mobileNav');
-  const heroMedia = document.querySelector('.hero-media');
-  const hero = document.querySelector('.hero');
+  const hero = document.querySelector('.hero-wrap');
   const year = document.getElementById('year');
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -35,15 +34,13 @@
     reveals.forEach(el => el.classList.add('is-in'));
   }
 
-  /* Header state, progress bar and a light hero parallax, batched per frame */
+  /* Header state and progress bar, batched per frame */
   let ticking = false;
-  let heroVisible = true;
   const update = () => {
     const y = window.scrollY;
     const scrollable = root.scrollHeight - window.innerHeight;
     if (progressBar) progressBar.style.transform = `scaleX(${scrollable > 0 ? Math.min(1, y / scrollable) : 0})`;
     if (header) header.classList.toggle('is-scrolled', y > 24);
-    if (heroMedia && heroVisible && !motionQuery.matches) heroMedia.style.setProperty('--py', `${Math.round(y * 0.12)}px`);
     ticking = false;
   };
   const requestUpdate = () => {
@@ -54,10 +51,6 @@
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate);
   update();
-
-  if (hero && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting; }).observe(hero);
-  }
 
   /* Active section in the main navigation */
   const navLinks = [...document.querySelectorAll('.desktop-nav a')];
