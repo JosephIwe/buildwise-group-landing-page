@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B0D10">
+  <meta name="description" content="Answer seven short questions and get a personalised report on where AI, automation and software could help your business. No sign-up.">
+  <meta property="og:title" content="AI Business Opportunity Scanner — BuildWise Group">
+  <meta property="og:description" content="Find where AI, automation and software could help your business save time, reduce costs or unlock new revenue.">
+  <meta property="og:type" content="website">
+  <title>AI Business Opportunity Scanner — BuildWise Group</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="scanner.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="script.js"></script>
+  <script defer src="scanner-engine.js"></script>
+  <script defer src="scanner.js"></script>
+</head>
+<body class="scan-page">
+  <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="bw-fold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="currentColor" stop-opacity=".45"/>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+      </linearGradient>
+      <symbol id="bw-mark" viewBox="0 0 100 112">
+        <path fill="currentColor" d="M0 0H54C68.4 0 79 10.6 79 24.2C79 34.6 73.4 42.3 66.6 45.8L28 53.6V112H0Z"/>
+        <path fill="url(#bw-fold)" d="M28 53.6L60 47.2L44 58.6L28 61.8Z"/>
+        <path fill="currentColor" d="M44 67.4L74.4 52.6C89.4 56.4 100 68 100 82.6C100 99 87 112 70.4 112H44Z"/>
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-print" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="1.5"/><path d="M7 14h10v6.5H7Z"/></g></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></g></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="m4 6.5 8 6.5 8-6.5"/></g></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="BuildWise Group home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+      </a>
+      <a class="scan-back" href="./"><svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>Back to site</a>
+    </div>
+  </header>
+
+  <main id="main" class="scan-main">
+    <!-- Questionnaire -->
+    <section class="scanner" id="scanner" aria-labelledby="scanTitle">
+      <div class="container scanner-grid">
+        <aside class="scanner-rail">
+          <p class="label"><span class="dot dot-blue" aria-hidden="true"></span>AI Business Opportunity Scanner</p>
+          <h1 class="scanner-title" id="scanTitle">Find your next business advantage.</h1>
+          <p class="scanner-intro">Discover where AI, automation and software could help your business save time, reduce costs or unlock new revenue.</p>
+          <ol class="scanner-steps" id="scanSteps" aria-label="Questions"></ol>
+          <p class="scanner-privacy"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span>No sign-up. Your answers stay in this browser and are not sent to BuildWise Group unless you choose to contact us.</span></p>
+        </aside>
+
+        <div class="scanner-panel">
+          <div class="scanner-meter" aria-hidden="true"><span id="scanMeter"></span></div>
+          <noscript><p class="scanner-note">The scanner needs JavaScript to run in your browser. You can still <a href="mailto:hello@josephiwe.com">email BuildWise Group</a> directly.</p></noscript>
+          <form class="scan-step" id="scanForm" novalidate hidden>
+            <p class="label scan-count" id="scanCount"></p>
+            <fieldset class="scan-fieldset" id="scanFieldset" aria-describedby="scanHelp scanError">
+              <legend class="scan-q" id="scanQuestion" tabindex="-1"></legend>
+              <p class="scan-help" id="scanHelp"></p>
+              <div class="scan-options" id="scanOptions"></div>
+            </fieldset>
+            <p class="scan-error" id="scanError" role="alert"></p>
+            <div class="scan-actions">
+              <button type="button" class="scan-link" id="scanBack"><svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>Back</button>
+              <span class="scan-actions-end">
+                <button type="button" class="scan-link" id="scanSkip">Skip</button>
+                <button type="submit" class="btn btn-light" id="scanNext"><span id="scanNextText">Continue</span> <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </span>
+            </div>
+          </form>
+
+          <div class="scan-state" id="scanLoading" hidden>
+            <div class="scan-loader" aria-hidden="true"><i></i><i></i><i></i></div>
+            <p class="scan-state-title" role="status">Preparing your report</p>
+            <p class="scan-state-copy">Matching your answers against our library of AI, automation and software patterns.</p>
+          </div>
+
+          <div class="scan-state" id="scanFail" hidden>
+            <p class="label">Something went wrong</p>
+            <h2 class="scan-state-title" id="scanFailTitle" tabindex="-1">We couldn’t build your report.</h2>
+            <p class="scan-state-copy" id="scanFailCopy">Your answers are still here. Please try again.</p>
+            <div class="scan-state-actions">
+              <button type="button" class="btn btn-light" id="scanRetry">Try again <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button type="button" class="scan-link" id="scanRestart">Start a new scan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report -->
+    <section class="report" id="report" aria-labelledby="reportTitle" hidden>
+      <div class="container">
+        <header class="report-head">
+          <p class="label">Your opportunity report</p>
+          <h1 class="report-title" id="reportTitle" tabindex="-1"></h1>
+          <p class="report-summary" id="reportSummary"></p>
+          <ul class="report-meta" id="reportMeta"></ul>
+        </header>
+
+        <div class="report-basis">
+          <div class="basis-card basis-method">
+            <p class="tag tag-generated">Generated recommendation</p>
+            <p id="reportMethod"></p>
+            <p class="basis-limits" id="reportLimits"></p>
+          </div>
+          <div class="basis-card basis-answers">
+            <p class="tag tag-input">Your answers</p>
+            <dl class="answer-list" id="reportAnswers"></dl>
+            <button type="button" class="scan-link scan-link-dark" id="reportEdit">Edit answers</button>
+          </div>
+        </div>
+
+        <div class="report-ops" id="reportOps"></div>
+
+        <section class="report-plan" aria-labelledby="planTitle">
+          <p class="label">Indicative sequence</p>
+          <h2 class="report-h2" id="planTitle">How you could approach it</h2>
+          <ol class="plan" id="reportPlan"></ol>
+          <p class="report-fine">The sequence is indicative. Timing depends on your team, systems and data, which this scan does not assess.</p>
+        </section>
+
+        <section class="report-brief" id="reportBrief" aria-labelledby="briefTitle" hidden>
+          <p class="label">From the Business Opportunity Brief</p>
+          <h2 class="report-h2" id="briefTitle">Related reading</h2>
+          <ul class="brief-list" id="briefList"></ul>
+        </section>
+
+        <section class="report-next" aria-labelledby="nextTitle">
+          <p class="label">Next steps</p>
+          <h2 class="report-h2" id="nextTitle">Where to go from here</h2>
+          <div class="next-grid">
+            <article class="next-card">
+              <span class="next-n">01</span>
+              <h3>Explore the opportunity further</h3>
+              <p>Work through the questions that would shape your first priority before anything is built.</p>
+              <button type="button" class="scan-link scan-link-dark" id="exploreToggle" aria-expanded="false" aria-controls="explorePanel">Show the questions</button>
+              <div class="explore-panel" id="explorePanel" hidden>
+                <ol id="exploreList"></ol>
+              </div>
+            </article>
+            <article class="next-card next-card-accent">
+              <span class="next-n">02</span>
+              <h3>Get help implementing it</h3>
+              <p>Send BuildWise Group a summary of this report. It opens in your own email app so you can edit it first. Nothing is sent automatically.</p>
+              <a class="btn btn-light" id="helpLink" href="mailto:hello@josephiwe.com">Request help <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <button type="button" class="scan-link" id="copySummary">Copy the summary instead</button>
+            </article>
+            <article class="next-card">
+              <span class="next-n">03</span>
+              <h3>Save or email the report</h3>
+              <p>Keep a copy for yourself or share it with your team.</p>
+              <div class="save-actions">
+                <button type="button" class="save-btn" id="saveDownload"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download</button>
+                <button type="button" class="save-btn" id="savePrint"><svg class="ico" aria-hidden="true"><use href="#i-print"/></svg>Print or PDF</button>
+                <button type="button" class="save-btn" id="saveLink"><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg>Copy link</button>
+                <a class="save-btn" id="saveEmail" href="mailto:"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg>Email to myself</a>
+              </div>
+              <p class="report-fine">Links contain your multiple-choice answers but not your optional notes.</p>
+            </article>
+          </div>
+          <p class="scan-toast" id="scanToast" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="report-foot">
+          <button type="button" class="scan-link scan-link-dark" id="reportRestart">Start a new scan</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand" href="./" aria-label="BuildWise Group home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+      </a>
+      <p class="label footer-line">AI products. Business systems. Real impact.</p>
+      <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
+    </div>
+  </footer>
+</body>
+</html>
