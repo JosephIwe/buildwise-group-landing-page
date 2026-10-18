@@ -21,7 +21,9 @@ Then visit `http://localhost:8000`. There is no build step; Cloudflare Pages ser
 - `analytics.js`: Cloudflare Web Analytics loader (off until a site token is added)
 - `brief/brief.json`: entries for the future Business Opportunity Brief (empty for now)
 - `tests/`: engine and browser tests
-- `favicon.svg`: monogram favicon
+- `favicon.svg`: monogram favicon; `apple-touch-icon.png` is the same mark for home screens and the structured-data logo
+- `robots.txt`, `sitemap.xml`, `llms.txt`, `404.html`, `_headers`: discoverability files (see below)
+- `assets/og-image.jpg`: 1200×630 social-sharing image
 - `assets/logo-mark.svg`: standalone vector of the B monogram
 - `assets/ventures/`: one illustrative photo per venture (Huntly, Tradr, Maya), cropped to 4:3 and exported at 480, 800 and 1200px wide as AVIF and WebP
 - `assets/hero-architecture.svg`: source for the empty architectural stage; `hero-architecture.webp` and `-sm.webp` are rasterised from it so the camera can move it cheaply
@@ -55,6 +57,17 @@ The report reads `brief/brief.json` and shows up to three related entries when a
 ```
 
 `url` must start with `https://` or `/`.
+
+## Discoverability
+- **Canonical domain.** `https://buildwise-group.pages.dev` is the only public domain today: no custom domain is attached to the repository or recorded in the project. Canonical URLs, `og:url`, structured data, `robots.txt`, `sitemap.xml` and `llms.txt` all use it. If a custom domain is added in Cloudflare Pages, replace `https://buildwise-group.pages.dev` in those files in one change and redirect the `pages.dev` address to the new domain.
+- **Indexed pages.** The homepage (`/`) and the scanner's start page (`/scan`) are indexable and listed in the sitemap. Internal links use `/scan`, the address Pages serves `scan.html` at, so there is no redirect hop.
+- **Scanner reports are not indexable.** Report contents are never in a URL a crawler can request: shared links keep the answers after `#` (never sent to the server) and are removed from the address bar on opening, and the open report lives in `sessionStorage`. As a second safeguard `scanner.js` adds `<meta name="robots" content="noindex">` while a report is on screen and removes it when the visitor returns to the questions.
+- **Not-found pages.** Without `404.html`, Cloudflare Pages treats a site as a single-page app and answers every unknown path with the homepage and a 200. `404.html` gives those paths a real 404 with links home.
+- **Non-page files.** The repository root is deployed as-is, so `_headers` sends `X-Robots-Tag: noindex` for `README.md`, `tests/` and `brief/`. Pages already adds `noindex` to preview deployments.
+- **Structured data.** The homepage carries `Organization` and `WebSite` JSON-LD using only facts visible on the page (name, address, email, description and venture names).
+- **Crawler policy.** `robots.txt` allows every crawler. Search crawlers (Googlebot, Bingbot) and AI search/answer crawlers (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, PerplexityBot) are what make BuildWise findable, so they must stay allowed. Model-training crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot, Applebot-Extended) are also allowed on purpose: the site is public marketing copy whose value comes from being known, there is nothing proprietary on it, and visitor answers never appear in a crawlable URL. To opt out of training later, add a `User-agent: <name>` / `Disallow: /` group per training crawler; do not block the search crawlers. Cloudflare zone settings such as "Block AI bots" and managed `robots.txt` apply only to a custom domain on a Cloudflare zone, not to a `pages.dev` address.
+- **`llms.txt`.** A short plain-text summary for AI tools that look for it. It is not a ranking factor and no major search engine is known to use it; it is kept because it costs nothing and repeats only what the homepage says. Update it when the services or ventures change.
+- None of this guarantees indexing or inclusion in AI answers. Submit `https://buildwise-group.pages.dev/sitemap.xml` in Google Search Console and Bing Webmaster Tools to request crawling and see what is actually indexed.
 
 ## Tests
 ```bash

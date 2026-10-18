@@ -22,6 +22,20 @@
     if (Array.isArray(window.dataLayer)) window.dataLayer.push(detail);
   };
 
+  /* A report view is never indexed. Crawlers cannot reach one (answers live after
+   * "#" or in sessionStorage), but this keeps it that way if a renderer ever does. */
+  const setNoindex = (on) => {
+    let meta = document.querySelector('meta[name="robots"]');
+    if (on && !meta) {
+      meta = document.createElement('meta');
+      meta.name = 'robots';
+      meta.content = 'noindex';
+      document.head.appendChild(meta);
+    } else if (!on && meta) {
+      meta.remove();
+    }
+  };
+
   const el = (tag, className, text) => {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -531,6 +545,7 @@
       try { history.replaceState(null, '', location.pathname); } catch (e) { /* file:// or sandboxed */ }
     }
     showingReport = true;
+    setNoindex(true);
     save();
     scanner.hidden = true;
     reportSection.hidden = false;
@@ -582,6 +597,7 @@
     step = 0;
     report = null;
     showingReport = false;
+    setNoindex(false);
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* ignore */ }
     reportSection.hidden = true;
     scanner.hidden = false;

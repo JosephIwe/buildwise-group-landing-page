@@ -1,0 +1,9 @@
+# BuildWise Group
+# The homepage and the scanner's start page are public and open to search
+# engines and AI assistants alike. Scanner answers never appear in a URL a
+# crawler can request: report links keep them after "#", which browsers never
+# send to the server, and a page showing a report is marked noindex.
+User-agent: *
+Allow: /
+
+Sitemap: https://buildwise-group.pages.dev/sitemap.xml
