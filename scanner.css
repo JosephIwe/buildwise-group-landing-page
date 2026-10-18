@@ -93,6 +93,10 @@ button.scan-step-item:hover { color: var(--offwhite); }
 .scan-input::placeholder, .scan-textarea::placeholder { color: rgba(250, 250, 248, .38); }
 .scan-input:focus, .scan-textarea:focus { outline: none; border-color: var(--cobalt-soft); box-shadow: 0 0 0 3px rgba(125, 151, 255, .22); }
 .scan-counter { margin-top: 6px; text-align: right; font-size: 12px; color: var(--slate); }
+.scan-website { margin-top: 22px; }
+.scan-website-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; color: var(--offwhite); }
+.scan-website-help { margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--slate); }
+.scan-input[aria-invalid="true"] { border-color: #FFB3A6; }
 .scan-error { min-height: 1.5em; margin-top: 14px; font-size: 14px; font-weight: 500; color: #FFB3A6; }
 .scan-fieldset[aria-invalid="true"] .opt-box { border-color: rgba(255, 179, 166, .45); }
 
@@ -150,6 +154,7 @@ button.scan-step-item:hover { color: var(--offwhite); }
 .report-basis { margin-top: clamp(32px, 4vw, 56px); display: grid; gap: 16px; }
 .basis-card { background: #fff; border: 1px solid var(--line-light); border-radius: 3px; padding: clamp(20px, 2.6vw, 32px); font-size: 15px; color: #3A3F48; }
 .basis-limits { margin-top: 10px; color: var(--slate); }
+.basis-website { font-weight: 500; }
 .tag { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line-light); color: var(--slate); }
 .basis-card .tag { margin-bottom: 14px; }
 .tag-generated { border-color: rgba(30, 79, 255, .4); color: var(--cobalt); background: rgba(30, 79, 255, .05); }

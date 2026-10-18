@@ -71,7 +71,7 @@
   }
 
   const QUESTIONS = engine.QUESTIONS;
-  const blank = () => ({ industry: '', industryOther: '', stage: '', objective: '', bottleneck: '', tasks: [], tools: [], context: '' });
+  const blank = () => ({ industry: '', industryOther: '', stage: '', objective: '', bottleneck: '', tasks: [], tools: [], context: '', website: '' });
 
   let answers = blank();
   let step = 0;
@@ -81,6 +81,8 @@
   let busy = false;
   let started = false;
   let showingReport = false;
+  // What the visitor typed in the website field, kept so a typo survives Back and a reload.
+  let websiteText = '';
 
   const draft = storage.read();
   if (draft && draft.answers) {
@@ -88,8 +90,9 @@
     step = Math.min(Math.max(0, draft.step | 0), QUESTIONS.length - 1);
     furthest = Math.min(Math.max(step, draft.furthest | 0), QUESTIONS.length - 1);
     skipped = new Set(Array.isArray(draft.skipped) ? draft.skipped : []);
+    websiteText = typeof draft.websiteText === 'string' ? draft.websiteText.slice(0, 400) : answers.website;
   }
-  const save = () => storage.write({ answers, step, furthest, skipped: [...skipped], showReport: showingReport });
+  const save = () => storage.write({ answers, step, furthest, skipped: [...skipped], showReport: showingReport, websiteText });
 
   /* ---------- Questionnaire ---------- */
   const steps = $('scanSteps');
@@ -188,6 +191,20 @@
       options.appendChild(label);
       options.appendChild(area);
       options.appendChild(counter);
+
+      // Optional website: context for the report only. It is never fetched from here.
+      const site = el('div', 'scan-website');
+      const siteLabel = el('label', 'scan-website-label', 'Your website (optional)');
+      siteLabel.htmlFor = 'scanWebsite';
+      const siteInput = el('input', 'scan-input');
+      Object.assign(siteInput, { id: 'scanWebsite', type: 'url', inputMode: 'url', maxLength: 400, placeholder: 'example.com', value: websiteText, autocomplete: 'url', spellcheck: false });
+      siteInput.setAttribute('aria-describedby', 'scanWebsiteHelp');
+      const siteHelp = el('p', 'scan-website-help', 'Shown in your report as context. The scanner does not visit or check it.');
+      siteHelp.id = 'scanWebsiteHelp';
+      site.appendChild(siteLabel);
+      site.appendChild(siteInput);
+      site.appendChild(siteHelp);
+      options.appendChild(site);
     }
 
     $('scanBack').hidden = step === 0;
@@ -216,6 +233,8 @@
       answers[q.id] = [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
     } else {
       answers[q.id] = $('scanText').value;
+      websiteText = $('scanWebsite').value.trim();
+      answers.website = engine.normalizeWebsite(websiteText).url;
     }
     answers = Object.assign(blank(), engine.normalizeAnswers(answers).answers);
   };
@@ -244,6 +263,13 @@
     readStep();
     const q = QUESTIONS[step];
     const { errors } = engine.normalizeAnswers(answers);
+    const websiteError = q.type === 'text' ? engine.normalizeWebsite(websiteText).error : '';
+    if (websiteError) {
+      $('scanError').textContent = websiteError;
+      $('scanWebsite').setAttribute('aria-invalid', 'true');
+      $('scanWebsite').focus();
+      return;
+    }
     if (errors[q.id]) {
       $('scanError').textContent = errors[q.id];
       $('scanFieldset').setAttribute('aria-invalid', 'true');
@@ -260,6 +286,7 @@
   $('scanSkip').addEventListener('click', () => {
     const q = QUESTIONS[step];
     answers[q.id] = Array.isArray(answers[q.id]) ? [] : '';
+    if (q.type === 'text') { answers.website = ''; websiteText = ''; }
     skipped.add(q.id);
     track('step_complete', { step: step + 1, question: q.id, skipped: true });
     advance();
@@ -415,6 +442,7 @@
     if (p.tasks.length) lines.push(`Repetitive tasks: ${p.tasks.join('; ')}`);
     if (p.tools.length) lines.push(`Tools: ${p.tools.join('; ')}`);
     if (p.context) lines.push(`Notes: ${p.context}`);
+    if (p.website) lines.push(`Website: ${p.website} (not checked by the scanner)`);
     lines.push('', 'Suggested opportunities:');
     report.opportunities.forEach(o => lines.push(`${o.rank}. ${o.title}`));
     lines.push('', `Report link: ${shareUrl()}`, '', 'Name:', 'Company:', 'Best way to reach me:');
@@ -492,6 +520,7 @@
     const date = new Date(r.generatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     [`Generated ${date}`, 'Rule-based, in your browser', r.general ? 'General starting points' : 'Matched to your answers', 'Not verified findings'].forEach(text => meta.appendChild(el('li', null, text)));
     if (fromLink) meta.appendChild(el('li', null, 'Opened from a link, without optional notes'));
+    if (r.websiteNote) meta.appendChild(el('li', null, 'Website not visited'));
     $('reportMethod').textContent = `${r.method} ${r.scoring}`;
     const sharpen = $('reportSharpen');
     $('sharpenList').textContent = '';
@@ -500,12 +529,14 @@
     $('reportShortfall').hidden = !r.shortfall;
     sharpen.hidden = !r.sharpen.length;
     $('reportLimits').textContent = r.limits;
+    $('reportWebsite').textContent = r.websiteNote;
+    $('reportWebsite').hidden = !r.websiteNote;
 
     const dl = $('reportAnswers');
     dl.textContent = '';
     const p = r.profile;
     [['Business', p.industry], ['Size', p.stage], ['Objective', p.objective], ['Bottleneck', p.bottleneck],
-      ['Repetitive tasks', p.tasks.join(', ') || 'Skipped'], ['Tools', p.tools.join(', ') || 'Skipped'], ['Resources', p.capacity || 'Skipped'], ['Notes', p.context || 'None']]
+      ['Repetitive tasks', p.tasks.join(', ') || 'Skipped'], ['Tools', p.tools.join(', ') || 'Skipped'], ['Resources', p.capacity || 'Skipped'], ['Notes', p.context || 'None'], ...(p.website ? [['Website', `${p.website} (not visited)`]] : [])]
       .forEach(([k, v]) => {
         const row = el('div');
         row.appendChild(el('dt', null, k));
@@ -590,6 +621,7 @@
   const backToQuestions = (reset) => {
     if (reset) {
       answers = blank();
+      websiteText = '';
       skipped = new Set();
       furthest = 0;
       storage.clear();

@@ -344,3 +344,53 @@ test('a profile with a not-sure bottleneck still ranks by tasks and notes', () =
   assert.equal(r.opportunities[0].id, 'proposal-drafting');
   assert.match(r.summary + r.headline, /tasks and notes|Starting points/);
 });
+
+/* ---------- Optional website ---------- */
+test('website: public http(s) addresses are kept as origin and path, anything else is rejected', () => {
+  const ok = {
+    'example.co.uk': ['https://example.co.uk/', 'example.co.uk'],
+    'https://Shop.Example.org/about?token=secret#x': ['https://shop.example.org/about', 'shop.example.org/about'],
+    'http://acme.com': ['http://acme.com/', 'acme.com'],
+    'acme.com.': ['https://acme.com/', 'acme.com'],
+    '  ': ['', '']
+  };
+  for (const [input, [url, display]] of Object.entries(ok)) {
+    const w = E.normalizeWebsite(input);
+    assert.equal(w.error, '', input);
+    assert.equal(w.url, url, input);
+    assert.equal(w.display, display, input);
+  }
+  for (const bad of ['localhost', 'http://localhost:3000', '127.0.0.1', 'http://2130706433', '[::1]', '10.0.0.1', 'acme', 'acme.internal', 'router.local',
+    'ftp://acme.com', 'javascript:alert(1)', 'mailto:me@acme.com', 'user:pw@acme.com', 'acme.com:8080', 'a b.com', `${'a'.repeat(250)}.com`, '<script>.com']) {
+    const w = E.normalizeWebsite(bad);
+    assert.equal(w.url, '', bad);
+    assert.match(w.error, /like example\.com/, bad);
+  }
+});
+
+test('website: is context only and never changes the recommendations', () => {
+  const without = E.generateReport(P.software, { now: NOW });
+  const withSite = E.generateReport({ ...P.software, website: 'acme.io' }, { now: NOW });
+  assert.deepEqual(ids(withSite), ids(without));
+  assert.deepEqual(withSite.opportunities.map(o => o.score), without.opportunities.map(o => o.score));
+  assert.equal(without.websiteNote, '');
+  assert.equal(withSite.profile.website, 'acme.io');
+  assert.match(withSite.websiteNote, /did not visit or check it/);
+  assert.match(withSite.websiteNote, /based only on your answers/);
+  assert.ok(!/audit(ed)?|scanned your (site|website)|we (checked|reviewed) your/i.test(JSON.stringify(withSite)), 'never claims the site was checked');
+  const text = E.toPlainText(withSite);
+  assert.ok(text.includes('Website: acme.io (not visited)'));
+  // An invalid website is dropped rather than blocking the report.
+  assert.equal(E.generateReport({ ...base, website: 'localhost' }).answers.website, '');
+});
+
+test('website: share links never carry it, even when a link is edited to include one', () => {
+  const answers = E.normalizeAnswers({ ...base, website: 'acme.io', context: 'private' }).answers;
+  const token = E.encodeAnswers(answers);
+  assert.ok(!Buffer.from(token.slice(3), 'base64url').toString().includes('acme'));
+  assert.equal(E.decodeAnswers(token).website, '');
+  const forged = `v1.${Buffer.from(JSON.stringify({ ...base, website: 'evil.example.net', context: 'injected' })).toString('base64url')}`;
+  const decoded = E.decodeAnswers(forged);
+  assert.equal(decoded.website, '');
+  assert.equal(decoded.context, '');
+});
