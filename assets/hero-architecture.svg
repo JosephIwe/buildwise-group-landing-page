@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#08090B"/><stop offset=".55" stop-color="#121315"/><stop offset="1" stop-color="#1A1918"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="1" y2=".6">
+      <stop offset="0" stop-color="#2B2B2C"/><stop offset=".55" stop-color="#46433F"/><stop offset="1" stop-color="#5E5952"/>
+    </linearGradient>
+    <linearGradient id="under" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0C0C0D"/><stop offset="1" stop-color="#211F1D"/>
+    </linearGradient>
+    <linearGradient id="door" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E9DECB"/><stop offset=".6" stop-color="#F6EFE3"/><stop offset="1" stop-color="#FBF6EE"/>
+    </linearGradient>
+    <linearGradient id="pillar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8A7F70"/><stop offset=".12" stop-color="#5A534B"/><stop offset=".7" stop-color="#2E2B28"/><stop offset="1" stop-color="#1A1918"/>
+    </linearGradient>
+    <linearGradient id="jamb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3A3530"/><stop offset="1" stop-color="#B9AC98"/>
+    </linearGradient>
+    <linearGradient id="leftwall" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#060708"/><stop offset="1" stop-color="#1D1C1B"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2A2724"/><stop offset=".35" stop-color="#1A1918"/><stop offset="1" stop-color="#0E0E0F"/>
+    </linearGradient>
+    <radialGradient id="spill" cx=".5" cy="0" r="1">
+      <stop offset="0" stop-color="#F3E7D2" stop-opacity=".55"/><stop offset=".45" stop-color="#C9B89E" stop-opacity=".14"/><stop offset="1" stop-color="#C9B89E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#F7EEDD" stop-opacity=".5"/><stop offset="1" stop-color="#F7EEDD" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx=".62" cy=".55" r=".8">
+      <stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/>
+    </radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 .22"/></feComponentTransfer>
+    </filter>
+    <filter id="concrete" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".006 .045" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 .2"/></feComponentTransfer>
+    </filter>
+    <filter id="blur40"><feGaussianBlur stdDeviation="40"/></filter>
+    <filter id="blur6"><feGaussianBlur stdDeviation="6"/></filter>
+    <clipPath id="beamClip"><path d="M300 0H1268V528Z"/></clipPath>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+
+  <!-- back wall and opening -->
+  <rect x="1060" y="190" width="540" height="520" fill="#1E1C1A"/>
+  <rect x="1140" y="236" width="196" height="474" fill="url(#door)"/>
+  <ellipse cx="1238" cy="470" rx="260" ry="320" fill="url(#glow)" filter="url(#blur40)"/>
+  <path d="M1100 236H1140V710H1100Z" fill="url(#jamb)"/>
+  <path d="M1336 236H1600V720H1336Z" fill="url(#pillar)"/>
+  <path d="M1336 236H1360V716H1336Z" fill="#C8BBA6" opacity=".55"/>
+  <rect x="1060" y="190" width="540" height="46" fill="#151413"/>
+
+  <!-- floor -->
+  <path d="M0 700H1600V1000H0Z" fill="url(#floor)"/>
+  <path d="M1140 708H1336L1600 1000H560Z" fill="url(#spill)" filter="url(#blur6)"/>
+  <g stroke="#F4EBDD" stroke-opacity=".07" stroke-width="1.2" fill="none">
+    <path d="M1238 706L240 1000M1238 706L760 1000M1238 706L1320 1000M1238 706L1600 900M1238 706L0 860"/>
+    <path d="M0 760H1600M0 836H1600M0 930H1600" stroke-opacity=".045"/>
+  </g>
+
+  <!-- left mass -->
+  <path d="M0 0H300L720 230V735L0 1000Z" fill="url(#leftwall)"/>
+  <path d="M720 230V735" stroke="#2C2A28" stroke-opacity=".6" stroke-width="2"/>
+
+  <!-- cantilevered beam -->
+  <path d="M120 0H300L1268 528L1214 574Z" fill="url(#under)"/>
+  <path d="M300 0H1268V528Z" fill="url(#beam)"/>
+  <g clip-path="url(#beamClip)">
+    <rect width="1600" height="1000" filter="url(#concrete)"/>
+    <g stroke="#000" stroke-opacity=".18" stroke-width="1.4">
+      <path d="M560 0L1268 386M820 0L1268 244M1060 0L1268 112"/>
+    </g>
+    <path d="M300 0L1268 528" stroke="#D9CDB9" stroke-opacity=".35" stroke-width="2"/>
+  </g>
+  <path d="M1268 0V528" stroke="#0C0C0D" stroke-width="6"/>
+
+  <!-- figure -->
+  <g fill="#0A0A0B">
+    <ellipse cx="1243" cy="583" rx="6.6" ry="8"/>
+    <path d="M1237.5 594C1240.5 591.5 1245.5 591.5 1248.5 594L1252 614L1253.5 642L1250.5 643L1249.5 662L1250 705H1245.5L1243.6 668H1242.4L1240.5 705H1236L1236.5 662L1235.5 643L1232.5 642L1234 614Z"/>
+  </g>
+  <ellipse cx="1243" cy="706" rx="16" ry="2.6" fill="#000" opacity=".45"/>
+  <path d="M1236 708L1250 708L1234 760L1210 760Z" fill="#000" opacity=".18" filter="url(#blur6)"/>
+
+  <rect width="1600" height="1000" fill="url(#vignette)"/>
+  <rect width="1600" height="1000" filter="url(#grain)" opacity=".55"/>
+</svg>
