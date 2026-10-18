@@ -5,5 +5,7 @@
 # send to the server, and a page showing a report is marked noindex.
 User-agent: *
 Allow: /
+# The audit API only answers POST requests from the audit page.
+Disallow: /api/
 
 Sitemap: https://buildwisegroup.dev/sitemap.xml

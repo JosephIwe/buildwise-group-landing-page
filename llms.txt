@@ -21,6 +21,7 @@ This file is a plain-text summary of the public website for AI assistants and ot
 
 - [Homepage](https://buildwisegroup.dev/): services, approach, ventures and contact.
 - [AI Business Opportunity Scanner](https://buildwisegroup.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to BuildWise Group.
+- [Website & AI Visibility Audit](https://buildwisegroup.dev/website-audit): an automated, read-only check of a public website's technical SEO, robots.txt rules for search and AI crawlers, and content clarity, with evidence for each finding. It is not a guarantee of rankings or AI citations.
 
 ## Contact
 

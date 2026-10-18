@@ -1,0 +1,75 @@
+/* Website & AI Visibility Audit. Builds on scanner.css (layout, report, cards) and styles.css (tokens). */
+.audit-title { max-width: 16ch; }
+.audit-label { display: block; }
+.audit-field { margin-top: 22px; display: grid; gap: 12px; }
+.audit-field .btn { justify-content: center; }
+.audit-field .scan-input[aria-invalid="true"] { border-color: #FFB3A6; }
+@media (min-width: 600px) { .audit-field { grid-template-columns: 1fr auto; align-items: stretch; } }
+.audit-covers { margin-top: 28px; display: grid; gap: 14px; border-top: 1px solid var(--line-dark); padding-top: 24px; }
+.audit-covers li { font-size: 14.5px; line-height: 1.55; color: rgba(250, 250, 248, .7); }
+.audit-covers strong { display: block; font-weight: 600; color: var(--offwhite); margin-bottom: 2px; }
+
+.audit-section { margin-top: var(--space-6); }
+.audit-intro { margin-top: 14px; max-width: 46em; color: var(--slate); }
+.audit-list { margin-top: var(--space-4); display: grid; gap: 16px; }
+.audit-empty { padding: 24px; background: #fff; border: 1px dashed var(--line-light); border-radius: 3px; color: var(--slate); }
+
+.audit-finding { position: relative; background: #fff; border: 1px solid var(--line-light); border-left: 3px solid var(--slate-light); border-radius: 3px; padding: clamp(20px, 3vw, 36px); }
+.audit-finding.sev-critical { border-left-color: #C2261B; }
+.audit-finding.sev-high { border-left-color: #D9622B; }
+.audit-finding.sev-medium { border-left-color: var(--cobalt); }
+.audit-finding.sev-low { border-left-color: var(--slate-light); }
+.audit-finding-title { margin-top: 14px; font-size: clamp(19px, 1.8vw, 24px); font-weight: 600; letter-spacing: -.02em; line-height: 1.25; overflow-wrap: anywhere; }
+.tag-critical { border-color: rgba(194, 38, 27, .45); color: #A11F16; background: rgba(194, 38, 27, .06); }
+.tag-high { border-color: rgba(217, 98, 43, .5); color: #9A4214; background: rgba(217, 98, 43, .07); }
+.tag-medium { border-color: rgba(30, 79, 255, .4); color: var(--cobalt); background: rgba(30, 79, 255, .05); }
+.tag-low { background: var(--paper); }
+.audit-evidence { margin-top: 18px; padding: 14px 16px; background: var(--paper); border-radius: 3px; }
+.audit-evidence ul { display: grid; gap: 6px; }
+.audit-evidence li { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; line-height: 1.5; color: #2C3038; overflow-wrap: anywhere; }
+.audit-finding-grid { margin-top: 18px; display: grid; gap: 18px; }
+.audit-finding-grid p { color: #3A3F48; }
+@media (min-width: 900px) { .audit-finding-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+.audit-finding .op-fine { margin-top: 16px; }
+
+.audit-table-wrap { margin-top: var(--space-4); overflow-x: auto; background: #fff; border: 1px solid var(--line-light); border-radius: 3px; }
+.audit-table-wrap:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.audit-table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px; }
+.audit-table th, .audit-table td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line-light); color: #2C3038; }
+.audit-table thead th { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--slate); }
+.audit-table tbody th { font-weight: 600; white-space: nowrap; }
+.audit-table tbody th a { color: var(--graphite); text-decoration: underline; text-decoration-color: var(--line-light); text-underline-offset: 3px; }
+.audit-table tbody th a:hover { color: var(--cobalt); }
+.audit-operator, .audit-note { display: block; font-size: 12.5px; font-weight: 400; color: var(--slate); margin-top: 2px; }
+.audit-purpose { display: block; font-weight: 500; }
+.audit-note { max-width: 32em; }
+.audit-access { font-weight: 600; white-space: nowrap; }
+.is-allowed .audit-access { color: #1D7A46; }
+.is-blocked .audit-access { color: #A11F16; }
+.is-unknown .audit-access { color: var(--slate); }
+.audit-rule { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; overflow-wrap: anywhere; min-width: 220px; }
+.audit-table tbody tr:last-child > * { border-bottom: 0; }
+
+.audit-split { display: grid; gap: 0 48px; }
+@media (min-width: 900px) { .audit-split { grid-template-columns: 1fr 1fr; } }
+.report-h3 { margin-top: 12px; font-size: clamp(22px, 2.2vw, 30px); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
+.audit-split .op-list { margin-top: 18px; }
+.audit-notchecked { margin-top: 18px; display: grid; gap: 14px; }
+.audit-notchecked li { padding-left: 18px; position: relative; color: #3A3F48; }
+.audit-notchecked li::before { content: ""; position: absolute; left: 0; top: .72em; width: 7px; height: 1px; background: var(--slate-light); }
+.audit-notchecked strong { display: block; font-weight: 600; color: var(--graphite); }
+.audit-requests { margin-top: var(--space-5); }
+.audit-requests ol { margin-top: 12px; display: grid; gap: 4px; }
+.audit-requests li { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; color: #3A3F48; overflow-wrap: anywhere; }
+
+@media (max-width: 520px) {
+  .audit-finding { padding: 20px 18px; }
+}
+@media print {
+  .audit-page .audit-start, .audit-page .report-next, .audit-page .report-foot { display: none !important; }
+  .audit-requests ol { display: block; }
+  .audit-finding, .audit-table-wrap { border-color: #ccc; break-inside: avoid-page; }
+  .audit-table { min-width: 0; }
+}
+/* The scanner hides its intro on phones; here it is the explanation of the tool, so keep it. */
+.audit-page .scanner-intro { display: block; }
