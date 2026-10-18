@@ -19,8 +19,8 @@ This file is a plain-text summary of the public website for AI assistants and ot
 
 ## Pages
 
-- [Homepage](https://buildwise-group.pages.dev/): services, approach, ventures and contact.
-- [AI Business Opportunity Scanner](https://buildwise-group.pages.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to BuildWise Group.
+- [Homepage](https://buildwisegroup.dev/): services, approach, ventures and contact.
+- [AI Business Opportunity Scanner](https://buildwisegroup.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to BuildWise Group.
 
 ## Contact
 
