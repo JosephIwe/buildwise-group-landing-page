@@ -884,7 +884,7 @@
     const byArea = new Map();
     const areasOf = opp => [opp.area, ...(opp.covers || [])];
     ranked.forEach(item => {
-      const holder = byArea.get(item.opp.area);
+      const holder = areasOf(item.opp).map(area => byArea.get(area)).find(Boolean);
       if (holder) {
         if (!holder.alternative && item.parts.some(p => p.specific)) holder.alternative = item;
         return;

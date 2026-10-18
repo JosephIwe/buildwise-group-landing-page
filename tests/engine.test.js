@@ -293,6 +293,19 @@ test('labels never get weaker down the ranking, and each problem area appears on
   }
 });
 
+test('a pattern that already covers another problem area is not shown next to it', () => {
+  const byId = Object.fromEntries(E.LIBRARY.map(o => [o.id, o]));
+  for (const bottleneck of optionsOf('bottleneck')) {
+    for (const tasks of [['chasing', 'documents'], ['chasing', 'data-entry'], ['documents']]) {
+      const r = E.generateReport({ industry: 'professional', stage: 'small', objective: 'time', bottleneck, tasks });
+      const shown = r.opportunities.map(o => byId[o.id]);
+      shown.forEach(a => shown.forEach(b => {
+        if (a !== b) assert.ok(!(a.covers || []).includes(b.area), `${bottleneck}: ${a.id} covers ${b.id}`);
+      }));
+    }
+  }
+});
+
 test('AI is only suggested when a specific answer points straight at it', () => {
   for (const bottleneck of optionsOf('bottleneck')) {
     for (const objective of optionsOf('objective')) {
