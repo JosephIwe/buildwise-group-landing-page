@@ -119,6 +119,7 @@
       return;
     }
     report = data.report;
+    report.reused = data.cached === true;
     session.set(STORE_KEY, JSON.stringify(report));
     renderReport();
   };
@@ -225,6 +226,9 @@
     const date = new Date(r.auditedAt).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     [`Audited ${date}`, `HTTP ${r.status}`, plural(r.requests.length, 'request'), 'Automated technical audit', 'No score: findings only'].forEach(t => meta.appendChild(el('li', null, t)));
     if (r.finalUrl !== r.requestedUrl) meta.appendChild(el('li', null, `Final address ${r.finalUrl}`));
+    // Say when this is not a fresh run, so a change made since then is not mistaken for a failure.
+    if (r.restored) meta.appendChild(el('li', null, 'Shown from earlier in this tab'));
+    else if (r.reused) meta.appendChild(el('li', null, 'Saved result: the same address was audited in the last 10 minutes'));
     $('reportMethod').textContent = r.method;
     $('reportDisclaimer').textContent = r.disclaimer;
 
@@ -331,7 +335,7 @@
   const saved = session.get(STORE_KEY);
   let restored = false;
   if (saved && !prefill) {
-    try { report = JSON.parse(saved); restored = Boolean(report && report.finalUrl && Array.isArray(report.confirmed)); } catch (e) { restored = false; }
+    try { report = JSON.parse(saved); restored = Boolean(report && report.finalUrl && Array.isArray(report.confirmed)); if (restored) report.restored = true; } catch (e) { restored = false; }
   }
   if (restored) { show('form'); renderReport(); } else { report = null; show('form'); }
 })();

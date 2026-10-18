@@ -8,8 +8,8 @@
  *   node scripts/check-production.mjs --audit         # also run one real audit
  *
  * Every http:// address must answer 301 with the same host, path and query on
- * https://. The https:// pages must answer 200, and the audit API must answer
- * 405 to GET (it only accepts POST). Redirects are not followed, so the status
+ * https:// (www may instead go to the bare domain). The https:// pages must
+ * answer 200, and the audit API must answer 405 to GET (it only accepts POST). Redirects are not followed, so the status
  * printed is the one the server sent. Exits 1 if any check fails.
  */
 
@@ -22,7 +22,10 @@ export function plan(base) {
   return [
     ...PATHS.map(p => ({ name: `HTTP ${p} redirects`, url: `${http}${p}`, status: 301, location: `${https}${p}` })),
     ...PATHS.slice(0, 3).map(p => ({ name: `HTTPS ${p} loads`, url: `${https}${p}`, status: 200 })),
-    { name: 'Audit API refuses GET', url: `${https}/api/website-audit`, status: 405 }
+    { name: 'Audit API refuses GET', url: `${https}/api/website-audit`, status: 405 },
+    // www may either be served as is or redirect to the bare domain; either way http:// must go to https:// first.
+    { name: 'HTTP www redirects', url: `http://www.${site.host}/`, status: [301], location: [`https://www.${site.host}/`, `${https}/`] },
+    { name: 'HTTPS www loads or redirects to the bare domain', url: `https://www.${site.host}/`, status: [200, 301, 308], location: ['', `${https}/`] }
   ];
 }
 
@@ -34,8 +37,9 @@ export async function runCheck(fetchImpl, check) {
     return { ...check, ok: false, got: `request failed (${error.message})` };
   }
   const location = res.headers.get('location') || '';
-  let ok = res.status === check.status;
-  if (ok && check.location) ok = location === check.location;
+  const statuses = [].concat(check.status);
+  let ok = statuses.includes(res.status);
+  if (ok && check.location != null) ok = [].concat(check.location).includes(location);
   if (ok && check.expectJson) {
     const data = await res.json().catch(() => null);
     ok = Boolean(data && check.expectJson(data));
@@ -71,7 +75,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const results = await runAll(fetch, base, { audit: args.includes('--audit') });
   console.log(`Checked ${new Date().toISOString()}`);
   for (const r of results) {
-    const want = r.location ? `${r.status} -> ${r.location}` : String(r.status);
+    const want = `${[].concat(r.status).join(' or ')}${r.location ? ` -> ${[].concat(r.location).filter(Boolean).join(' or ')}` : ''}`;
     console.log(`${r.ok ? 'PASS' : 'FAIL'}  ${r.method || 'GET'} ${r.url}\n      expected ${want}, got ${r.got}`);
   }
   process.exitCode = results.every(r => r.ok) ? 0 : 1;
