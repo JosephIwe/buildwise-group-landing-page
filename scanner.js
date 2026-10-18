@@ -306,6 +306,12 @@
     const why = el('div', 'op-why');
     why.appendChild(el('h3', 'op-h', 'Why this was selected for you'));
     why.appendChild(list('ul', o.reasons, 'op-list'));
+    if (o.alternative) {
+      const alt = el('p', 'op-alt');
+      alt.appendChild(el('strong', null, `Also considered: ${o.alternative.title}. `));
+      alt.appendChild(document.createTextNode(o.alternative.text));
+      why.appendChild(alt);
+    }
     card.appendChild(why);
 
     const block = (heading, content, className) => {
@@ -318,6 +324,7 @@
     const core = el('div', 'op-grid');
     core.appendChild(block('The problem it addresses', o.problem));
     core.appendChild(block('Proposed solution', o.solution));
+    if (o.simplerFirst) core.appendChild(block('Before using AI', o.simplerFirst, 'op-simpler'));
     card.appendChild(core);
 
     const more = el('div', 'op-more');
@@ -336,7 +343,28 @@
     more.appendChild(block('Main dependencies', list('ul', o.dependencies, 'op-list')));
     more.appendChild(block('Risks and limitations', list('ul', o.risks, 'op-list')));
     more.appendChild(block('Suggested first experiment', o.experiment, 'op-experiment'));
+    more.appendChild(block('Success metrics to track', [list('ul', o.metrics, 'op-list'), el('p', 'op-fine', 'Record a baseline before you start, so any change can be measured.')]));
+    more.appendChild(block('To estimate costs, savings or ROI, we would need', list('ul', o.estimateInputs, 'op-list')));
     more.appendChild(block('Indicative implementation sequence', list('ol', o.sequence, 'seq'), 'op-seq'));
+
+    const scoring = el('details', 'op-score');
+    scoring.appendChild(el('summary', null, `How this was scored: ${o.score} points, ${o.match.toLowerCase()}`));
+    const table = el('table');
+    const caption = el('caption', 'sr-only', `Scoring for ${o.title}`);
+    table.appendChild(caption);
+    const tbody = el('tbody');
+    const row = (label, points, kind) => {
+      const tr = el('tr', kind ? `is-${kind}` : null);
+      tr.appendChild(el('th', null, label));
+      tr.appendChild(el('td', null, `${points > 0 ? '+' : ''}${points}`));
+      tbody.appendChild(tr);
+    };
+    o.evidence.forEach(e => row(e.label, e.points, e.specific ? 'specific' : 'general'));
+    o.adjustments.forEach(x => row(`Ranking only: ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, x.points, 'adjust'));
+    table.appendChild(tbody);
+    scoring.appendChild(table);
+    scoring.appendChild(el('p', 'op-fine', `${o.match}: ${o.matchRule} Ranking adjustments change the order only, not the points or the label.`));
+    more.appendChild(scoring);
     more.hidden = !expanded;
     card.appendChild(more);
 
@@ -448,16 +476,22 @@
     const meta = $('reportMeta');
     meta.textContent = '';
     const date = new Date(r.generatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-    [`Generated ${date}`, 'Rule-based, in your browser', 'Not verified analysis'].forEach(text => meta.appendChild(el('li', null, text)));
+    [`Generated ${date}`, 'Rule-based, in your browser', r.general ? 'General starting points' : 'Matched to your answers', 'Not verified findings'].forEach(text => meta.appendChild(el('li', null, text)));
     if (fromLink) meta.appendChild(el('li', null, 'Opened from a link, without optional notes'));
-    $('reportMethod').textContent = r.method;
+    $('reportMethod').textContent = `${r.method} ${r.scoring}`;
+    const sharpen = $('reportSharpen');
+    $('sharpenList').textContent = '';
+    r.sharpen.forEach(tip => $('sharpenList').appendChild(el('li', null, tip)));
+    $('reportShortfall').textContent = r.shortfall;
+    $('reportShortfall').hidden = !r.shortfall;
+    sharpen.hidden = !r.sharpen.length;
     $('reportLimits').textContent = r.limits;
 
     const dl = $('reportAnswers');
     dl.textContent = '';
     const p = r.profile;
     [['Business', p.industry], ['Size', p.stage], ['Objective', p.objective], ['Bottleneck', p.bottleneck],
-      ['Repetitive tasks', p.tasks.join(', ') || 'Skipped'], ['Tools', p.tools.join(', ') || 'Skipped'], ['Notes', p.context || 'None']]
+      ['Repetitive tasks', p.tasks.join(', ') || 'Skipped'], ['Tools', p.tools.join(', ') || 'Skipped'], ['Resources', p.capacity || 'Skipped'], ['Notes', p.context || 'None']]
       .forEach(([k, v]) => {
         const row = el('div');
         row.appendChild(el('dt', null, k));
@@ -555,12 +589,14 @@
     renderStep(true);
   };
   $('reportEdit').addEventListener('click', () => { furthest = QUESTIONS.length - 1; track('edit_answers'); backToQuestions(false); });
+  $('sharpenEdit').addEventListener('click', () => { furthest = QUESTIONS.length - 1; track('edit_answers', { from: 'sharpen' }); backToQuestions(false); });
   $('reportRestart').addEventListener('click', () => { track('restart'); backToQuestions(true); });
   $('scanRestart').addEventListener('click', () => backToQuestions(true));
   $('scanRetry').addEventListener('click', generate);
 
   window.addEventListener('beforeprint', () => {
     document.querySelectorAll('.op-more').forEach(m => { m.dataset.wasHidden = m.hidden ? '1' : ''; m.hidden = false; });
+    document.querySelectorAll('.op-score').forEach(d => { d.open = true; });
   });
   window.addEventListener('afterprint', () => {
     document.querySelectorAll('.op-more').forEach(m => { if (m.dataset.wasHidden === '1') m.hidden = true; });

@@ -16,7 +16,7 @@
 })(typeof self !== 'undefined' ? self : this, () => {
   'use strict';
 
-  const ENGINE_VERSION = '1.0.0';
+  const ENGINE_VERSION = '2.0.0';
   const LIMITS = { context: 600, otherText: 60, multi: 6 };
 
   /* ---------- Questions ---------- */
@@ -83,7 +83,8 @@
         { value: 'inventory', label: 'Stock, supply and orders' },
         { value: 'compliance', label: 'Quality, safety and compliance' },
         { value: 'content', label: 'Marketing and content' },
-        { value: 'knowledge', label: 'Know-how stuck in a few people’s heads' }
+        { value: 'knowledge', label: 'Know-how stuck in a few people’s heads' },
+        { value: 'unsure', label: 'Not sure yet' }
       ]
     },
     {
@@ -116,6 +117,16 @@
         { value: 'pm', label: 'Project or task management' },
         { value: 'custom', label: 'An in-house system' },
         { value: 'paper', label: 'Mostly paper or manual' }
+      ]
+    },
+    {
+      id: 'capacity', short: 'Resources', type: 'single', required: false,
+      title: 'What could you put towards a first project?',
+      help: 'Optional. This helps match each suggestion to what you can realistically support.',
+      options: [
+        { value: 'diy', label: 'A small budget and no technical staff' },
+        { value: 'some', label: 'A modest budget, but no in-house developers' },
+        { value: 'team', label: 'Budget plus technical staff or a development partner' }
       ]
     },
     {
@@ -158,14 +169,17 @@
       risks: ['Generic automated replies can put people off, so keep a person reviewing drafts at first', 'Enquiries contain personal data that must be handled in line with privacy law, such as UK GDPR', 'Too many follow-ups annoy people, so set sensible limits'],
       experiment: 'For two weeks, route every new enquiry from one channel into a single list and send a drafted first reply within the hour. Compare reply times before and after, and count how many enquiries turned into a conversation.',
       sequence: ['Map where enquiries arrive today and who answers them', 'Centralise one channel and agree reply templates', 'Add drafted replies with human approval', 'Add automated follow-ups and connect the remaining channels'],
-      questions: ['Where do your best {customers} usually first get in touch?', 'How quickly do you reply today, and does speed matter in your market?', 'Who should own a lead once it arrives?']
+      questions: ['Where do your best {customers} usually first get in touch?', 'How quickly do you reply today, and does speed matter in your market?', 'Who should own a lead once it arrives?'],
+      area: 'leads',
+      metrics: ["Median time from enquiry to first reply", "Share of enquiries that get at least one follow-up", "Enquiries that turn into a conversation or quote"],
+      estimateInputs: ["How many enquiries you receive each month and how many become {customers} today", "The average value of a new customer", "Time spent per enquiry, and the cost of any CRM or AI tool"]
     },
     {
       id: 'enquiry-assistant', kind: 'AI', title: 'Answer routine questions with a grounded assistant',
       signals: {
         bottleneck: { enquiries: 6, knowledge: 1 }, tasks: { 'same-questions': 4 },
         objective: { experience: 3, time: 2, costs: 1 }, tools: { email: 1, booking: 1, ecommerce: 1 }, stages: { idea: -3 },
-        keywords: ['question', 'faq', 'enquir', 'support', 'customer service', 'chat', 'phone', 'calls', 'inbox']
+        keywords: ['question', 'enquir', 'support ticket', 'customer service', 'live chat', 'chatbot', 'inbox', 'out of hours', 'after hours']
       },
       problem: 'Your team spends much of the day answering the same questions from {customers}, which slows down replies to the questions that genuinely need a person.',
       solution: 'An assistant that answers routine questions using only information you have approved, such as prices, policies, hours and process, and hands everything else to your team with the conversation attached.',
@@ -182,7 +196,11 @@
       risks: ['AI models can give confident but wrong answers, so restrict them to approved content and log every conversation', 'Some {customers} prefer a person, so make handover easy', 'Questions about health, money or legal matters need strict limits'],
       experiment: 'Pull your last 50 customer questions, group them and write approved answers for the top ten. Use them as suggested replies in your inbox for two weeks and count how many needed editing.',
       sequence: ['Collect and group recent questions', 'Write approved answers and handover rules', 'Pilot as suggested replies that staff review', 'Open a customer-facing channel once accuracy is consistently acceptable'],
-      questions: ['Which questions take the most time each week?', 'Which topics must always go to a person?', 'Where do {customers} prefer to ask: website, email, phone or messaging?']
+      questions: ['Which questions take the most time each week?', 'Which topics must always go to a person?', 'Where do {customers} prefer to ask: website, email, phone or messaging?'],
+      area: 'answers',
+      metrics: ["Share of questions answered without a person", "Share of assistant answers that staff had to correct", "Time to first response"],
+      estimateInputs: ["Weekly question volume and the share that are routine", "Average time spent answering one question", "Expected AI usage cost at your volume, which a provider can quote"],
+      simplerFirst: "Before an AI assistant, check whether a searchable FAQ or help centre would answer most questions. If written answers do not exist yet, writing them is the first step either way."
     },
     {
       id: 'booking-automation', kind: 'Automation', title: 'Self-serve booking with automatic reminders',
@@ -207,7 +225,10 @@
       risks: ['Rigid rules can frustrate {customers} with unusual needs, so keep a way to contact a person', 'Reminder messages need consent and an easy opt-out', 'Calendar sync must be reliable or double bookings return'],
       experiment: 'Offer online booking for one service or one team member for a month, with an automatic reminder the day before. Note how much scheduling back-and-forth disappears and whether missed appointments change.',
       sequence: ['Write down your booking rules and exceptions', 'Set up a booking tool for one service', 'Add reminders and calendar sync', 'Roll out to the remaining services and connect payments if useful'],
-      questions: ['Which {work} cause the most back-and-forth to arrange?', 'How often do appointments get missed or moved at short notice?', 'Should {customers} pay or leave a deposit when they book?']
+      questions: ['Which {work} cause the most back-and-forth to arrange?', 'How often do appointments get missed or moved at short notice?', 'Should {customers} pay or leave a deposit when they book?'],
+      area: 'scheduling',
+      metrics: ["Hours per week spent arranging appointments", "Missed appointments per month", "Share of bookings made online"],
+      estimateInputs: ["Bookings per week and time spent arranging each one", "Your current missed-appointment rate and the value of a slot", "The booking tool’s subscription cost"]
     },
     {
       id: 'document-processing', kind: 'AI', title: 'Automated document intake and data extraction',
@@ -231,7 +252,11 @@
       risks: ['Extraction is never perfect, so keep a review step for anything financial', 'Documents can contain personal or sensitive data, so storage and retention need care', 'Unusual layouts need extra examples before they extract reliably'],
       experiment: 'Run 30 recent documents of a single type through an extraction tool. Compare the output with what your team typed and note which fields came out right every time.',
       sequence: ['List document types by volume and pain', 'Test extraction on one type against real examples', 'Add a review queue and export to your system', 'Extend to further document types'],
-      questions: ['Which document type takes the longest to process?', 'Which fields must be exactly right, and which can be checked later?', 'Where does the data need to end up?']
+      questions: ['Which document type takes the longest to process?', 'Which fields must be exactly right, and which can be checked later?', 'Where does the data need to end up?'],
+      area: 'documents',
+      metrics: ["Documents processed per week without retyping", "Fields corrected during review", "Time from receipt to entry in your system"],
+      estimateInputs: ["Documents per month, by type", "Minutes spent keying each one today", "The per-document or subscription cost of an extraction service"],
+      simplerFirst: "First check whether your accounting or bank software can import these documents directly, or whether suppliers can send the data electronically. That may remove the need for AI extraction."
     },
     {
       id: 'proposal-drafting', kind: 'AI', title: 'AI-assisted proposals and quotes',
@@ -256,7 +281,11 @@
       risks: ['Pricing mistakes are costly, so calculate prices with rules and check them', 'Every draft must be reviewed before it is sent', 'Confidential client details should only go to providers with suitable data terms'],
       experiment: 'Write a short brief for your next three proposals and generate drafts from your best past examples. Time each one against your usual process and note how much editing was needed.',
       sequence: ['Gather strong examples and tidy the price list', 'Define the brief and draft template', 'Pilot on live proposals with full review', 'Connect to your CRM so briefs fill themselves'],
-      questions: ['How many proposals or quotes do you write in a typical month?', 'Which parts are always the same and which change every time?', 'Who signs off pricing today?']
+      questions: ['How many proposals or quotes do you write in a typical month?', 'Which parts are always the same and which change every time?', 'Who signs off pricing today?'],
+      area: 'proposals',
+      metrics: ["Time to produce a proposal or quote", "Edits needed per draft", "Proposals or quotes sent per month"],
+      estimateInputs: ["Proposals per month and hours spent on each", "Your current win rate, if you track it", "The AI tool’s cost at your volume"],
+      simplerFirst: "A well-structured template and a pricing spreadsheet may get you most of the way before any AI drafting."
     },
     {
       id: 'payment-followup', kind: 'Automation', title: 'Automated invoicing and payment reminders',
@@ -280,7 +309,10 @@
       risks: ['Reminders must reflect the real account status or they damage relationships', 'Some {customers} need a personal approach, so allow exceptions', 'Payment details should never be sent by plain email'],
       experiment: 'Switch on scheduled payment reminders in your accounting software for one month. Compare the number of overdue invoices and the time spent chasing with the previous month.',
       sequence: ['Agree payment terms and reminder wording', 'Turn on reminders in your accounting tool', 'Trigger invoices from completed work', 'Add online payment links and an overdue report'],
-      questions: ['How long does it usually take to get paid?', 'Which {customers} pay late most often, and why?', 'Can {customers} pay online today?']
+      questions: ['How long does it usually take to get paid?', 'Which {customers} pay late most often, and why?', 'Can {customers} pay online today?'],
+      area: 'payments',
+      metrics: ["Average days to get paid", "Overdue invoices at month end", "Time spent chasing per week"],
+      estimateInputs: ["Invoices per month and the value currently overdue", "Time spent chasing payments today", "The cost of accounting software or add-ons"]
     },
     {
       id: 'reporting', kind: 'Software', title: 'Automated reporting from a single source of truth',
@@ -305,7 +337,10 @@
       risks: ['Automating a report built on messy data spreads the mess faster, so agree definitions first', 'A dashboard nobody uses adds no value, so start from the decisions you need to make', 'Financial and personal data need proper access permissions'],
       experiment: 'Choose the report you produce most often. Write down where each number comes from and how it is defined, then automate just that report and run it alongside the manual version for a month.',
       sequence: ['Choose the decisions and measures that matter', 'Connect the first data sources', 'Automate one report and check it against the manual version', 'Add further reports, alerts and sources'],
-      questions: ['Which decisions are you making without the numbers you need?', 'Which report takes the longest to produce?', 'Where do the numbers disagree today?']
+      questions: ['Which decisions are you making without the numbers you need?', 'Which report takes the longest to produce?', 'Where do the numbers disagree today?'],
+      area: 'reporting',
+      metrics: ["Hours spent preparing the chosen report", "Days between period end and the report being ready", "Figures disputed in meetings"],
+      estimateInputs: ["Hours spent per report and how often it is produced", "How many data sources are involved and how clean they are", "The cost of a reporting tool or the build work"]
     },
     {
       id: 'integration', kind: 'Automation', title: 'Connect your systems and remove double entry',
@@ -329,7 +364,10 @@
       risks: ['Badly mapped fields can corrupt data quickly, so test on copies first', 'Integrations need monitoring and can break when tools change', 'Each connected tool widens who can see your data'],
       experiment: 'List every place one piece of information, such as a new customer, gets typed. Automate the most frequent transfer with an integration tool and count how many manual entries it replaces over two weeks.',
       sequence: ['Map the flow of your key records', 'Automate the single highest-volume transfer', 'Add monitoring and failure alerts', 'Connect the remaining systems one at a time'],
-      questions: ['Which piece of information do you type most often?', 'Which system should be the master copy?', 'What breaks when two systems disagree?']
+      questions: ['Which piece of information do you type most often?', 'Which system should be the master copy?', 'What breaks when two systems disagree?'],
+      area: 'integration',
+      metrics: ["Manual entries replaced per week", "Records that disagree between systems", "Failed transfers per month"],
+      estimateInputs: ["How often each record is typed and how long it takes", "How often errors occur and what fixing them costs", "An integration platform subscription or developer time"]
     },
     {
       id: 'knowledge-assistant', kind: 'AI', title: 'Internal knowledge assistant for your team',
@@ -354,7 +392,11 @@
       risks: ['Answers are only as good as the documents behind them, and outdated content gives outdated answers', 'Access must respect who is allowed to see what', 'AI can still misread documents, so answers should cite their sources and a person should review the ones staff flag'],
       experiment: 'Ask your most interrupted person to list the ten questions they answer most. Document the answers, load them into an assistant restricted to those documents and let two colleagues use it for two weeks.',
       sequence: ['List the questions people ask most', 'Document the answers and processes', 'Pilot the assistant with a small group', 'Expand coverage and set a routine for keeping content current'],
-      questions: ['Who gets interrupted most, and with which questions?', 'How long does a new starter take to work independently?', 'Which documents already exist, and are they current?']
+      questions: ['Who gets interrupted most, and with which questions?', 'How long does a new starter take to work independently?', 'Which documents already exist, and are they current?'],
+      area: 'knowledge',
+      metrics: ["Questions asked of key people per week", "Time for a new starter to work independently", "Share of assistant answers that cite a current source"],
+      estimateInputs: ["Hours your key people spend answering questions", "How long it takes to onboard a new starter today", "Time to write the documents, plus AI usage cost"],
+      simplerFirst: "Start by writing the answers into a shared, searchable document or wiki. Add an AI assistant only if people still cannot find what they need."
     },
     {
       id: 'onboarding-flow', kind: 'Automation', title: 'Structured onboarding workflow',
@@ -378,7 +420,10 @@
       risks: ['Identity and employment documents are sensitive, so store them securely', 'An overly rigid flow can feel impersonal, so keep a personal welcome', 'Steps change over time and the checklist must keep up'],
       experiment: 'Write your onboarding steps as a checklist and run your next three new {customers} or hires through an automated version with a form and scheduled reminders. Note what was still missed.',
       sequence: ['Document the current steps and pain points', 'Build the checklist and forms', 'Pilot with the next few starts', 'Connect it to your other systems'],
-      questions: ['What gets missed most often during onboarding?', 'Which documents do you collect, and where do they go?', 'How long does onboarding take from first yes to fully set up?']
+      questions: ['What gets missed most often during onboarding?', 'Which documents do you collect, and where do they go?', 'How long does onboarding take from first yes to fully set up?'],
+      area: 'onboarding',
+      metrics: ["Steps missed per onboarding", "Days from first yes to fully set up", "Reminders needed per onboarding"],
+      estimateInputs: ["Onboardings per month and hours spent on each", "The cost of delays or missed steps", "The form or workflow tool’s cost"]
     },
     {
       id: 'inventory-signals', kind: 'Software', title: 'Stock and demand visibility',
@@ -403,7 +448,10 @@
       risks: ['Forecasts depend on clean history and are never certain', 'Promotions, seasons and supply shocks still need human judgement', 'Supplier data may arrive in inconsistent formats'],
       experiment: 'Track stock, sales and reorder dates for your 20 most important items in one shared view for a month. Note each stock-out or overstock and whether a simple reorder rule would have caught it.',
       sequence: ['Choose key items and verify stock counts', 'Build one shared stock view', 'Add reorder rules and alerts', 'Introduce forecasting once the history is reliable'],
-      questions: ['Which items run out most often?', 'How do you decide what to order today?', 'How reliable are your current stock counts?']
+      questions: ['Which items run out most often?', 'How do you decide what to order today?', 'How reliable are your current stock counts?'],
+      area: 'inventory',
+      metrics: ["Stock-outs of key items per month", "Stock value tied up in slow-moving items", "Time spent deciding what to order"],
+      estimateInputs: ["Sales history and stock levels for key items", "Margin lost per stock-out and the cost of holding stock", "Software subscription cost"]
     },
     {
       id: 'compliance-workflow', kind: 'Software', title: 'Digital checklists and compliance records',
@@ -428,7 +476,10 @@
       risks: ['Software does not make you compliant; your process and the people following it do', 'Regulated records may have specific retention rules', 'Staff may go back to paper if the tool is not simple'],
       experiment: 'Digitise one check that happens at least weekly. Run it on phones for a month and compare completion rates and the time needed to find records with the paper version.',
       sequence: ['List recurring checks and their rules', 'Digitise the most frequent check', 'Add alerts and audit-ready exports', 'Move the remaining checks across'],
-      questions: ['Which check is most often missed or late?', 'What does an auditor or inspector ask to see?', 'Who acts when a check fails?']
+      questions: ['Which check is most often missed or late?', 'What does an auditor or inspector ask to see?', 'Who acts when a check fails?'],
+      area: 'compliance',
+      metrics: ["Check completion rate", "Time to retrieve a record for an audit", "Failed or overdue checks found per month"],
+      estimateInputs: ["Checks per month and time per check", "Time spent preparing for audits today", "The checklist app’s subscription cost"]
     },
     {
       id: 'content-workflow', kind: 'AI', title: 'AI-assisted content production with human review',
@@ -452,12 +503,16 @@
       risks: ['Unedited AI content reads as generic and can contain errors', 'Check the accuracy of any claim, and your rights to any material used', 'Audiences and search engines reward original insight, which AI alone does not provide'],
       experiment: 'Record a 20-minute conversation about a topic you know well and use it to draft four posts and one email. Track the editing time and compare how the posts perform against your usual content.',
       sequence: ['Write a brand voice guide and calendar', 'Pilot drafting from recorded material', 'Set up review and scheduling', 'Repurpose content across channels'],
-      questions: ['Which channels actually bring you {customers}?', 'Who has the expertise worth sharing?', 'How much review time can you commit each week?']
+      questions: ['Which channels actually bring you {customers}?', 'Who has the expertise worth sharing?', 'How much review time can you commit each week?'],
+      area: 'content',
+      metrics: ["Pieces published per month", "Editing time per piece", "Enquiries or sales you can trace to content"],
+      estimateInputs: ["Hours spent on content today", "How you currently trace enquiries back to content", "AI tool subscription cost"],
+      simplerFirst: "A content calendar and a few reusable templates may be enough to steady your publishing before adding AI drafting."
     },
     {
       id: 'product-validation', kind: 'Software', title: 'Validate a new AI-enabled product or service',
       signals: {
-        objective: { launch: 7, revenue: 1 }, stages: { idea: 4, solo: 2, small: 1 },
+        objective: { launch: 7, revenue: 1 }, coreObjectives: ['launch'], stages: { idea: 4, solo: 2, small: 1 },
         keywords: ['launch', 'new product', 'new service', 'idea', 'mvp', 'startup', 'prototype', 'mobile app', 'saas']
       },
       problem: 'You have an idea for a new product or service, but building the full version before knowing whether people will use it or pay for it is expensive and risky.',
@@ -475,10 +530,96 @@
       risks: ['Early interest does not guarantee paying demand', 'AI features add running costs and accuracy risks that must be designed for', 'Scope tends to grow, so protect the experiment’s focus'],
       experiment: 'Write one sentence on who the product is for and the problem it solves. Speak to ten people who match that description before building anything, and note how many describe the problem without being prompted.',
       sequence: ['Frame the problem, audience and riskiest assumption', 'Test demand with conversations or a landing page', 'Build a narrow working prototype', 'Pilot with a small group and decide what to build next'],
-      questions: ['Who exactly has this problem, and how do they solve it today?', 'What would they need to see to pay for it?', 'What is the smallest version that proves the idea?']
+      questions: ['Who exactly has this problem, and how do they solve it today?', 'What would they need to see to pay for it?', 'What is the smallest version that proves the idea?'],
+      area: 'launch',
+      metrics: ["Target customers who describe the problem without prompting", "Sign-ups or commitments from a landing page or pilot", "Pilot users who come back after first use"],
+      estimateInputs: ["The size of your target audience and how you would reach them", "What people say they would pay, tested in conversations", "Build, hosting and AI usage costs for a prototype"]
     },
     {
-      id: 'customer-portal', kind: 'Software', title: 'Customer self-service portal',
+      id: 'admin-basics', kind: 'Software', title: 'Move paperwork into off-the-shelf job and accounting software',
+      requires: { withoutTools: ['accounting'] }, goodFor: ['diy'], covers: ['payments'],
+      signals: {
+        bottleneck: { admin: 6, payments: 2 }, tasks: { documents: 4, chasing: 2, 'data-entry': 2, proposals: 1 },
+        objective: { costs: 2, time: 2 }, industries: { trades: 1, professional: 1, health: 1 }, stages: { idea: -3, large: -3, established: -2 },
+        keywords: ['paper', 'paperwork', 'receipt', 'invoice', 'spreadsheet', 'admin', 'evenings', 'shoebox']
+      },
+      problem: 'Quotes, invoices, receipts and job details live on paper and in spreadsheets, so admin eats into evenings, documents go missing and it is hard to see what is owed.',
+      solution: 'Adopt one off-the-shelf tool for quotes, invoices and expenses, use its phone app to photograph receipts as they arrive, and switch on its built-in payment reminders, before considering anything custom or AI-based.',
+      how: [
+        'Choose one accounting or job-management tool that covers quotes, invoices and expenses for a business of your size.',
+        'Set up your services, prices and customer list once.',
+        'Photograph receipts and supplier invoices with the tool’s app as they arrive, instead of keeping paper.',
+        'Send invoices from the tool and turn on its automatic payment reminders.'
+      ],
+      benefits: ['Could cut the evenings spent on paperwork', 'Could reduce lost receipts and missed invoices', 'Would show what is owed and what has been paid in one place'],
+      complexity: { level: 'low', why: 'These tools are designed to be set up without technical help. The work is moving your price list and customer details across and building the habit.' },
+      integrates: false, digital: false,
+      dependencies: ['A monthly subscription for the tool, which is an ongoing cost', 'A few hours to set up prices, customers and bank connection', 'A smartphone for capturing receipts', 'Advice from your accountant on which tool they can work with'],
+      risks: ['Switching tools mid-year can complicate your accounts, so check timing with your accountant', 'The tool only helps if receipts are captured every time', 'Bank connections and data are sensitive, so use strong passwords and two-factor sign-in'],
+      experiment: 'Pick a tool your accountant supports and use its free trial for one month on new work only: quote, invoice and capture every receipt in it. Note the hours spent on admin each week compared with the previous month.',
+      sequence: ['Ask your accountant which tools they support', 'Trial one tool on new work for a month', 'Move existing customers and open invoices across', 'Switch on payment reminders and bank feeds'],
+      questions: ['Which tool does your accountant already work with?', 'Which paperwork takes the most time each week?', 'Do you need quotes and job tracking as well as invoices?'],
+      area: 'documents',
+      metrics: ['Hours spent on admin each week', 'Receipts or invoices that go missing', 'Average days to get paid'],
+      estimateInputs: ['Hours you spend on admin each week today', 'The tool’s monthly subscription', 'How much is currently overdue or written off']
+    },
+    {
+      id: 'help-centre', kind: 'Software', title: 'Searchable help centre and FAQ',
+      signals: {
+        bottleneck: { enquiries: 6 }, tasks: { 'same-questions': 4, onboarding: 1 },
+        objective: { experience: 3, time: 2, costs: 2 }, industries: { software: 1, retail: 1 }, stages: { idea: -3 },
+        keywords: ['help doc', 'docs', 'documentation', 'faq', 'how do i', 'how-do-i', 'how-to', 'how to', 'article', 'help centre', 'help center', 'knowledge base', 'same question']
+      },
+      problem: '{customers} ask questions that already have answers, because the answers are hard to find or do not exist in writing yet. Each repeat question takes the team’s time.',
+      solution: 'Publish clear answers to your most common questions in a searchable help centre, link to them from your website, emails and contact page, and suggest relevant articles before {customers} send a message.',
+      how: [
+        'Pull your most frequent questions from recent emails, calls or tickets.',
+        'Write short, specific answers and organise them by topic.',
+        'Put the help centre where {customers} look: website navigation, confirmation emails and the contact page.',
+        'Suggest matching articles on the contact form, and review searches that return nothing.'
+      ],
+      benefits: ['Could reduce repeat questions reaching the team', 'Would let {customers} find answers at any hour without waiting', 'Would create approved written answers that an AI assistant could use later, if one is ever needed'],
+      complexity: { level: 'low', why: 'Help-centre tools and website FAQ pages are widely available. The work is writing and maintaining the answers.' },
+      integrates: false, digital: true,
+      dependencies: ['A list of your most common questions and their correct answers', 'A help-centre tool or a section of your website', 'Someone responsible for keeping answers current', 'A subscription cost, if you use a dedicated help-centre tool'],
+      risks: ['Out-of-date answers create more questions, so set a review routine', 'Articles that are hard to find will not be used, so search and placement matter', 'Some {customers} will still prefer a person, so keep contact easy'],
+      experiment: 'Write answers to your ten most frequent questions, publish them on one page and link to it from your contact page and confirmation emails. For a month, count how many messages ask those ten questions and compare with the month before.',
+      sequence: ['Collect recent questions and rank them by frequency', 'Write and publish the first ten answers', 'Add search, and link articles from emails and the contact form', 'Review failed searches monthly and fill the gaps'],
+      questions: ['Which questions take up the most replies each week?', 'Do written answers to them already exist anywhere?', 'Where do {customers} look before they contact you?'],
+      area: 'answers',
+      metrics: ['Messages per week about the questions you published', 'Help-centre searches that return no result', 'Contact-form visitors who open a suggested article'],
+      estimateInputs: ['How many enquiries you receive each week, and what share are repeat questions', 'Average time spent answering one', 'The cost of a help-centre tool, if you choose one']
+    },
+    {
+      id: 'order-updates', kind: 'Automation', title: 'Proactive order and status updates',
+      requires: { industries: ['retail', 'logistics', 'manufacturing'] },
+      signals: {
+        bottleneck: { enquiries: 6 }, tasks: { 'same-questions': 3, chasing: 1 },
+        objective: { experience: 3, costs: 1, time: 1 }, industries: { retail: 1, logistics: 1 }, stages: { idea: -4 },
+        keywords: ['where is my order', 'where is', 'order status', 'tracking', 'track', 'delivery', 'deliveries', 'dispatch', 'shipping', 'shipped', 'returns', 'refund', 'status update', 'progress update']
+      },
+      problem: 'Many messages from {customers} ask where their {work} have got to, or how returns work. The answer is already in your systems, but they have to ask for it.',
+      solution: 'Send automatic updates at the stages {customers} care about, such as confirmed, dispatched and delivered, with a tracking link and a plain-language returns page, so the most common questions are answered before they are asked.',
+      how: [
+        'List the stages {customers} care about and the questions each one triggers.',
+        'Turn on or configure status notifications in your e-commerce, shipping or job system.',
+        'Include a tracking link and a link to a clear returns or changes page.',
+        'Watch which questions still arrive and add an update or page for them.'
+      ],
+      benefits: ['Could reduce “where is my order” and returns enquiries', 'Would keep {customers} informed without them having to ask', 'Would use features many e-commerce and shipping tools already include'],
+      complexity: { level: 'low', why: 'Many e-commerce and shipping tools include status notifications. The work is choosing the stages and writing clear messages.', easierWith: ['ecommerce'] },
+      integrates: true, digital: true,
+      dependencies: ['A system that knows the status of each order or job', 'Courier tracking links, if you ship goods', 'A returns or changes policy written in plain language', 'A notifications or shipping add-on, which may carry a subscription or per-message cost'],
+      risks: ['Too many messages annoy people, so send only updates that answer real questions', 'Messages must reflect the true status or they create more enquiries', 'Text messages need consent and an opt-out'],
+      experiment: 'Tag a month of support emails by topic to see how many ask about order status or returns. Then turn on dispatch and delivery notifications with a tracking link and a returns-page link, and compare the next month.',
+      sequence: ['Tag recent enquiries by topic', 'Write a plain-language returns or changes page', 'Turn on status notifications for the key stages', 'Add further updates for whatever questions remain'],
+      questions: ['What share of enquiries are about status or returns?', 'Which system knows the current status of each order?', 'Which stage triggers the most questions?'],
+      area: 'status',
+      metrics: ['Weekly enquiries about order status or returns', 'Time from order to first status update', 'Opt-out rate for status messages'],
+      estimateInputs: ['Weekly volume of status and returns enquiries', 'Average time spent handling one', 'The per-message or subscription cost of the notification tool']
+    },
+    {
+      id: 'customer-portal', kind: 'Software', title: 'Customer self-service portal', notFor: ['diy'],
       signals: {
         bottleneck: { enquiries: 2, scheduling: 1, payments: 1 }, tasks: { 'same-questions': 2, chasing: 1, onboarding: 1 },
         objective: { experience: 4, costs: 1 }, tools: { custom: 1, crm: 1 },
@@ -501,7 +642,10 @@
       risks: ['Security matters: a portal exposes customer data if built carelessly', 'Low adoption if {customers} are not shown why it helps', 'Ongoing maintenance costs as systems change'],
       experiment: 'List the five status questions you are asked most. Send automatic status updates for one month as a stand-in for a portal, and track whether those enquiries fall.',
       sequence: ['Identify the most common self-service needs', 'Pilot proactive status updates', 'Build a narrow portal for one need', 'Add documents, requests and further integrations'],
-      questions: ['What do {customers} contact you about most after they have bought?', 'Where does status information live today?', 'Would your {customers} sign in to a portal, or prefer updates sent to them?']
+      questions: ['What do {customers} contact you about most after they have bought?', 'Where does status information live today?', 'Would your {customers} sign in to a portal, or prefer updates sent to them?'],
+      area: 'status',
+      metrics: ["Routine status enquiries per week", "Share of {customers} who sign in", "Requests completed without staff involvement"],
+      estimateInputs: ["Weekly status enquiries and the time spent on each", "How many {customers} would realistically use it", "A build quote plus hosting and maintenance costs"]
     }
   ];
 
@@ -524,7 +668,7 @@
   /* ---------- Validation ---------- */
   function normalizeAnswers(input) {
     const raw = input && typeof input === 'object' ? input : {};
-    const answers = { industry: '', industryOther: '', stage: '', objective: '', bottleneck: '', tasks: [], tools: [], context: '' };
+    const answers = { industry: '', industryOther: '', stage: '', objective: '', bottleneck: '', tasks: [], tools: [], capacity: '', context: '' };
     const errors = {};
 
     QUESTIONS.forEach(q => {
@@ -547,7 +691,23 @@
     return { answers, errors, valid: Object.keys(errors).length === 0 };
   }
 
-  /* ---------- Scoring ---------- */
+  /* ---------- Scoring ----------
+   * Every point comes from one of the visitor's answers, and the report shows
+   * the breakdown. "Specific" evidence (bottleneck, repetitive tasks, words in
+   * the notes) decides the match label; "general" evidence (objective, sector,
+   * size) only orders options that are otherwise close. Tools never add points:
+   * they only change how complex an option is likely to be.
+   */
+  const POINTS = { bottleneckDirect: 6, /* also used for an objective that is the problem itself */ bottleneckPartial: 1, taskDirect: 3, taskPartial: 1, taskCap: 6, keyword: 2, keywordCap: 4, objectiveDirect: 2, objectivePartial: 1, industry: 1, stageCap: 2 };
+  const PENALTY = { perLevel: 0.75, ai: 1, aiLimited: 2.5 };
+  const LIMITED_HINTS = ['no budget', 'small budget', 'tight budget', 'limited budget', 'low budget', 'no developer', 'no tech', 'no it ', 'do everything myself', 'on my own', 'just me'];
+  const MATCH_RULES = {
+    'Strong match': 'Addresses your biggest bottleneck, and at least two more of your specific answers (repetitive tasks, notes, or an objective that is itself the problem) point directly to it.',
+    'Good match': 'Addresses your biggest bottleneck and one more specific answer points directly to it, or two specific answers point directly to it.',
+    'Partial match': 'Addresses your biggest bottleneck on its own, or only one or two of your specific answers point to it, some only indirectly.',
+    'General suggestion': 'None of your specific answers point to it. It is included because it suits your objective, sector or size.'
+  };
+
   /* Keywords match at the start of a word; the reason quotes the visitor's own word. */
   function findKeywords(context, keywords) {
     if (!context || !keywords) return [];
@@ -561,43 +721,89 @@
       let end = i + k.length;
       while (isWordChar(text[end])) end += 1;
       const word = text.slice(i, end);
-      if (!found.includes(word)) found.push(word);
+      if (!found.some(f => f.includes(word) || word.includes(f))) found.push(word);
     });
     return found.slice(0, 2);
+  }
+
+  /* Resources the visitor can put towards a project: their answer, or an inference they can see. */
+  function resourcesFor(a) {
+    if (a.capacity) return { level: a.capacity, inferred: false };
+    const text = ` ${a.context.toLowerCase()} `;
+    if (LIMITED_HINTS.some(h => text.includes(h))) return { level: 'diy', inferred: 'notes' };
+    if (a.stage === 'solo' || a.stage === 'idea') return { level: 'diy', inferred: 'stage' };
+    return { level: '', inferred: false };
   }
 
   function scoreOpportunity(opp, a) {
     const s = opp.signals;
     const parts = [];
-    const add = (type, points, detail) => { if (points) parts.push({ type, points, detail }); };
+    const add = (type, points, label, specific, strong) => { if (points) parts.push({ type, points, label, specific, strong: Boolean(strong) }); };
 
-    add('bottleneck', (s.bottleneck || {})[a.bottleneck] || 0, a.bottleneck);
-    const taskHits = a.tasks.filter(t => (s.tasks || {})[t]);
-    taskHits.forEach(t => add('task', s.tasks[t], t));
-    add('objective', (s.objective || {})[a.objective] || 0, a.objective);
-    const toolHits = a.tools.filter(t => (s.tools || {})[t]);
-    toolHits.forEach(t => add('tool', s.tools[t], t));
-    add('industry', (s.industries || {})[a.industry] || 0, a.industry);
-    add('stage', (s.stages || {})[a.stage] || 0, a.stage);
-    findKeywords(a.context, s.keywords).forEach(k => add('keyword', 2, k));
+    const b = (s.bottleneck || {})[a.bottleneck];
+    if (b) {
+      const direct = b >= 5;
+      add(direct ? 'bottleneck' : 'bottleneck-partial', direct ? POINTS.bottleneckDirect : POINTS.bottleneckPartial,
+        `${direct ? 'Addresses' : 'Partly addresses'} your biggest bottleneck: ${lower(labelFor('bottleneck', a.bottleneck))}`, true, direct);
+    }
+    let taskPoints = 0;
+    a.tasks.forEach(t => {
+      const w = (s.tasks || {})[t];
+      if (!w) return;
+      const pts = Math.min(w >= 4 ? POINTS.taskDirect : POINTS.taskPartial, POINTS.taskCap - taskPoints);
+      taskPoints += pts;
+      add('task', pts, `${w >= 4 ? 'Matches' : 'Partly matches'} a repetitive task: ${lower(labelFor('tasks', t))}`, true, w >= 4);
+    });
+    findKeywords(a.context, s.keywords).slice(0, POINTS.keywordCap / POINTS.keyword)
+      .forEach(k => add('keyword', POINTS.keyword, `Your notes mention “${k}”`, true, true));
+
+    const o = (s.objective || {})[a.objective];
+    if (o) {
+      // For a few patterns the objective itself is the problem (launching something new), so it counts as specific evidence.
+      const core = (s.coreObjectives || []).includes(a.objective);
+      const pts = core ? POINTS.bottleneckDirect : (o >= 3 ? POINTS.objectiveDirect : POINTS.objectivePartial);
+      add(core ? 'objective-core' : 'objective', pts, `${core ? 'Directly serves' : 'Supports'} your objective: ${focusFor(a.objective)}`, core, core);
+    }
+    if ((s.industries || {})[a.industry]) add('industry', POINTS.industry, `Relevant to ${lower(labelFor('industry', a.industry))} businesses`, false);
+    const st = (s.stages || {})[a.stage];
+    if (st) add('stage', Math.min(st, POINTS.stageCap), st > 0 ? `Suits a business of your size (${lower(labelFor('stage', a.stage))})` : `Less suited to a business of your size (${lower(labelFor('stage', a.stage))})`, false);
 
     const score = parts.reduce((sum, p) => sum + p.points, 0);
     return { score, parts };
   }
 
-  function assessComplexity(opp, a) {
+  const TIERS = ['General suggestion', 'Partial match', 'Good match', 'Strong match'];
+  function matchStrength(parts) {
+    const direct = parts.some(p => p.type === 'bottleneck');
+    const strong = parts.filter(p => p.strong && p.type !== 'bottleneck').length;
+    if (direct && strong >= 2) return 'Strong match';
+    if ((direct && strong === 1) || strong >= 2) return 'Good match';
+    if (direct || parts.some(p => p.specific)) return 'Partial match';
+    return 'General suggestion';
+  }
+
+  function isEligible(opp, a, parts, resources) {
+    if (opp.notFor && opp.notFor.includes(resources.level)) return false;
+    // AI is only suggested when a specific answer points straight at it, never on indirect evidence alone.
+    if (opp.kind === 'AI' && !parts.some(p => p.strong)) return false;
+    if (opp.requires && opp.requires.industries && !opp.requires.industries.includes(a.industry) && !parts.some(p => p.type === 'keyword')) return false;
+    if (opp.requires && opp.requires.withoutTools && opp.requires.withoutTools.some(t => a.tools.includes(t))) return false;
+    return true;
+  }
+
+  function assessComplexity(opp, a, resources) {
     const c = opp.complexity;
+    const res = resources || resourcesFor(a);
     let index = LEVELS.indexOf(c.level);
     const notes = [c.why];
-    const answeredTools = a.tools.length > 0;
     const toolLabels = values => listJoin(values.map(v => lower(labelFor('tools', v))));
 
-    if (answeredTools) {
+    if (a.tools.length) {
       const helpful = (c.easierWith || []).filter(t => a.tools.includes(t));
       if (helpful.length) { index -= 1; notes.push(`You already use ${toolLabels(helpful)}, which this can build on.`); }
       if (c.harderWithout && !c.harderWithout.some(t => a.tools.includes(t))) { index += 1; notes.push(c.harderNote); }
       if (a.tools.includes('paper') && opp.digital) { index += 1; notes.push('Much of your information is on paper or handled manually, so it needs capturing digitally first.'); }
-      if (a.tools.includes('custom') && opp.integrates) { notes.push('Connecting to your in-house system depends on whether it can share data, for example through an API.'); }
+      if (a.tools.includes('custom') && opp.integrates) notes.push('Connecting to your in-house system depends on whether it can share data, for example through an API.');
     } else {
       notes.push('You skipped the tools question, so this assumes a typical setup.');
     }
@@ -605,38 +811,31 @@
       index += 1;
       notes.push('At your size, security review, permissions and rollout across teams add effort.');
     }
+    if (res.level === 'diy') {
+      const why = res.inferred === 'notes' ? 'Your notes suggest a limited budget' : res.inferred === 'stage' ? 'As a very small business you may have limited budget and technical help' : 'You said you have a small budget and no technical staff';
+      if (opp.integrates && index >= 1) { index += 1; notes.push(`${why}, so connecting systems would need a no-code tool or outside help.`); }
+      else notes.push(`${why}. Start with off-the-shelf tools you can configure yourself.`);
+    } else if (res.level === 'team' && opp.integrates && index > 0) {
+      index -= 1;
+      notes.push('Your technical staff or development partner could take on the integration work.');
+    }
     const level = LEVELS[Math.max(0, Math.min(2, index))];
     return { level, label: LEVEL_LABELS[level], notes };
   }
 
   function buildReasons(parts, a) {
     const reasons = [];
-    const of = type => parts.filter(p => p.type === type && p.points > 0);
-    const bottleneck = of('bottleneck')[0];
-    if (bottleneck) {
-      reasons.push(bottleneck.points >= 5
-        ? `You named “${lower(labelFor('bottleneck', a.bottleneck))}” as your biggest bottleneck, and this addresses it directly.`
-        : `It eases part of your main bottleneck, “${lower(labelFor('bottleneck', a.bottleneck))}”.`);
-    }
+    const of = type => parts.filter(p => p.type === type);
+    if (of('bottleneck').length) reasons.push(`You named “${lower(labelFor('bottleneck', a.bottleneck))}” as your biggest bottleneck, and this addresses it directly.`);
+    if (of('bottleneck-partial').length) reasons.push(`It eases part of your biggest bottleneck, “${lower(labelFor('bottleneck', a.bottleneck))}”, though it is not the main fix.`);
     const tasks = of('task');
-    if (tasks.length) reasons.push(`You flagged ${listJoin(tasks.map(t => `“${lower(labelFor('tasks', t.detail))}”`))} as repetitive work.`);
-    const objective = of('objective')[0];
-    if (objective) reasons.push(`It supports your main objective of ${focusFor(a.objective)}.`);
-    const tools = of('tool').filter(t => t.detail !== 'paper');
-    if (tools.length) reasons.push(`It can build on ${listJoin(tools.map(t => lower(labelFor('tools', t.detail))))}, which you already use.`);
-    if (of('tool').some(t => t.detail === 'paper')) reasons.push('You said you mostly work on paper or by hand, which is where this helps most.');
-    const stage = of('stage')[0];
-    if (stage && stage.points >= 2) reasons.push(`It suits a business at your stage (${lower(labelFor('stage', a.stage))}).`);
+    if (tasks.length) reasons.push(`You flagged ${listJoin(tasks.map(t => `“${t.label.replace(/^(Partly matches|Matches) a repetitive task: /, '')}”`))} as repetitive work, which this would ${tasks.every(t => !t.strong) ? 'help with' : 'take on'}.`);
     const keywords = of('keyword');
-    if (keywords.length) reasons.push(`Your notes mention ${listJoin(keywords.map(k => `“${k.detail}”`))}.`);
-    if (!reasons.length) reasons.push('Your answers did not point strongly to one area, so this is included as a general starting point.');
+    if (keywords.length) reasons.push(`Your notes mention ${listJoin(keywords.map(k => k.label.replace('Your notes mention ', '')))}.`);
+    if (of('objective-core').length) reasons.push(`It directly serves your main objective of ${focusFor(a.objective)}.`);
+    if (of('objective').length) reasons.push(`It supports your objective of ${focusFor(a.objective)}.`);
+    if (!parts.some(p => p.specific)) reasons.push('None of your specific answers point to this, so treat it as a general suggestion rather than a finding about your business.');
     return reasons;
-  }
-
-  function matchStrength(score) {
-    if (score >= 10) return 'Strong match';
-    if (score >= 6) return 'Good match';
-    return 'Possible match';
   }
 
   /* ---------- Report ---------- */
@@ -655,38 +854,93 @@
     return {
       problem: f(opp.problem), solution: f(opp.solution), how: opp.how.map(f), benefits: opp.benefits.map(f),
       dependencies: opp.dependencies.map(f), risks: opp.risks.map(f), experiment: f(opp.experiment),
-      sequence: opp.sequence.map(f), questions: opp.questions.map(f)
+      sequence: opp.sequence.map(f), questions: opp.questions.map(f), metrics: opp.metrics.map(f),
+      estimateInputs: opp.estimateInputs.map(f), simplerFirst: opp.simplerFirst ? f(opp.simplerFirst) : ''
     };
   }
 
   function rankLibrary(a) {
+    const resources = resourcesFor(a);
     return LIBRARY.map(opp => {
       const { score, parts } = scoreOpportunity(opp, a);
-      const complexity = assessComplexity(opp, a);
-      // Small preference for lower-complexity options when matches are close.
-      const priority = score - LEVELS.indexOf(complexity.level) * 0.75;
-      return { opp, score, parts, complexity, priority };
-    }).sort((x, y) => y.priority - x.priority || x.opp.id.localeCompare(y.opp.id));
+      const complexity = assessComplexity(opp, a, resources);
+      const adjustments = [];
+      const levelPenalty = LEVELS.indexOf(complexity.level) * PENALTY.perLevel;
+      if (levelPenalty) adjustments.push({ label: `${complexity.label} complexity`, points: -levelPenalty });
+      if (opp.goodFor && opp.goodFor.includes(resources.level)) adjustments.push({ label: 'Suited to limited budget and no technical staff', points: 1.5 });
+      if (opp.kind === 'AI') {
+        const ai = resources.level === 'diy' ? PENALTY.aiLimited : PENALTY.ai;
+        adjustments.push({ label: resources.level === 'diy' ? 'AI option with limited resources: simpler options are preferred' : 'AI option: simpler options are preferred when close', points: -ai });
+      }
+      const priority = score + adjustments.reduce((sum, x) => sum + x.points, 0);
+      return { opp, score, parts, complexity, adjustments, priority, match: matchStrength(parts), eligible: isEligible(opp, a, parts, resources) };
+    }).filter(x => x.eligible && x.score > 0)
+      .sort((x, y) => TIERS.indexOf(y.match) - TIERS.indexOf(x.match) || y.priority - x.priority || x.opp.id.localeCompare(y.opp.id));
   }
 
-  function rankNote(rank, item, next) {
-    if (rank === 1) {
-      const quick = item.complexity.level === 'low' ? ' and is rated low complexity' : '';
-      return `Suggested starting point. It is the closest match to your answers${quick}.`;
-    }
-    if (rank === 2) return 'A possible second step, which may be easier once the first is in place.';
-    return next ? '' : 'Worth scoping once the first two are under way.';
+  /* One recommendation per problem area. The best runner-up in the same area is shown as "also considered". */
+  function selectDistinct(ranked, count) {
+    const picked = [];
+    const byArea = new Map();
+    const areasOf = opp => [opp.area, ...(opp.covers || [])];
+    ranked.forEach(item => {
+      const holder = byArea.get(item.opp.area);
+      if (holder) {
+        if (!holder.alternative && item.parts.some(p => p.specific)) holder.alternative = item;
+        return;
+      }
+      if (picked.length >= count) return;
+      picked.push(item);
+      areasOf(item.opp).forEach(area => { if (!byArea.has(area)) byArea.set(area, item); });
+    });
+    return picked;
+  }
+
+  const ORDINAL = ['first', 'second', 'third'];
+  function rankNote(rank, item) {
+    const specific = item.parts.filter(p => p.specific && p.type !== 'bottleneck').length;
+    const direct = item.parts.some(p => p.type === 'bottleneck');
+    const indirectOnly = !item.parts.some(p => p.strong);
+    let because;
+    if (direct && specific > 0) because = `it addresses your biggest bottleneck and ${specific === 1 ? 'one more of your specific answers points' : `${specific} more of your specific answers point`} to it`;
+    else if (direct) because = 'it addresses your biggest bottleneck';
+    else if (indirectOnly && item.parts.some(p => p.specific)) because = 'some of your answers point to it, though only indirectly';
+    else if (specific > 1) because = `${specific} of your specific answers point to it`;
+    else if (specific === 1) because = 'one of your specific answers points to it';
+    else return `Ranked ${ORDINAL[rank - 1]} as a general suggestion. Your specific answers do not point to it.`;
+    const easy = item.complexity.level === 'low' ? ', and it is rated low complexity' : '';
+    return `Ranked ${ORDINAL[rank - 1]} because ${because}${easy}.`;
+  }
+
+  function alternativeNote(item) {
+    const alt = item.alternative;
+    if (!alt) return null;
+    let why;
+    if (alt.opp.kind === 'AI' && item.opp.kind !== 'AI') why = 'it uses AI for a problem the simpler option may solve; consider it if the simpler option is not enough';
+    else if (LEVELS.indexOf(alt.complexity.level) > LEVELS.indexOf(item.complexity.level)) why = 'it addresses the same problem with more complexity';
+    else why = 'fewer of your answers point to it';
+    return { id: alt.opp.id, title: alt.opp.title, text: `Ranked lower because ${why}.` };
   }
 
   function buildRoadmap(picked) {
     const [first, second, third] = picked;
     const steps = [
-      { phase: 'Prove', text: `Run the first experiment for “${first.title}”. Agree in advance what result would make it worth continuing.` },
+      { phase: 'Prove', text: `Run the first experiment for “${first.title}”. Agree in advance which measure would make it worth continuing.` },
       { phase: 'Embed', text: `If the result holds up, make “${first.title}” part of everyday work and assign an owner.` }
     ];
     if (second) steps.push({ phase: 'Extend', text: `Start discovery for “${second.title}”, reusing any data, integrations or content the first step created.` });
     if (third) steps.push({ phase: 'Scope', text: `Scope “${third.title}” once the first two are stable, and revisit this plan with what you have learned.` });
     return steps;
+  }
+
+  function sharpenTips(a, general) {
+    const tips = [];
+    if (a.bottleneck === 'unsure') tips.push('Pick the one area where work gets stuck most often, even if it is only a hunch.');
+    if (!a.tasks.length) tips.push('Select the tasks your team repeats every week.');
+    if (!a.context) tips.push('Describe one frustrating process in a sentence or two in the notes.');
+    if (!a.tools.length) tips.push('Say which tools you use, so complexity can be judged properly.');
+    if (!a.capacity) tips.push('Say what budget and technical help you have, so suggestions match what you can support.');
+    return general || tips.length >= 3 ? tips : [];
   }
 
   function generateReport(input, options) {
@@ -699,24 +953,30 @@
       throw error;
     }
     const words = industryWords(a);
+    const resources = resourcesFor(a);
     const ranked = rankLibrary(a);
-    const picked = ranked.slice(0, 3);
-    const general = picked[0].score < 6;
+    const specific = item => item.match === 'Strong match' || item.match === 'Good match';
+    // In a specific report, weak filler (indirect evidence only, few points) is left out rather than padded in.
+    const relevant = ranked.filter(item => item.parts.some(p => p.strong) || item.score >= 4);
+    const general = !relevant.some(specific);
+    const picked = selectDistinct(general ? ranked : relevant, 3);
 
-    const opportunities = picked.map((item, i) => {
-      const text = personalise(item.opp, words);
-      return Object.assign({
-        rank: i + 1,
-        id: item.opp.id,
-        title: item.opp.title,
-        kind: item.opp.kind,
-        match: matchStrength(item.score),
-        score: item.score,
-        rankNote: rankNote(i + 1, item, picked[i + 1]),
-        reasons: buildReasons(item.parts, a),
-        complexity: item.complexity
-      }, text);
-    });
+    const opportunities = picked.map((item, i) => Object.assign({
+      rank: i + 1,
+      id: item.opp.id,
+      title: item.opp.title,
+      kind: item.opp.kind,
+      area: item.opp.area,
+      match: item.match,
+      matchRule: MATCH_RULES[item.match],
+      score: item.score,
+      evidence: item.parts.map(p => ({ label: p.label, points: p.points, specific: p.specific })),
+      adjustments: item.adjustments,
+      rankNote: rankNote(i + 1, item),
+      reasons: buildReasons(item.parts, a),
+      complexity: item.complexity,
+      alternative: alternativeNote(item)
+    }, personalise(item.opp, words)));
 
     const industryLabel = a.industry === 'other' && a.industryOther ? a.industryOther : labelFor('industry', a.industry);
     const profile = {
@@ -726,8 +986,11 @@
       bottleneck: labelFor('bottleneck', a.bottleneck),
       tasks: a.tasks.map(t => labelFor('tasks', t)),
       tools: a.tools.map(t => labelFor('tools', t)),
+      capacity: a.capacity ? labelFor('capacity', a.capacity) : '',
       context: a.context
     };
+    const who = a.industry === 'other' && !a.industryOther ? 'a business' : `${article(industryLabel)} ${lower(industryLabel)} business`;
+    const count = ['No', 'One', 'Two', 'Three'][opportunities.length];
 
     return {
       engine: ENGINE_VERSION,
@@ -735,16 +998,26 @@
       answers: a,
       profile,
       general,
-      headline: a.industry === 'other' && !a.industryOther
-        ? `Three opportunities for a business focused on ${focusFor(a.objective)}`
-        : `Three opportunities for ${article(industryLabel)} ${lower(industryLabel)} business focused on ${focusFor(a.objective)}`,
+      resources,
+      headline: general
+        ? `Starting points for ${who} focused on ${focusFor(a.objective)}`
+        : `${count} opportunities for ${who} focused on ${focusFor(a.objective)}`,
       summary: general
-        ? 'Your answers did not point strongly to one area, so these are general starting points. Adding repetitive tasks or a short note may sharpen the result.'
-        : `Based mainly on where work gets stuck (${lower(profile.bottleneck)}) and your objective of ${focusFor(a.objective)}.`,
+        ? (picked.some(item => item.parts.some(p => p.type === 'bottleneck'))
+          ? 'Your biggest bottleneck points to the first suggestion, but nothing else you told us confirms it yet, so treat these as starting points rather than matches. The tips below would sharpen the result.'
+          : 'Your answers do not point clearly to one problem, so these are general suggestions rather than matches. The tips below would sharpen the result.')
+        : (a.bottleneck === 'unsure'
+          ? `Based on your repetitive tasks and notes, and your objective of ${focusFor(a.objective)}.`
+          : `Based mainly on where work gets stuck (${lower(profile.bottleneck)}) and your objective of ${focusFor(a.objective)}.`),
+      sharpen: sharpenTips(a, general),
+      shortfall: !general && opportunities.length < 3
+        ? `Only ${opportunities.length === 1 ? 'one option fits' : 'two options fit'} your answers closely enough to suggest. More detail in the questions may surface others.`
+        : '',
       opportunities,
       roadmap: buildRoadmap(opportunities),
+      scoring: 'Points come only from your answers. Your biggest bottleneck, repetitive tasks and notes count as specific evidence and decide the match label. Options are ordered by match label first, then by points. Your objective, sector and size add smaller amounts, and within the same label, lower-complexity and non-AI options rank higher. Only one option per problem area is shown.',
       method: `These recommendations were generated in your browser by a rule-based engine. It ranks a fixed library of ${LIBRARY.length} AI, automation and software patterns, written by BuildWise Group, against the answers you gave. No AI model, market research or data about your business beyond your answers was used.`,
-      limits: 'Because the library is fixed and the ranking depends only on your answers, it may miss opportunities that suit your business. Treat this as a starting point for a conversation, not verified analysis. Benefits are possible outcomes to test, not measured results, and nothing here is a guaranteed outcome. Every option has costs, and the AI-based ones need human review.'
+      limits: 'Because the library is fixed and the ranking depends only on your answers, it may miss opportunities that suit your business. These are general recommendations, not verified findings: confirming any of them would need a look at your actual processes and data. Benefits are possible outcomes to test, not measured results, and nothing here is a guaranteed outcome. Every option has costs, and the AI-based ones need human review.'
     };
   }
 
@@ -765,7 +1038,7 @@
   }
 
   /* ---------- Sharing and export ---------- */
-  const SHARE_KEYS = ['industry', 'industryOther', 'stage', 'objective', 'bottleneck', 'tasks', 'tools'];
+  const SHARE_KEYS = ['industry', 'industryOther', 'stage', 'objective', 'bottleneck', 'tasks', 'tools', 'capacity'];
 
   function toBase64Url(text) {
     const bytes = typeof TextEncoder !== 'undefined' ? new TextEncoder().encode(text) : Buffer.from(text, 'utf8');
@@ -802,26 +1075,35 @@
     const lines = [];
     const rule = '-'.repeat(60);
     lines.push('BuildWise Group · AI Business Opportunity Scanner', report.headline, `Generated ${report.generatedAt.slice(0, 10)}`, '');
-    lines.push('ABOUT THIS REPORT', report.method, report.limits, '');
+    lines.push('ABOUT THIS REPORT', report.method, report.scoring, report.limits, '');
+    if (report.shortfall) lines.push(report.shortfall, '');
+    if (report.sharpen.length) lines.push('TO GET A SHARPER REPORT', ...report.sharpen.map(t => `- ${t}`), '');
     lines.push('YOUR ANSWERS');
     const p = report.profile;
     lines.push(`Business: ${p.industry}`, `Size: ${p.stage}`, `Objective: ${p.objective}`, `Bottleneck: ${p.bottleneck}`);
     if (p.tasks.length) lines.push(`Repetitive tasks: ${p.tasks.join('; ')}`);
     if (p.tools.length) lines.push(`Tools: ${p.tools.join('; ')}`);
+    if (p.capacity) lines.push(`Resources: ${p.capacity}`);
     if (p.context) lines.push(`Notes: ${p.context}`);
     report.opportunities.forEach(o => {
       lines.push('', rule, `${o.rank}. ${o.title} (${o.kind} · ${o.match})`, rule);
       if (o.rankNote) lines.push(o.rankNote);
+      lines.push(`Match rule: ${o.matchRule}`);
       lines.push('', 'Why this was selected:', ...o.reasons.map(r => `- ${r}`));
+      lines.push('', 'How this was scored:', ...o.evidence.map(e => `- ${e.label}: ${e.points > 0 ? '+' : ''}${e.points}`), ...o.adjustments.map(x => `- Ranking adjustment, ${lower(x.label)}: ${x.points}`));
+      if (o.alternative) lines.push('', `Also considered: ${o.alternative.title}. ${o.alternative.text}`);
       lines.push('', `Problem: ${o.problem}`, '', `Proposed solution: ${o.solution}`, '', 'How it would work:', ...o.how.map((h, i) => `${i + 1}. ${h}`));
+      if (o.simplerFirst) lines.push('', `Before using AI: ${o.simplerFirst}`);
       lines.push('', 'Possible benefits to validate (not measured results):', ...o.benefits.map(b => `- ${b}`));
       lines.push('', `Implementation complexity: ${o.complexity.label}`, ...o.complexity.notes.map(n => `- ${n}`));
       lines.push('', 'Dependencies:', ...o.dependencies.map(d => `- ${d}`), '', 'Risks and limitations:', ...o.risks.map(r => `- ${r}`));
-      lines.push('', `Suggested first experiment: ${o.experiment}`, '', 'Indicative sequence:', ...o.sequence.map((s, i) => `${i + 1}. ${s}`));
+      lines.push('', `Suggested first experiment: ${o.experiment}`, '', 'Success metrics to track:', ...o.metrics.map(m => `- ${m}`));
+      lines.push('', 'Needed to estimate costs, savings or ROI:', ...o.estimateInputs.map(m => `- ${m}`));
+      lines.push('', 'Indicative sequence:', ...o.sequence.map((s, i) => `${i + 1}. ${s}`));
     });
     lines.push('', rule, 'INDICATIVE PLAN', ...report.roadmap.map((s, i) => `${i + 1}. ${s.phase}: ${s.text}`));
     return lines.join('\n');
   }
 
-  return { ENGINE_VERSION, LIMITS, QUESTIONS, LIBRARY, LEVELS, normalizeAnswers, generateReport, matchBrief, encodeAnswers, decodeAnswers, toPlainText, scoreOpportunity, assessComplexity };
+  return { ENGINE_VERSION, LIMITS, QUESTIONS, LIBRARY, LEVELS, MATCH_RULES, normalizeAnswers, generateReport, matchBrief, encodeAnswers, decodeAnswers, toPlainText, scoreOpportunity, assessComplexity, resourcesFor };
 });
