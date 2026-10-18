@@ -17,7 +17,7 @@
   'use strict';
 
   const ENGINE_VERSION = '2.0.0';
-  const LIMITS = { context: 600, otherText: 60, multi: 6 };
+  const LIMITS = { context: 600, otherText: 60, multi: 6, website: 200 };
 
   /* ---------- Questions ---------- */
   const INDUSTRIES = [
@@ -132,7 +132,7 @@
     {
       id: 'context', short: 'Anything else', type: 'text', required: false, max: LIMITS.context,
       title: 'Anything else we should know?',
-      help: 'Optional. Describe a process, a frustration or a goal in your own words.',
+      help: 'Optional. Describe a process, a frustration or a goal in your own words, and add your website if you like.',
       placeholder: 'For example: we quote every job by hand from an old spreadsheet and it takes most evenings.'
     }
   ];
@@ -666,9 +666,33 @@
   const capitalise = text => text.charAt(0).toUpperCase() + text.slice(1);
 
   /* ---------- Validation ---------- */
+
+  /* The optional website is context only: the scanner never visits it. Only a
+   * public-looking http(s) address is kept, reduced to its origin and path, so a
+   * query string or fragment (which can carry tokens) is never stored or repeated. */
+  const WEBSITE_ERROR = 'Enter a website address like example.com, or leave it empty.';
+  function normalizeWebsite(value) {
+    const text = clean(value, 400);
+    if (!text) return { url: '', display: '', error: '' };
+    if (text.length > LIMITS.website || /\s/.test(text)) return { url: '', display: '', error: WEBSITE_ERROR };
+    let url;
+    try { url = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(text) ? text : `https://${text}`); } catch (e) { return { url: '', display: '', error: WEBSITE_ERROR }; }
+    const host = url.hostname.toLowerCase().replace(/\.$/, '');
+    const labels = host.split('.');
+    const tld = labels[labels.length - 1];
+    const publicName = labels.length >= 2 && labels.every(l => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(l))
+      && (/^[a-z]{2,63}$/.test(tld) || /^xn--[a-z0-9-]{2,59}$/.test(tld))
+      && !/(^|\.)(localhost|local|internal|intranet|lan|home\.arpa|test|invalid|example)$/.test(host);
+    if (!/^https?:$/.test(url.protocol) || url.username || url.password || (url.port && url.port !== '80' && url.port !== '443') || !publicName) {
+      return { url: '', display: '', error: WEBSITE_ERROR };
+    }
+    const pathname = url.pathname === '/' ? '' : url.pathname;
+    return { url: `${url.protocol}//${host}${pathname || '/'}`, display: `${host}${pathname}`.replace(/\/$/, ''), error: '' };
+  }
+
   function normalizeAnswers(input) {
     const raw = input && typeof input === 'object' ? input : {};
-    const answers = { industry: '', industryOther: '', stage: '', objective: '', bottleneck: '', tasks: [], tools: [], capacity: '', context: '' };
+    const answers = { industry: '', industryOther: '', stage: '', objective: '', bottleneck: '', tasks: [], tools: [], capacity: '', context: '', website: '' };
     const errors = {};
 
     QUESTIONS.forEach(q => {
@@ -688,6 +712,8 @@
     });
 
     if (answers.industry === 'other') answers.industryOther = clean(raw.industryOther, LIMITS.otherText);
+    // An invalid website is dropped rather than blocking the report; the page checks it with normalizeWebsite first.
+    answers.website = normalizeWebsite(raw.website).url;
     return { answers, errors, valid: Object.keys(errors).length === 0 };
   }
 
@@ -987,7 +1013,8 @@
       tasks: a.tasks.map(t => labelFor('tasks', t)),
       tools: a.tools.map(t => labelFor('tools', t)),
       capacity: a.capacity ? labelFor('capacity', a.capacity) : '',
-      context: a.context
+      context: a.context,
+      website: a.website ? normalizeWebsite(a.website).display : ''
     };
     const who = a.industry === 'other' && !a.industryOther ? 'a business' : `${article(industryLabel)} ${lower(industryLabel)} business`;
     const count = ['No', 'One', 'Two', 'Three'][opportunities.length];
@@ -1017,6 +1044,8 @@
       roadmap: buildRoadmap(opportunities),
       scoring: 'Points come only from your answers. Your biggest bottleneck, repetitive tasks and notes count as specific evidence and decide the match label. Options are ordered by match label first, then by points. Your objective, sector and size add smaller amounts, and within the same label, lower-complexity and non-AI options rank higher. Only one option per problem area is shown.',
       method: `These recommendations were generated in your browser by a rule-based engine. It ranks a fixed library of ${LIBRARY.length} AI, automation and software patterns, written by BuildWise Group, against the answers you gave. No AI model, market research or data about your business beyond your answers was used.`,
+      // The website is never fetched, so the report says so instead of implying it was checked.
+      websiteNote: profile.website ? `You added ${profile.website}, but the scanner did not visit or check it. This report is based only on your answers.` : '',
       limits: 'Because the library is fixed and the ranking depends only on your answers, it may miss opportunities that suit your business. These are general recommendations, not verified findings: confirming any of them would need a look at your actual processes and data. Benefits are possible outcomes to test, not measured results, and nothing here is a guaranteed outcome. Every option has costs, and the AI-based ones need human review.'
     };
   }
@@ -1066,7 +1095,10 @@
     if (typeof token !== 'string' || !/^v1\.[A-Za-z0-9_-]{1,1200}$/.test(token)) throw new Error('This report link is not valid.');
     let data;
     try { data = JSON.parse(fromBase64Url(token.slice(3))); } catch (e) { throw new Error('This report link could not be read.'); }
-    const { answers, valid } = normalizeAnswers(data);
+    // Only the shareable answers are read from a link, even if one was edited to carry notes or a website.
+    const shared = {};
+    if (data && typeof data === 'object') SHARE_KEYS.forEach(k => { if (k in data) shared[k] = data[k]; });
+    const { answers, valid } = normalizeAnswers(shared);
     if (!valid) throw new Error('This report link is incomplete.');
     return answers;
   }
@@ -1085,6 +1117,7 @@
     if (p.tools.length) lines.push(`Tools: ${p.tools.join('; ')}`);
     if (p.capacity) lines.push(`Resources: ${p.capacity}`);
     if (p.context) lines.push(`Notes: ${p.context}`);
+    if (report.websiteNote) lines.push(`Website: ${p.website} (not visited)`, report.websiteNote);
     report.opportunities.forEach(o => {
       lines.push('', rule, `${o.rank}. ${o.title} (${o.kind} · ${o.match})`, rule);
       if (o.rankNote) lines.push(o.rankNote);
@@ -1105,5 +1138,5 @@
     return lines.join('\n');
   }
 
-  return { ENGINE_VERSION, LIMITS, QUESTIONS, LIBRARY, LEVELS, MATCH_RULES, normalizeAnswers, generateReport, matchBrief, encodeAnswers, decodeAnswers, toPlainText, scoreOpportunity, assessComplexity, resourcesFor };
+  return { ENGINE_VERSION, LIMITS, QUESTIONS, LIBRARY, LEVELS, MATCH_RULES, normalizeAnswers, normalizeWebsite, generateReport, matchBrief, encodeAnswers, decodeAnswers, toPlainText, scoreOpportunity, assessComplexity, resourcesFor };
 });

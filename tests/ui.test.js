@@ -497,3 +497,61 @@ test('public files point only at the canonical domain', () => {
     assert.ok(!read(file).includes('pages.dev'), `${file} does not reference the pages.dev address`);
   }
 });
+
+/* ---------- Optional website ---------- */
+async function toLastQuestion(page) {
+  await choose(page, 'Retail & e-commerce'); await page.click('#scanNext');
+  await choose(page, '11 to 50 people'); await page.click('#scanNext');
+  await choose(page, 'Reduce costs'); await page.click('#scanNext');
+  await choose(page, 'Stock, supply and orders'); await page.click('#scanNext');
+  await page.click('#scanSkip'); await page.click('#scanSkip'); await page.click('#scanSkip');
+}
+
+test('website: optional field on the last question, validated, shown as not visited and never fetched', opts, async () => {
+  const { page, context, errors } = await open('/scan.html');
+  const outside = [];
+  page.on('request', req => { if (/acme|evil/i.test(req.url())) outside.push(req.url()); });
+  await toLastQuestion(page);
+  assert.equal(await page.locator('#scanCount').textContent(), 'Question 8 of 8 · Optional', 'no extra question');
+  assert.equal(await page.locator('label[for="scanWebsite"]').textContent(), 'Your website (optional)');
+
+  await page.fill('#scanWebsite', 'localhost:3000');
+  await page.click('#scanNext');
+  assert.match(await page.locator('#scanError').textContent(), /like example\.com/);
+  assert.equal(await page.locator('#scanWebsite').getAttribute('aria-invalid'), 'true');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'scanWebsite');
+  assert.ok(await page.locator('#scanForm').isVisible(), 'an invalid address does not produce a report');
+
+  await page.fill('#scanWebsite', 'https://www.acme-shop.co.uk/?session=abc123');
+  await page.click('#scanNext');
+  await page.waitForSelector('#report:not([hidden])');
+  const answersText = await page.locator('#reportAnswers').textContent();
+  assert.match(answersText, /www\.acme-shop\.co\.uk \(not visited\)/);
+  assert.ok(!answersText.includes('abc123'), 'query strings are dropped');
+  assert.match(await page.locator('#reportWebsite').textContent(), /did not visit or check it\. This report is based only on your answers\./);
+  assert.match(await page.locator('#reportMeta').textContent(), /Website not visited/);
+
+  const help = decodeURIComponent(await page.locator('#helpLink').getAttribute('href'));
+  assert.match(help, /Website: www\.acme-shop\.co\.uk \(not checked by the scanner\)/);
+  const link = decodeURIComponent(await page.locator('#saveEmail').getAttribute('href')).match(/Full report: (\S+)/)[1];
+  assert.ok(!Buffer.from(link.split('#r=v1.')[1], 'base64url').toString().includes('acme'), 'report links leave the website out');
+  assert.ok(!page.url().includes('acme'));
+  assert.deepEqual(outside, [], 'the website is never requested');
+
+  await page.reload();
+  await page.waitForSelector('#report:not([hidden])');
+  assert.match(await page.locator('#reportAnswers').textContent(), /acme-shop/);
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('website: skipping the last question clears it, and a report without one has no website note', opts, async () => {
+  const { page, context } = await open('/scan.html');
+  await toLastQuestion(page);
+  await page.fill('#scanWebsite', 'not a website');
+  await page.click('#scanSkip');
+  await page.waitForSelector('#report:not([hidden])');
+  assert.ok(await page.locator('#reportWebsite').isHidden());
+  assert.ok(!(await page.locator('#reportAnswers').textContent()).includes('Website'));
+  await context.close();
+});
