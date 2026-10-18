@@ -274,6 +274,10 @@ button.scan-step-item:hover { color: var(--offwhite); }
 
 .scan-toast { position: fixed; z-index: 150; left: 50%; bottom: 24px; max-width: calc(100vw - 32px); padding: 12px 20px; border-radius: 999px; background: var(--graphite); color: var(--offwhite); font-size: 14px; font-weight: 500; box-shadow: 0 16px 40px -16px rgba(0, 0, 0, .6); opacity: 0; transform: translate3d(-50%, 12px, 0); pointer-events: none; transition: opacity .3s var(--ease), transform .4s var(--ease); }
 .scan-toast.is-on { opacity: 1; transform: translate3d(-50%, 0, 0); }
+.report-cross { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 20px 24px; background: #fff; border: 1px solid var(--line-light); border-radius: 3px; }
+.report-cross p { max-width: 52em; color: #3A3F48; }
+.report-cross strong { color: var(--graphite); font-weight: 600; }
+.report-cross[hidden] { display: none; }
 .report-foot { margin-top: var(--space-5); padding-top: 24px; border-top: 1px solid var(--line-light); }
 
 @media (prefers-reduced-motion: reduce) {
@@ -294,3 +298,5 @@ button.scan-step-item:hover { color: var(--offwhite); }
   .op-why, .op-experiment { break-inside: avoid; }
   .report-plan { margin-top: 32px; }
 }
+.scan-entry-alt a { color: var(--offwhite); text-decoration: underline; text-decoration-color: rgba(250, 250, 248, .35); text-underline-offset: 3px; }
+.scan-entry-alt a:hover { text-decoration-color: currentColor; }

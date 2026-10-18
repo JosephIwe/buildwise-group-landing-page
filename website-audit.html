@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B0D10">
+  <meta name="description" content="Check whether search engines and AI systems can read your website: technical SEO, robots.txt crawler rules and content clarity, with evidence and next steps. No sign-up.">
+  <title>Website &amp; AI Visibility Audit — BuildWise Group</title>
+  <link rel="canonical" href="https://buildwisegroup.dev/website-audit">
+  <meta property="og:site_name" content="BuildWise Group">
+  <meta property="og:title" content="Website &amp; AI Visibility Audit — BuildWise Group">
+  <meta property="og:description" content="Can search engines and AI systems understand your website? Run a practical check with evidence and prioritised next steps.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buildwisegroup.dev/website-audit">
+  <meta property="og:image" content="https://buildwisegroup.dev/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="BuildWise Group: AI products. Business systems. Real impact.">
+  <meta property="og:locale" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="scanner.css">
+  <link rel="stylesheet" href="website-audit.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="script.js"></script>
+  <script defer src="website-audit.js"></script>
+  <script defer src="analytics.js"></script>
+</head>
+<body class="scan-page audit-page">
+  <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="bw-fold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="currentColor" stop-opacity=".45"/>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+      </linearGradient>
+      <symbol id="bw-mark" viewBox="0 0 100 112">
+        <path fill="currentColor" d="M0 0H54C68.4 0 79 10.6 79 24.2C79 34.6 73.4 42.3 66.6 45.8L28 53.6V112H0Z"/>
+        <path fill="url(#bw-fold)" d="M28 53.6L60 47.2L44 58.6L28 61.8Z"/>
+        <path fill="currentColor" d="M44 67.4L74.4 52.6C89.4 56.4 100 68 100 82.6C100 99 87 112 70.4 112H44Z"/>
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-print" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="1.5"/><path d="M7 14h10v6.5H7Z"/></g></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="BuildWise Group home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+      </a>
+      <a class="scan-back" href="/"><svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>Back to site</a>
+    </div>
+  </header>
+
+  <main id="main" class="scan-main">
+    <section class="scanner audit-start" id="auditStart" aria-labelledby="auditTitle">
+      <div class="container scanner-grid">
+        <div class="scanner-rail">
+          <p class="label"><span class="dot dot-blue" aria-hidden="true"></span>Website &amp; AI Visibility Audit</p>
+          <h1 class="scanner-title audit-title" id="auditTitle">Can search engines and AI systems understand your website?</h1>
+          <p class="scanner-intro">Run a practical website check to identify technical SEO, crawler-access and content-discoverability issues, with evidence and prioritised next steps.</p>
+          <p class="scanner-privacy"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span>No sign-up. This is an automated technical audit, not a guarantee of search rankings, AI citations or customers.</span></p>
+          <details class="scanner-details">
+            <summary>How the audit works and what we keep</summary>
+            <ul>
+              <li>The address you enter is sent to BuildWise Group’s audit service, which runs on Cloudflare. It requests your page, robots.txt, a sitemap and up to five internal links, all as ordinary read-only page requests identified as BuildWiseAudit.</li>
+              <li>It never logs in, submits forms, runs your site’s scripts or changes anything. It only checks public websites, not private or internal addresses.</li>
+              <li>The report is shown in this browser. A copy may be cached for up to ten minutes so a repeat check does not request your site again; nothing else is stored, and no account or email is needed.</li>
+              <li>“Request help” opens your own email app with a summary you can edit. Nothing is sent unless you send it.</li>
+              <li>We may count page visits with Cloudflare Web Analytics, which records the page visited, never the address you audit or the report.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="scanner-panel audit-panel">
+          <noscript><p class="scanner-note">The audit needs JavaScript to run. You can still <a href="mailto:hello@josephiwe.com">email BuildWise Group</a> directly.</p></noscript>
+          <form class="audit-form" id="auditForm" novalidate hidden>
+            <label class="scan-q audit-label" for="auditUrl">Your website address</label>
+            <p class="scan-help" id="auditHelp">Enter a public page, usually your homepage, for example example.com.</p>
+            <div class="audit-field">
+              <input class="scan-input" id="auditUrl" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" maxlength="2048" placeholder="example.com" aria-describedby="auditHelp auditError" required>
+              <button type="submit" class="btn btn-light" id="auditSubmit">Audit my website <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            </div>
+            <p class="scan-error" id="auditError" role="alert"></p>
+            <ul class="audit-covers" aria-label="What the audit checks">
+              <li><strong>Technical SEO</strong> Status, redirects, HTTPS, title, description, canonical, indexability, headings, sitemap and links.</li>
+              <li><strong>Crawler access</strong> What your robots.txt allows search and AI crawlers to do, rule by rule.</li>
+              <li><strong>Content and clarity</strong> Whether the page says what you do, structured data and a contact route.</li>
+            </ul>
+          </form>
+
+          <div class="scan-state" id="auditLoading" hidden>
+            <div class="scan-loader" aria-hidden="true"><i></i><i></i><i></i></div>
+            <p class="scan-state-title" role="status" id="auditLoadingTitle">Checking your website</p>
+            <p class="scan-state-copy">Requesting the page, robots.txt and sitemap. This usually takes a few seconds.</p>
+          </div>
+
+          <div class="scan-state" id="auditFail" hidden>
+            <p class="label">The audit could not finish</p>
+            <h2 class="scan-state-title" id="auditFailTitle" tabindex="-1">We couldn’t audit that address.</h2>
+            <p class="scan-state-copy" id="auditFailCopy"></p>
+            <div class="scan-state-actions">
+              <button type="button" class="btn btn-light" id="auditRetry">Try again <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button type="button" class="scan-link" id="auditChange">Change the address</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="report audit-report" id="auditReport" aria-labelledby="reportTitle" hidden>
+      <div class="container">
+        <header class="report-head">
+          <p class="label">Website &amp; AI Visibility Audit</p>
+          <h1 class="report-title" id="reportTitle" tabindex="-1"></h1>
+          <p class="report-summary" id="reportSummary"></p>
+          <ul class="report-meta" id="reportMeta"></ul>
+        </header>
+
+        <div class="report-basis">
+          <div class="basis-card">
+            <p class="tag tag-generated">Automated technical audit</p>
+            <p id="reportMethod"></p>
+            <p class="basis-limits" id="reportDisclaimer"></p>
+          </div>
+          <div class="basis-card">
+            <p class="tag tag-input">How the page introduces you</p>
+            <dl class="answer-list" id="reportIntro"></dl>
+            <p class="basis-limits">Read these as a newcomer would: do they say what you do, for whom and where? The audit cannot judge meaning, only report what is there.</p>
+          </div>
+        </div>
+
+        <section class="audit-section" aria-labelledby="confirmedTitle">
+          <p class="label">Confirmed findings</p>
+          <h2 class="report-h2" id="confirmedTitle">Issues found, with evidence</h2>
+          <div class="audit-list" id="confirmedList"></div>
+        </section>
+
+        <section class="audit-section" aria-labelledby="advisoryTitle">
+          <p class="label">Recommendations</p>
+          <h2 class="report-h2" id="advisoryTitle">Worth considering</h2>
+          <p class="audit-intro">Good practice that depends on your goals. These are judgement calls, not errors.</p>
+          <div class="audit-list" id="advisoryList"></div>
+        </section>
+
+        <section class="audit-section" aria-labelledby="crawlerTitle">
+          <p class="label">Crawler access</p>
+          <h2 class="report-h2" id="crawlerTitle">What your robots.txt allows</h2>
+          <p class="audit-intro" id="crawlerIntro">Whether each crawler may fetch this page, and the rule that decides it. Permission is not proof that a crawler has visited, indexed or cited the site.</p>
+          <div class="audit-table-wrap" role="region" aria-labelledby="crawlerTitle" tabindex="0">
+            <table class="audit-table">
+              <thead><tr><th scope="col">Crawler</th><th scope="col">Used for</th><th scope="col">This page</th><th scope="col">Deciding rule</th></tr></thead>
+              <tbody id="crawlerRows"></tbody>
+            </table>
+          </div>
+          <p class="report-fine" id="crawlerFine"></p>
+        </section>
+
+        <div class="audit-split">
+          <section class="audit-section" aria-labelledby="passedTitle">
+            <p class="label">Checked and fine</p>
+            <h2 class="report-h3" id="passedTitle">What looked right</h2>
+            <ul class="op-list" id="passedList"></ul>
+          </section>
+          <section class="audit-section" aria-labelledby="notCheckedTitle">
+            <p class="label">Not checked</p>
+            <h2 class="report-h3" id="notCheckedTitle">What this audit could not check</h2>
+            <ul class="audit-notchecked" id="notCheckedList"></ul>
+          </section>
+        </div>
+
+        <details class="op-score audit-requests">
+          <summary id="requestsSummary">Requests made</summary>
+          <ol id="requestsList"></ol>
+        </details>
+
+        <section class="report-next" aria-labelledby="nextTitle">
+          <p class="label">Next steps</p>
+          <h2 class="report-h2" id="nextTitle">Want BuildWise to help fix these issues?</h2>
+          <div class="next-grid">
+            <article class="next-card next-card-accent">
+              <span class="next-n">01</span>
+              <h3>Ask us to help</h3>
+              <p>Send BuildWise Group a summary: the address you audited and the titles of the findings. It opens in your own email app so you can edit it first. Nothing is sent automatically.</p>
+              <a class="btn btn-light" id="helpLink" href="mailto:hello@josephiwe.com">Request help <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <button type="button" class="scan-link" id="copySummary">Copy the summary instead</button>
+            </article>
+            <article class="next-card">
+              <span class="next-n">02</span>
+              <h3>Save the report</h3>
+              <p>Keep a copy for yourself or your web developer. Reports are not saved on our side.</p>
+              <div class="save-actions">
+                <button type="button" class="save-btn" id="saveDownload"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download</button>
+                <button type="button" class="save-btn" id="savePrint"><svg class="ico" aria-hidden="true"><use href="#i-print"/></svg>Print or PDF</button>
+              </div>
+            </article>
+            <article class="next-card">
+              <span class="next-n">03</span>
+              <h3 id="crossTitle">Look beyond the website</h3>
+              <p id="crossCopy">If enquiries, bookings or admin are slowing you down, the AI Business Opportunity Scanner suggests where automation or software could help.</p>
+              <a class="scan-link scan-link-dark" href="/scan">Scan my business <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </article>
+          </div>
+          <p class="scan-toast" id="auditToast" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="report-foot">
+          <button type="button" class="scan-link scan-link-dark" id="auditAgain">Audit another website</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand" href="/" aria-label="BuildWise Group home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+      </a>
+      <p class="label footer-line">AI products. Business systems. Real impact.</p>
+      <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
+    </div>
+  </footer>
+</body>
+</html>

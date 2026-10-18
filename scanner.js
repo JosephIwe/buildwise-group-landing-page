@@ -566,6 +566,13 @@
     $('exploreToggle').setAttribute('aria-expanded', 'false');
     $('exploreToggle').textContent = `Show the questions for “${top.title}”`;
 
+    // A separate funnel: suggest the website audit when the site or the bottleneck makes it relevant.
+    // The address is handed over in this tab's sessionStorage, never in the link.
+    const cross = $('reportCross');
+    cross.hidden = !(p.website || ['leads', 'content'].includes(r.answers.bottleneck));
+    $('crossLead').textContent = p.website ? `Want to check how search engines and AI systems read ${p.website}?` : 'Is your website easy for search engines and AI systems to read?';
+    $('crossText').textContent = 'The Website & AI Visibility Audit is a separate, free check of technical SEO, crawler access and content clarity. This scanner has not checked your website.';
+
     $('helpLink').href = mailto(CONTACT, `Scanner report: ${top.title}`, summaryText());
     const selfBody = [r.headline, '', ...r.opportunities.map(o => `${o.rank}. ${o.title}\n   First experiment: ${o.experiment}`), '', `Full report: ${shareUrl()}`].join('\n');
     $('saveEmail').href = mailto('', 'My AI Business Opportunity report', selfBody);
@@ -617,6 +624,12 @@
     track('report_copy_link');
   });
   $('saveEmail').addEventListener('click', () => track('report_email'));
+  $('crossLink').addEventListener('click', () => {
+    if (report && report.answers.website) {
+      try { window.sessionStorage.setItem('bw-audit-prefill', report.answers.website); } catch (e) { /* the audit page still opens */ }
+    }
+    track('website_audit_open');
+  });
 
   const backToQuestions = (reset) => {
     if (reset) {

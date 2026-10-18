@@ -400,7 +400,7 @@ const SITE = 'https://buildwisegroup.dev';
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 
 test('pages have unique titles, descriptions and canonical social metadata', opts, async () => {
-  const pages = [['/index.html', `${SITE}/`], ['/scan.html', `${SITE}/scan`]];
+  const pages = [['/index.html', `${SITE}/`], ['/scan.html', `${SITE}/scan`], ['/website-audit.html', `${SITE}/website-audit`]];
   const seen = { title: new Set(), description: new Set() };
   for (const [urlPath, canonical] of pages) {
     const { page, context, errors } = await open(urlPath);
@@ -443,10 +443,12 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), 'the site is not blocked');
   assert.match(robots, new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
   const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`]);
+  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`]);
+  assert.match(robots, /^Disallow: \/api\/$/m);
   assert.ok(!read('sitemap.xml').includes('#'), 'no report links in the sitemap');
   assert.match(read('index.html'), new RegExp(`rel="canonical" href="${locs[0]}"`));
   assert.match(read('scan.html'), new RegExp(`rel="canonical" href="${locs[1]}"`));
+  assert.match(read('website-audit.html'), new RegExp(`rel="canonical" href="${locs[2]}"`));
 });
 
 test('unknown paths get a real 404 page that is not indexed', () => {
@@ -478,7 +480,7 @@ test('a page showing a report is marked noindex, and the questionnaire is not', 
 
 test('local links and assets on every page resolve', () => {
   const missing = [];
-  for (const file of ['index.html', 'scan.html', '404.html', 'llms.txt']) {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt']) {
     const refs = [...read(file).matchAll(/(?:href|src)="([^"]+)"|](https:\/\/buildwisegroup\.dev[^)]*)\)/g)].map(m => m[1] || m[2]);
     for (let ref of refs) {
       if (ref.startsWith(SITE)) ref = ref.slice(SITE.length) || '/';
@@ -493,7 +495,7 @@ test('local links and assets on every page resolve', () => {
 });
 
 test('public files point only at the canonical domain', () => {
-  for (const file of ['index.html', 'scan.html', '404.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
     assert.ok(!read(file).includes('pages.dev'), `${file} does not reference the pages.dev address`);
   }
 });
@@ -554,4 +556,210 @@ test('website: skipping the last question clears it, and a report without one ha
   assert.ok(await page.locator('#reportWebsite').isHidden());
   assert.ok(!(await page.locator('#reportAnswers').textContent()).includes('Website'));
   await context.close();
+});
+
+
+/* ---------- Website & AI Visibility Audit ---------- */
+// The page talks to the real handler (lib/audit/handler.mjs) running in this process
+// against a fake network, so no request leaves the machine.
+let auditLib;
+async function auditPage({ routes, viewport, handler } = {}) {
+  if (!auditLib) {
+    auditLib = {
+      handler: await import('../lib/audit/handler.mjs'),
+      net: await import('./fixtures/fake-net.mjs')
+    };
+  }
+  const net = auditLib.net.fakeNet(routes || auditLib.net.goodSite());
+  const deps = { ...net, limiter: auditLib.handler.createLimiter(), cache: null };
+  const calls = [];
+  const { page, context, errors } = await open('/website-audit.html', viewport ? { viewport } : {});
+  await page.route('**/api/website-audit', async route => {
+    const req = route.request();
+    calls.push(JSON.parse(req.postData() || '{}'));
+    if (handler) return handler(route);
+    const headers = { ...req.headers(), origin: 'https://buildwisegroup.dev', 'cf-connecting-ip': '203.0.113.5' };
+    const res = await auditLib.handler.handleAudit(new Request('https://buildwisegroup.dev/api/website-audit', { method: 'POST', headers, body: req.postData() }), deps);
+    return route.fulfill({ status: res.status, headers: Object.fromEntries(res.headers), body: await res.text() });
+  });
+  await page.waitForSelector('#auditForm:not([hidden])');
+  return { page, context, errors, calls, net };
+}
+
+test('audit: the page explains what it does and that it is not a guarantee', opts, async () => {
+  const { page, context, errors } = await auditPage();
+  assert.equal(await page.locator('#auditTitle').textContent(), 'Can search engines and AI systems understand your website?');
+  assert.match(await page.locator('.scanner-intro').textContent(), /technical SEO, crawler-access and content-discoverability issues/);
+  assert.equal((await page.locator('#auditSubmit').textContent()).trim(), 'Audit my website');
+  assert.match(await page.locator('.scanner-privacy').textContent(), /not a guarantee of search rankings, AI citations or customers/);
+  await page.click('.scanner-details summary');
+  assert.match(await page.locator('.scanner-details').textContent(), /never logs in, submits forms, runs your site’s scripts/);
+  assert.equal(await page.locator('meta[name="robots"]').count(), 0);
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('audit: a report separates confirmed findings, recommendations, crawler rules and what was not checked', opts, async () => {
+  const { goodSite } = await import('./fixtures/fake-net.mjs');
+  const routes = goodSite('https://acme.example.com', {
+    'https://acme.example.com/robots.txt': { type: 'text/plain', body: 'User-agent: OAI-SearchBot\nDisallow: /\n\nUser-agent: GPTBot\nDisallow: /\n\nUser-agent: *\nAllow: /' },
+    'https://acme.example.com/about': { status: 404 }
+  });
+  const { page, context, errors, calls } = await auditPage({ routes });
+  await page.fill('#auditUrl', 'acme.example.com');
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('#auditReport:not([hidden])');
+  assert.deepEqual(calls, [{ url: 'acme.example.com' }]);
+  assert.equal(await page.locator('#reportTitle').textContent(), 'Audit of acme.example.com');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'reportTitle');
+  const confirmed = await page.locator('#confirmedList').textContent();
+  assert.match(confirmed, /robots\.txt blocks AI search crawlers \(OAI-SearchBot\)/);
+  assert.match(confirmed, /User-agent: OAI-SearchBot \(line 1\), Disallow: \/ \(line 2\)/);
+  assert.match(confirmed, /1 broken internal link/);
+  assert.match(confirmed, /Why it matters/);
+  assert.match(confirmed, /Recommended fix/);
+  assert.match(await page.locator('#advisoryList').textContent(), /Little descriptive text/);
+  const gpt = page.locator('#crawlerRows tr', { hasText: 'GPTBot' });
+  assert.match(await gpt.textContent(), /AI model training.*Opted out/);
+  assert.match(await page.locator('#crawlerRows tr', { hasText: 'Googlebot' }).textContent(), /Allowed/);
+  assert.match(await page.locator('#notCheckedList').textContent(), /crawled, indexed or cited/);
+  assert.match(await page.locator('#reportDisclaimer').textContent(), /not a guarantee/);
+  assert.ok(!(await page.locator('#auditReport').textContent()).match(/score/i) || (await page.locator('#reportMeta').textContent()).includes('No score'));
+  assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex');
+  assert.ok(!page.url().includes('acme'), 'the audited address never appears in the page URL');
+
+  const help = decodeURIComponent(await page.locator('#helpLink').getAttribute('href'));
+  assert.ok(help.startsWith('mailto:hello@josephiwe.com?subject=Website audit: acme.example.com'));
+  assert.match(help, /\[High\] robots\.txt blocks AI search crawlers/);
+  assert.match(await page.locator('.next-card-accent').textContent(), /Nothing is sent automatically/);
+  assert.match(await page.locator('#crossCopy').textContent(), /AI Business Opportunity Scanner/);
+  assert.equal(await page.locator('.next-card a[href="/scan"]').count(), 1);
+
+  await page.reload();
+  await page.waitForSelector('#auditReport:not([hidden])');
+  assert.equal(await page.locator('#reportTitle').textContent(), 'Audit of acme.example.com', 'the report survives a reload in this tab');
+  await page.click('#auditAgain');
+  await page.waitForSelector('#auditForm:not([hidden])');
+  assert.equal(await page.locator('meta[name="robots"]').count(), 0);
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('audit: content from the audited site is shown as text, never run as markup', opts, async () => {
+  const { page: html } = await import('./fixtures/fake-net.mjs');
+  const evil = '<img src=x onerror="window.__pwned=1"><script>window.__pwned=2</script>';
+  const routes = {
+    'https://evil.example.com/': { type: 'text/html', body: html({ head: `<title>${evil.replace(/</g, '&lt;')}</title><meta name="description" content="&lt;b onmouseover=alert(1)&gt;hi&lt;/b&gt;">`, body: `<h1>&lt;svg onload=window.__pwned=3&gt;</h1><a href="javascript:window.__pwned=4">x</a>` }) },
+    'https://evil.example.com/robots.txt': { type: 'text/plain', body: 'User-agent: *\n<script>window.__pwned=5</script>\nDisallow: /<img src=x onerror=window.__pwned=6>' }
+  };
+  const { page, context } = await auditPage({ routes });
+  await page.fill('#auditUrl', 'evil.example.com');
+  await page.click('#auditSubmit');
+  await page.waitForSelector('#auditReport:not([hidden])');
+  assert.equal(await page.evaluate(() => window.__pwned), undefined);
+  assert.equal(await page.locator('#auditReport img, #auditReport script, #auditReport svg:not(.ico), #auditReport b').count(), 0);
+  assert.match(await page.locator('#reportIntro').textContent(), /<img src=x onerror="window.__pwned=1">/);
+  assert.match(await page.locator('#auditReport').textContent(), /<script>window.__pwned=5<\/script>/);
+  const hrefs = await page.locator('#auditReport a').evaluateAll(as => as.map(a => a.getAttribute('href')));
+  assert.ok(hrefs.every(h => /^(https:|mailto:|\/)/.test(h)), hrefs.join(' '));
+  await context.close();
+});
+
+test('audit: invalid and blocked addresses are explained without running an audit', opts, async () => {
+  const { page, context, calls, net } = await auditPage();
+  await page.click('#auditSubmit');
+  assert.match(await page.locator('#auditError').textContent(), /like example\.com/);
+  assert.equal(await page.locator('#auditUrl').getAttribute('aria-invalid'), 'true');
+  assert.equal(calls.length, 0, 'an empty address is caught in the page');
+  await page.fill('#auditUrl', 'http://169.254.169.254/latest/meta-data/');
+  await page.click('#auditSubmit');
+  await page.waitForFunction(() => /public website/.test(document.getElementById('auditError').textContent));
+  assert.ok(await page.locator('#auditForm').isVisible());
+  assert.equal(net.requests.length, 0, 'nothing was fetched');
+  await context.close();
+});
+
+test('audit: failures show a clear message and a way to retry', opts, async () => {
+  let mode = 'rate';
+  const handler = route => {
+    if (mode === 'rate') return route.fulfill({ status: 429, contentType: 'application/json', body: JSON.stringify({ error: { code: 'rate_limited', message: 'You’ve run several audits in a short time. Please wait a few minutes and try again.' } }) });
+    if (mode === 'html') return route.fulfill({ status: 502, contentType: 'text/html', body: '<h1>Bad gateway</h1>' });
+    return route.abort('failed');
+  };
+  const { page, context } = await auditPage({ handler });
+  await page.fill('#auditUrl', 'acme.example.com');
+  await page.click('#auditSubmit');
+  await page.waitForSelector('#auditFail:not([hidden])');
+  assert.match(await page.locator('#auditFailCopy').textContent(), /wait a few minutes/);
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'auditFailTitle');
+  mode = 'html';
+  await page.click('#auditRetry');
+  await page.waitForFunction(() => /went wrong on our side/.test(document.getElementById('auditFailCopy').textContent));
+  mode = 'network';
+  await page.click('#auditRetry');
+  await page.waitForFunction(() => /couldn’t reach the audit service/.test(document.getElementById('auditFailTitle').textContent));
+  await page.click('#auditChange');
+  assert.ok(await page.locator('#auditForm').isVisible());
+  assert.equal(await page.inputValue('#auditUrl'), 'acme.example.com');
+  await context.close();
+});
+
+test('audit: no horizontal overflow on phone, tablet and desktop, and reduced motion works', opts, async () => {
+  for (const viewport of [{ width: 360, height: 780 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
+    const { page, context } = await auditPage({ viewport });
+    const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    assert.equal(await overflow(), 0, `form at ${viewport.width}px`);
+    await page.fill('#auditUrl', 'acme.example.com');
+    await page.click('#auditSubmit');
+    await page.waitForSelector('#auditReport:not([hidden])');
+    assert.equal(await overflow(), 0, `report at ${viewport.width}px`);
+    await context.close();
+  }
+  const { page, context } = await auditPage();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.fill('#auditUrl', 'acme.example.com');
+  await page.click('#auditSubmit');
+  await page.waitForSelector('#auditReport:not([hidden])');
+  await context.close();
+});
+
+test('audit: keyboard users can reach every control in a logical order', opts, async () => {
+  const { page, context } = await auditPage();
+  await page.locator('#auditUrl').focus();
+  await page.keyboard.type('acme.example.com');
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'auditSubmit');
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('#auditReport:not([hidden])');
+  const ids = [];
+  for (let i = 0; i < 40; i += 1) {
+    await page.keyboard.press('Tab');
+    ids.push(await page.evaluate(() => document.activeElement.id || document.activeElement.tagName));
+  }
+  for (const id of ['helpLink', 'copySummary', 'saveDownload', 'savePrint', 'auditAgain']) assert.ok(ids.includes(id), `${id} is reachable`);
+  assert.ok(ids.indexOf('helpLink') < ids.indexOf('auditAgain'));
+  await context.close();
+});
+
+test('scanner report suggests the website audit and hands the address over without a URL', opts, async () => {
+  const { page, context } = await open('/scan.html');
+  await toLastQuestion(page);
+  await page.fill('#scanWebsite', 'acme-shop.co.uk');
+  await page.click('#scanNext');
+  await page.waitForSelector('#report:not([hidden])');
+  assert.ok(await page.locator('#reportCross').isVisible());
+  assert.match(await page.locator('#crossLead').textContent(), /acme-shop\.co\.uk/);
+  assert.equal(await page.locator('#crossLink').getAttribute('href'), '/website-audit');
+  await page.route('**/website-audit', route => route.fulfill({ status: 200, contentType: 'text/html', body: fs.readFileSync(path.join(ROOT, 'website-audit.html'), 'utf8') }));
+  await page.click('#crossLink');
+  await page.waitForSelector('#auditForm:not([hidden])');
+  assert.equal(await page.inputValue('#auditUrl'), 'https://acme-shop.co.uk/');
+  assert.ok(!page.url().includes('acme'));
+  await context.close();
+
+  // Without a website, the suggestion only appears when the bottleneck is about leads or marketing.
+  const other = await open('/scan.html');
+  await completeScan(other.page);
+  assert.ok(await other.page.locator('#reportCross').isHidden());
+  await other.context.close();
 });
