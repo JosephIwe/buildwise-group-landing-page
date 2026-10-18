@@ -1,0 +1,9 @@
+# Cloudflare Pages response headers.
+# The repository root is deployed as-is, so keep the files that are not pages
+# out of search results.
+/README.md
+  X-Robots-Tag: noindex
+/tests/*
+  X-Robots-Tag: noindex
+/brief/*
+  X-Robots-Tag: noindex

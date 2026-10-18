@@ -1,0 +1,27 @@
+# BuildWise Group
+
+> BuildWise Group is an independent technology company. It partners with businesses to design, engineer and deploy AI-powered products and operational systems, and it builds and owns its own ventures.
+
+This file is a plain-text summary of the public website for AI assistants and other tools that read it. The website itself is the source of truth.
+
+## What BuildWise Group does
+
+- AI product engineering: product definition, architecture and working software for AI-native products.
+- Business automation: operations and customer workflows, with human oversight where it matters.
+- Custom software systems: integrated systems that connect the tools and data a team already uses.
+- Product and technical advisory: clarifying the problem, testing the riskiest assumptions and shaping a practical path.
+
+## Ventures
+
+- [Huntly](https://huntlyagent.com): an AI job-search assistant that helps people evaluate opportunities against their profile and prepare stronger applications.
+- Tradr (in development): a crypto research and trading-signals project for structuring market data. Signals are research inputs, not financial advice or a promise of returns.
+- Maya (in validation): an applied-AI employee platform being developed and validated for business workflows such as enquiries and bookings.
+
+## Pages
+
+- [Homepage](https://buildwise-group.pages.dev/): services, approach, ventures and contact.
+- [AI Business Opportunity Scanner](https://buildwise-group.pages.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to BuildWise Group.
+
+## Contact
+
+- Email: hello@josephiwe.com

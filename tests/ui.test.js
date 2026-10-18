@@ -10,7 +10,7 @@ let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { chromium = null; }
 
 const ROOT = path.resolve(__dirname, '..');
-const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.avif': 'image/avif', '.png': 'image/png' };
+const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.avif': 'image/avif', '.png': 'image/png', '.jpg': 'image/jpeg', '.txt': 'text/plain', '.xml': 'application/xml' };
 let server; let origin; let browser;
 
 const opts = { skip: chromium ? false : 'playwright is not installed (run npm install in tests/)' };
@@ -19,7 +19,9 @@ test.before(async () => {
   if (!chromium) return;
   server = http.createServer((req, res) => {
     const url = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
-    const file = path.join(ROOT, url.endsWith('/') ? `${url}index.html` : url);
+    let file = path.join(ROOT, url.endsWith('/') ? `${url}index.html` : url);
+    // Like Cloudflare Pages: /scan serves scan.html.
+    if (!path.extname(file) && fs.existsSync(`${file}.html`)) file = `${file}.html`;
     if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); res.end(); return; }
     res.writeHead(200, { 'content-type': TYPES[path.extname(file)] || 'application/octet-stream' });
     fs.createReadStream(file).pipe(res);
@@ -68,11 +70,11 @@ test('homepage shows the scanner entry point and keeps existing contact links', 
   assert.equal(await page.locator('#scanEntryTitle').textContent(), 'Find your next business advantage.');
   assert.match(await entry.textContent(), /Discover where AI, automation and software could help your business save time, reduce costs or unlock new revenue\./);
   const cta = page.getByRole('link', { name: 'Scan my business' });
-  assert.equal(await cta.getAttribute('href'), 'scan.html');
+  assert.equal(await cta.getAttribute('href'), '/scan');
   assert.match(await page.locator('.contact-actions .btn-light').getAttribute('href'), /^mailto:hello@josephiwe\.com/);
   assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '#work', '#ventures', '#about']);
   await cta.click();
-  await page.waitForURL(/scan\.html$/);
+  await page.waitForURL(/\/scan$/);
   await page.waitForSelector('#scanForm:not([hidden])');
   assert.deepEqual(errors(), []);
   await context.close();
@@ -391,4 +393,101 @@ test('analytics counts page views but never receives answers', opts, async () =>
   await shared.page.waitForSelector('#report:not([hidden])');
   assert.deepEqual(shared.beacon, [], 'no beacon on a page opened from a report link');
   await shared.context.close();
+});
+
+/* ---------- Discoverability ---------- */
+const SITE = 'https://buildwise-group.pages.dev';
+const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
+
+test('pages have unique titles, descriptions and canonical social metadata', opts, async () => {
+  const pages = [['/index.html', `${SITE}/`], ['/scan.html', `${SITE}/scan`]];
+  const seen = { title: new Set(), description: new Set() };
+  for (const [urlPath, canonical] of pages) {
+    const { page, context, errors } = await open(urlPath);
+    const meta = sel => page.locator(sel).getAttribute('content');
+    const title = await page.title();
+    const description = await meta('meta[name="description"]');
+    assert.ok(!seen.title.has(title) && !seen.description.has(description), `${urlPath} has its own title and description`);
+    seen.title.add(title); seen.description.add(description);
+    assert.ok(description.length >= 70 && description.length <= 170, 'description is a useful length');
+    assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), canonical);
+    assert.equal(await meta('meta[property="og:url"]'), canonical);
+    assert.equal(await page.locator('meta[name="robots"]').count(), 0, 'landing pages are indexable');
+    const image = await meta('meta[property="og:image"]');
+    assert.ok(image.startsWith(`${SITE}/`) && fs.existsSync(path.join(ROOT, image.slice(SITE.length))), 'og:image is a local asset');
+    assert.equal(await meta('meta[name="twitter:card"]'), 'summary_large_image');
+    assert.equal(await page.locator('h1').count() >= 1, true);
+    assert.deepEqual(errors(), []);
+    await context.close();
+  }
+});
+
+test('homepage structured data describes the organisation accurately', opts, async () => {
+  const { page, context } = await open('/index.html');
+  const data = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  const org = data['@graph'].find(n => n['@type'] === 'Organization');
+  const site = data['@graph'].find(n => n['@type'] === 'WebSite');
+  assert.equal(org.url, `${SITE}/`);
+  assert.equal(site.url, `${SITE}/`);
+  assert.ok(fs.existsSync(path.join(ROOT, org.logo.slice(SITE.length))), 'logo is a local asset');
+  const body = await page.locator('body').textContent();
+  assert.ok(body.includes(org.email), 'email is visible on the page');
+  for (const name of ['Huntly', 'Tradr', 'Maya']) assert.ok(body.includes(name) && org.description.includes(name));
+  assert.equal(await page.locator('h1').count(), 1, 'one h1 on the homepage');
+  await context.close();
+});
+
+test('robots.txt and sitemap.xml list exactly the canonical public pages', () => {
+  const robots = read('robots.txt');
+  assert.match(robots, /^User-agent: \*$/m);
+  assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), 'the site is not blocked');
+  assert.match(robots, new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
+  const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`]);
+  assert.ok(!read('sitemap.xml').includes('#'), 'no report links in the sitemap');
+  assert.match(read('index.html'), new RegExp(`rel="canonical" href="${locs[0]}"`));
+  assert.match(read('scan.html'), new RegExp(`rel="canonical" href="${locs[1]}"`));
+});
+
+test('unknown paths get a real 404 page that is not indexed', () => {
+  // Without 404.html, Cloudflare Pages answers every unknown path with the homepage and a 200.
+  const html = read('404.html');
+  assert.match(html, /<meta name="robots" content="noindex">/);
+  assert.match(html, /href="\/"/);
+  assert.match(read('_headers'), /\/tests\/\*\n\s+X-Robots-Tag: noindex/);
+});
+
+test('a page showing a report is marked noindex, and the questionnaire is not', opts, async () => {
+  const { page, context, errors } = await open('/scan');
+  const robots = () => page.locator('meta[name="robots"]').count();
+  assert.equal(await robots(), 0);
+  await completeScan(page);
+  assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex');
+  const url = decodeURIComponent(await page.locator('#saveEmail').getAttribute('href')).match(/Full report: (\S+)/)[1];
+  assert.equal(new URL(url).pathname, '/scan', 'share links use the canonical path');
+  await page.click('#reportRestart');
+  await page.waitForSelector('#scanForm:not([hidden])');
+  assert.equal(await robots(), 0);
+  await page.goto('about:blank');
+  await page.goto(url);
+  await page.waitForSelector('#report:not([hidden])');
+  assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex');
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('local links and assets on every page resolve', () => {
+  const missing = [];
+  for (const file of ['index.html', 'scan.html', '404.html', 'llms.txt']) {
+    const refs = [...read(file).matchAll(/(?:href|src)="([^"]+)"|\]\((https:\/\/buildwise-group\.pages\.dev[^)]*)\)/g)].map(m => m[1] || m[2]);
+    for (let ref of refs) {
+      if (ref.startsWith(SITE)) ref = ref.slice(SITE.length) || '/';
+      if (/^(https?:|mailto:|#|data:)/.test(ref)) continue;
+      let target = path.join(ROOT, ref.split('#')[0].split('?')[0]);
+      if (target.endsWith(path.sep)) target += 'index.html';
+      if (!path.extname(target)) target += '.html';
+      if (!fs.existsSync(target)) missing.push(`${file}: ${ref}`);
+    }
+  }
+  assert.deepEqual(missing, []);
 });
