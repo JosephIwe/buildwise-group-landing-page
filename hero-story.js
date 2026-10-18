@@ -381,10 +381,13 @@
     if (state.playing && state.target < T) state.target = Math.min(T, state.target + dt);
     const gap = state.target - state.time;
     state.time += Math.abs(gap) < 0.0005 ? gap : gap * (1 - Math.exp(-dt * 6));
-    state.idle += dt;
+    // Paused or finished means fully still, ambient motion included, once the
+    // camera settles; scrolling or the controls wake the loop again.
+    const moving = state.playing && state.time < T - 0.05;
+    if (moving) state.idle += dt;
     render(state.time, state.idle);
     setToggle();
-    if (state.visible && !document.hidden) raf = requestAnimationFrame(frame);
+    if (state.visible && !document.hidden && (moving || state.time !== state.target)) raf = requestAnimationFrame(frame);
   };
   function wake() {
     if (still || raf || !state.visible || document.hidden) return;
