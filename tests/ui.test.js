@@ -563,7 +563,7 @@ test('website: skipping the last question clears it, and a report without one ha
 // The page talks to the real handler (lib/audit/handler.mjs) running in this process
 // against a fake network, so no request leaves the machine.
 let auditLib;
-async function auditPage({ routes, viewport, handler } = {}) {
+async function auditPage({ routes, viewport, handler, cache = null } = {}) {
   if (!auditLib) {
     auditLib = {
       handler: await import('../lib/audit/handler.mjs'),
@@ -571,7 +571,7 @@ async function auditPage({ routes, viewport, handler } = {}) {
     };
   }
   const net = auditLib.net.fakeNet(routes || auditLib.net.goodSite());
-  const deps = { ...net, limiter: auditLib.handler.createLimiter(), cache: null };
+  const deps = { ...net, limiter: auditLib.handler.createLimiter(), cache };
   const calls = [];
   const { page, context, errors } = await open('/website-audit.html', viewport ? { viewport } : {});
   await page.route('**/api/website-audit', async route => {
@@ -762,4 +762,26 @@ test('scanner report suggests the website audit and hands the address over witho
   await completeScan(other.page);
   assert.ok(await other.page.locator('#reportCross').isHidden());
   await other.context.close();
+});
+
+test('audit: a reused or restored report says so, so a recent change is not mistaken for a failure', opts, async () => {
+  const store = new Map();
+  const cache = { match: async k => (store.has(k.url) ? new Response(store.get(k.url)) : undefined), put: async (k, r) => { store.set(k.url, await r.text()); } };
+  const { page, context, errors } = await auditPage({ cache });
+  const run = async () => {
+    await page.fill('#auditUrl', 'acme.example.com');
+    await page.click('#auditSubmit');
+    await page.waitForSelector('#auditReport:not([hidden])');
+    return page.locator('#reportMeta').textContent();
+  };
+  assert.doesNotMatch(await run(), /Saved result|earlier in this tab/);
+  await page.click('#auditAgain');
+  await page.fill('#auditUrl', 'acme.example.com');
+  await page.click('#auditSubmit');
+  await page.waitForFunction(() => /Saved result: the same address was audited in the last 10 minutes/.test(document.getElementById('reportMeta').textContent));
+  await page.reload();
+  await page.waitForSelector('#auditReport:not([hidden])');
+  assert.match(await page.locator('#reportMeta').textContent(), /Shown from earlier in this tab/);
+  assert.deepEqual(errors(), []);
+  await context.close();
 });

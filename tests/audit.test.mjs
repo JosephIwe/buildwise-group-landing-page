@@ -444,27 +444,91 @@ test('handler: a cached report is served without requesting the site again', asy
 });
 
 /* ---------- Production remediation (October 2026) ---------- */
-test('the HTTP to HTTPS finding quotes the request it saw, and each outcome is reported', async () => {
+test('the HTTP to HTTPS check: evidence, path and query, and inconclusive results', async () => {
   const origin = 'https://acme.example.com';
-  // http:// answers 200 with no redirect: one confirmed Medium finding with the exact evidence.
-  let { report } = await audit(goodSite(origin, { 'http://acme.example.com/': { type: 'text/html', body: 'plain http' } }));
-  const f = titled(report, /HTTP address does not redirect/);
+  const httpCheck = r => all(r).find(f => /HTTP address|HTTP redirects|HTTP to HTTPS redirect/.test(f.title));
+  const notChecked = r => r.notChecked.find(n => /http:\/\/ redirects to https/.test(n.title));
+  // http:// answers 200 with no redirect: one confirmed Medium finding quoting the exact request.
+  let { report, net } = await audit(goodSite(origin, { 'http://acme.example.com/': { type: 'text/html', body: 'plain http' } }));
+  let f = httpCheck(report);
+  assert.equal(f.title, 'The HTTP address does not redirect to HTTPS');
   assert.equal(f.severity, 'Medium');
   assert.ok(report.confirmed.includes(f));
   assert.deepEqual(f.evidence, ['GET http://acme.example.com/ returned 200 without redirecting to https://']);
-  // A 301 to https:// passes.
+  // The redirect is requested without following it automatically.
+  assert.ok(net.requests.some(r => r.url === 'http://acme.example.com/'));
+  // A 301 to the same page on https:// passes, and says where it went.
   ({ report } = await audit(goodSite(origin)));
-  assert.equal(titled(report, /HTTP address/), undefined);
-  assert.ok(report.passed.some(p => /http:\/\/acme\.example\.com\/ redirects to HTTPS/.test(p)));
-  // A redirect that stays on http:// is still flagged.
+  assert.equal(httpCheck(report), undefined);
+  assert.ok(report.passed.includes('http://acme.example.com/ redirects to https://acme.example.com/.'));
+  assert.equal(notChecked(report), undefined);
+  // The http:// version of the audited path and query is checked, not just the homepage.
+  const deep = goodSite(origin, {
+    'https://acme.example.com/services?area=leeds': { type: 'text/html', body: page({ head: goodHead, body: goodBody }) },
+    'http://acme.example.com/services?area=leeds': { status: 301, location: 'https://acme.example.com/services?area=leeds' }
+  });
+  ({ report } = await audit(deep, {}, 'https://acme.example.com/services?area=leeds'));
+  assert.ok(report.passed.includes('http://acme.example.com/services?area=leeds redirects to https://acme.example.com/services?area=leeds.'));
+  // Dropping the path or query is a recommendation, with the redirect chain as evidence.
+  deep['http://acme.example.com/services?area=leeds'] = { status: 301, location: 'https://acme.example.com/' };
+  ({ report } = await audit(deep, {}, 'https://acme.example.com/services?area=leeds'));
+  f = httpCheck(report);
+  assert.equal(f.title, 'HTTP redirects to HTTPS, but to a different address');
+  assert.ok(report.advisory.includes(f));
+  assert.deepEqual(f.evidence, ['http://acme.example.com/services?area=leeds → 301 → https://acme.example.com/']);
+  // A temporary redirect to the right page is a recommendation, not a pass.
+  ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': { status: 302, location: 'https://acme.example.com/' } })));
+  assert.equal(httpCheck(report).title, 'The HTTP to HTTPS redirect is temporary');
+  // A switch between www and the bare domain on the way is accepted.
+  ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': { status: 301, location: 'https://www.acme.example.com/' } })));
+  assert.equal(httpCheck(report), undefined);
+  // A redirect that stays on http:// is still a confirmed finding, with the chain as evidence.
   ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': { status: 301, location: 'http://www.acme.example.com/' }, 'http://www.acme.example.com/': { type: 'text/html', body: 'x' } })));
-  assert.ok(titled(report, /HTTP address does not redirect/));
-  // No answer on http:// is not a finding, but it is listed as not checked rather than dropped.
-  ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': () => { throw new TypeError('connection refused'); } })));
-  assert.equal(titled(report, /HTTP address/), undefined);
-  const nc = report.notChecked.find(n => /http:\/\/ redirects to https/.test(n.title));
-  assert.match(nc.reason, /did not answer/);
-  assert.ok(!report.passed.some(p => /redirects to HTTPS/.test(p)));
+  f = httpCheck(report);
+  assert.ok(report.confirmed.includes(f));
+  assert.deepEqual(f.evidence, ['http://acme.example.com/ → 301 → http://www.acme.example.com/', 'http://www.acme.example.com/ returned 200 over plain HTTP']);
+  // Inconclusive results are listed as not checked, never as a 200 or as a redirect failure.
+  const inconclusive = [
+    [() => { throw new TypeError('connection refused'); }, /did not answer/],
+    [() => new Promise(() => {}), /timed out/],
+    [{ status: 301, location: 'http://169.254.169.254/' }, /does not request/],
+    [{ status: 503, body: 'down' }, /returned HTTP 503/]
+  ];
+  for (const [route, reason] of inconclusive) {
+    ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': route }), { limits: { ...LIMITS, timeoutMs: 50 } }));
+    assert.equal(httpCheck(report), undefined, String(reason));
+    assert.match(notChecked(report).reason, reason);
+    assert.ok(!report.passed.some(p => /redirects to https/.test(p)), String(reason));
+  }
+});
+
+test('a site on the audit’s own Cloudflare zone gets no HTTP to HTTPS verdict either way', async () => {
+  const net = fakeNet(goodSite('https://acme.example.com', { 'http://acme.example.com/': { type: 'text/html', body: 'plain http' } }));
+  for (const selfHost of ['acme.example.com', 'www.acme.example.com', 'example.com']) {
+    const report = await runAudit('acme.example.com', { ...net, selfHost });
+    assert.equal(all(report).find(f => /HTTP address/.test(f.title)), undefined, selfHost);
+    const nc = report.notChecked.find(n => /http:\/\/ redirects to https/.test(n.title));
+    assert.match(nc.reason, /same Cloudflare zone/);
+    assert.match(nc.reason, /curl -I http:\/\/acme\.example\.com\//);
+  }
+  // A different site audited from the same service is checked normally.
+  const other = await runAudit('acme.example.com', { ...net, selfHost: 'buildwisegroup.dev' });
+  assert.ok(other.confirmed.some(f => /HTTP address does not redirect/.test(f.title)));
+});
+
+test('handler: the audit is told which host it runs on, and a reused result is flagged', async () => {
+  const seen = [];
+  const net = fakeNet(goodSite('https://buildwisegroup.dev', { 'http://buildwisegroup.dev/': { type: 'text/html', body: 'plain' } }));
+  const store = new Map();
+  const cache = { match: async k => (store.has(k.url) ? new Response(store.get(k.url)) : undefined), put: async (k, r) => { store.set(k.url, await r.text()); } };
+  const post = () => new Request('https://buildwisegroup.dev/api/website-audit', { method: 'POST', headers: { origin: 'https://buildwisegroup.dev', 'content-type': 'application/json', 'cf-connecting-ip': '203.0.113.9' }, body: JSON.stringify({ url: 'buildwisegroup.dev' }) });
+  const deps = { fetch: (u, i) => { seen.push(u); return net.fetch(u, i); }, resolve: net.resolve, cache, limiter: createLimiter() };
+  const first = await (await handleAudit(post(), deps)).json();
+  assert.equal(first.cached, false);
+  assert.match(first.report.notChecked.find(n => /http:\/\/ redirects/.test(n.title)).reason, /same Cloudflare zone/);
+  const again = await (await handleAudit(post(), deps)).json();
+  assert.equal(again.cached, true);
+  assert.equal(again.report.auditedAt, first.report.auditedAt);
 });
 
 test('the opening-text excerpt leaves navigation menus out and is a raw excerpt', () => {
