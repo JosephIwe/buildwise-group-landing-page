@@ -6,4 +6,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://buildwise-group.pages.dev/sitemap.xml
+Sitemap: https://buildwisegroup.dev/sitemap.xml

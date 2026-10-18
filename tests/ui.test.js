@@ -396,7 +396,7 @@ test('analytics counts page views but never receives answers', opts, async () =>
 });
 
 /* ---------- Discoverability ---------- */
-const SITE = 'https://buildwise-group.pages.dev';
+const SITE = 'https://buildwisegroup.dev';
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 
 test('pages have unique titles, descriptions and canonical social metadata', opts, async () => {
@@ -479,7 +479,7 @@ test('a page showing a report is marked noindex, and the questionnaire is not', 
 test('local links and assets on every page resolve', () => {
   const missing = [];
   for (const file of ['index.html', 'scan.html', '404.html', 'llms.txt']) {
-    const refs = [...read(file).matchAll(/(?:href|src)="([^"]+)"|\]\((https:\/\/buildwise-group\.pages\.dev[^)]*)\)/g)].map(m => m[1] || m[2]);
+    const refs = [...read(file).matchAll(/(?:href|src)="([^"]+)"|](https:\/\/buildwisegroup\.dev[^)]*)\)/g)].map(m => m[1] || m[2]);
     for (let ref of refs) {
       if (ref.startsWith(SITE)) ref = ref.slice(SITE.length) || '/';
       if (/^(https?:|mailto:|#|data:)/.test(ref)) continue;
@@ -490,4 +490,10 @@ test('local links and assets on every page resolve', () => {
     }
   }
   assert.deepEqual(missing, []);
+});
+
+test('public files point only at the canonical domain', () => {
+  for (const file of ['index.html', 'scan.html', '404.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
+    assert.ok(!read(file).includes('pages.dev'), `${file} does not reference the pages.dev address`);
+  }
 });
