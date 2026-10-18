@@ -1,42 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <!-- Source for hero-architecture.webp. Empty stage: the characters are drawn live in index.html. -->
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#08090B"/><stop offset=".55" stop-color="#121315"/><stop offset="1" stop-color="#1A1918"/>
     </linearGradient>
     <linearGradient id="beam" x1="0" y1="0" x2="1" y2=".6">
-      <stop offset="0" stop-color="#2B2B2C"/><stop offset=".55" stop-color="#46433F"/><stop offset="1" stop-color="#5E5952"/>
+      <stop offset="0" stop-color="#2A2A2B"/><stop offset=".55" stop-color="#44413D"/><stop offset="1" stop-color="#5C5750"/>
     </linearGradient>
     <linearGradient id="under" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0C0C0D"/><stop offset="1" stop-color="#211F1D"/>
+      <stop offset="0" stop-color="#0B0B0C"/><stop offset="1" stop-color="#201E1C"/>
     </linearGradient>
     <linearGradient id="door" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#E9DECB"/><stop offset=".6" stop-color="#F6EFE3"/><stop offset="1" stop-color="#FBF6EE"/>
+      <stop offset="0" stop-color="#D9CDB8"/><stop offset=".45" stop-color="#EEE5D6"/><stop offset="1" stop-color="#F8F2E8"/>
+    </linearGradient>
+    <linearGradient id="doorSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/>
     </linearGradient>
     <linearGradient id="pillar" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#8A7F70"/><stop offset=".12" stop-color="#5A534B"/><stop offset=".7" stop-color="#2E2B28"/><stop offset="1" stop-color="#1A1918"/>
+      <stop offset="0" stop-color="#8A7F70"/><stop offset=".1" stop-color="#57514A"/><stop offset=".7" stop-color="#2D2A27"/><stop offset="1" stop-color="#191817"/>
     </linearGradient>
     <linearGradient id="jamb" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#3A3530"/><stop offset="1" stop-color="#B9AC98"/>
+      <stop offset="0" stop-color="#36322D"/><stop offset="1" stop-color="#B4A792"/>
     </linearGradient>
     <linearGradient id="leftwall" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#060708"/><stop offset="1" stop-color="#1D1C1B"/>
+      <stop offset="0" stop-color="#060708"/><stop offset="1" stop-color="#1C1B1A"/>
     </linearGradient>
     <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2A2724"/><stop offset=".35" stop-color="#1A1918"/><stop offset="1" stop-color="#0E0E0F"/>
+      <stop offset="0" stop-color="#2B2825"/><stop offset=".35" stop-color="#1A1918"/><stop offset="1" stop-color="#0D0D0E"/>
     </linearGradient>
     <radialGradient id="spill" cx=".5" cy="0" r="1">
-      <stop offset="0" stop-color="#F3E7D2" stop-opacity=".55"/><stop offset=".45" stop-color="#C9B89E" stop-opacity=".14"/><stop offset="1" stop-color="#C9B89E" stop-opacity="0"/>
+      <stop offset="0" stop-color="#F3E7D2" stop-opacity=".5"/><stop offset=".45" stop-color="#C9B89E" stop-opacity=".13"/><stop offset="1" stop-color="#C9B89E" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="glow" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#F7EEDD" stop-opacity=".5"/><stop offset="1" stop-color="#F7EEDD" stop-opacity="0"/>
+      <stop offset="0" stop-color="#F7EEDD" stop-opacity=".45"/><stop offset="1" stop-color="#F7EEDD" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="vignette" cx=".62" cy=".55" r=".8">
-      <stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/>
+    <radialGradient id="vignette" cx=".64" cy=".55" r=".82">
+      <stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".68"/>
     </radialGradient>
     <filter id="grain" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/>
       <feColorMatrix type="saturate" values="0"/>
-      <feComponentTransfer><feFuncA type="table" tableValues="0 .22"/></feComponentTransfer>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 .2"/></feComponentTransfer>
     </filter>
     <filter id="concrete" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency=".006 .045" numOctaves="3" seed="3"/>
@@ -44,53 +48,48 @@
       <feComponentTransfer><feFuncA type="table" tableValues="0 .2"/></feComponentTransfer>
     </filter>
     <filter id="blur40"><feGaussianBlur stdDeviation="40"/></filter>
-    <filter id="blur6"><feGaussianBlur stdDeviation="6"/></filter>
-    <clipPath id="beamClip"><path d="M300 0H1268V528Z"/></clipPath>
+    <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+    <clipPath id="beamClip"><path d="M300 0H1236V552Z"/></clipPath>
+    <linearGradient id="refl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3E9D8" stop-opacity=".55"/><stop offset="1" stop-color="#F3E9D8" stop-opacity="0"/></linearGradient>
   </defs>
 
   <rect width="1600" height="1000" fill="url(#bg)"/>
 
-  <!-- back wall and opening -->
-  <rect x="1060" y="190" width="540" height="520" fill="#1E1C1A"/>
-  <rect x="1140" y="236" width="196" height="474" fill="url(#door)"/>
-  <ellipse cx="1238" cy="470" rx="260" ry="320" fill="url(#glow)" filter="url(#blur40)"/>
-  <path d="M1100 236H1140V710H1100Z" fill="url(#jamb)"/>
-  <path d="M1336 236H1600V720H1336Z" fill="url(#pillar)"/>
-  <path d="M1336 236H1360V716H1336Z" fill="#C8BBA6" opacity=".55"/>
-  <rect x="1060" y="190" width="540" height="46" fill="#151413"/>
+  <!-- back wall and tall aperture -->
+  <rect x="760" y="140" width="840" height="610" fill="#1C1A18"/>
+  <path d="M780 430L1040 300V742H780Z" fill="#24221F"/>
+  <rect x="1040" y="205" width="292" height="535" fill="url(#door)"/>
+  <rect x="1040" y="205" width="292" height="535" fill="url(#doorSide)"/>
+  <ellipse cx="1186" cy="470" rx="300" ry="340" fill="url(#glow)" filter="url(#blur40)"/>
+  <path d="M996 205H1040V742H996Z" fill="url(#jamb)"/>
+  <path d="M1332 205H1600V748H1332Z" fill="url(#pillar)"/>
+  <path d="M1332 205H1350V746H1332Z" fill="#C8BBA6" opacity=".5"/>
+  <g stroke="#000" stroke-opacity=".16" stroke-width="2"><path d="M1440 205V748M1530 205V748"/></g>
+  <rect x="1000" y="140" width="600" height="65" fill="#131211"/>
 
-  <!-- floor -->
-  <path d="M0 700H1600V1000H0Z" fill="url(#floor)"/>
-  <path d="M1140 708H1336L1600 1000H560Z" fill="url(#spill)" filter="url(#blur6)"/>
+  <!-- floor with reflection of the opening -->
+  <path d="M0 738H1600V1000H0Z" fill="url(#floor)"/>
+  <path d="M1040 742H1332L1560 1000H760Z" fill="url(#spill)" filter="url(#blur8)"/>
+  <path d="M1060 742H1312L1340 1000H1020Z" fill="url(#refl)" opacity=".5" filter="url(#blur8)"/>
   <g stroke="#F4EBDD" stroke-opacity=".07" stroke-width="1.2" fill="none">
-    <path d="M1238 706L240 1000M1238 706L760 1000M1238 706L1320 1000M1238 706L1600 900M1238 706L0 860"/>
-    <path d="M0 760H1600M0 836H1600M0 930H1600" stroke-opacity=".045"/>
+    <path d="M1186 738L160 1000M1186 738L660 1000M1186 738L1200 1000M1186 738L1700 1000M1186 738L0 880"/>
+    <path d="M0 782H1600M0 850H1600M0 940H1600" stroke-opacity=".045"/>
   </g>
 
   <!-- left mass -->
-  <path d="M0 0H300L720 230V735L0 1000Z" fill="url(#leftwall)"/>
-  <path d="M720 230V735" stroke="#2C2A28" stroke-opacity=".6" stroke-width="2"/>
+  <path d="M0 0H300L760 300V760L0 1000Z" fill="url(#leftwall)"/>
+  <path d="M760 300V760" stroke="#2C2A28" stroke-opacity=".5" stroke-width="2"/>
 
   <!-- cantilevered beam -->
-  <path d="M120 0H300L1268 528L1214 574Z" fill="url(#under)"/>
-  <path d="M300 0H1268V528Z" fill="url(#beam)"/>
+  <path d="M110 0H300L1236 552L1190 590Z" fill="url(#under)"/>
+  <path d="M300 0H1236V552Z" fill="url(#beam)"/>
   <g clip-path="url(#beamClip)">
     <rect width="1600" height="1000" filter="url(#concrete)"/>
-    <g stroke="#000" stroke-opacity=".18" stroke-width="1.4">
-      <path d="M560 0L1268 386M820 0L1268 244M1060 0L1268 112"/>
-    </g>
-    <path d="M300 0L1268 528" stroke="#D9CDB9" stroke-opacity=".35" stroke-width="2"/>
+    <g stroke="#000" stroke-opacity=".18" stroke-width="1.4"><path d="M560 0L1236 398M840 0L1236 233M1080 0L1236 92"/></g>
+    <path d="M300 0L1236 552" stroke="#D9CDB9" stroke-opacity=".35" stroke-width="2"/>
   </g>
-  <path d="M1268 0V528" stroke="#0C0C0D" stroke-width="6"/>
-
-  <!-- figure -->
-  <g fill="#0A0A0B">
-    <ellipse cx="1243" cy="583" rx="6.6" ry="8"/>
-    <path d="M1237.5 594C1240.5 591.5 1245.5 591.5 1248.5 594L1252 614L1253.5 642L1250.5 643L1249.5 662L1250 705H1245.5L1243.6 668H1242.4L1240.5 705H1236L1236.5 662L1235.5 643L1232.5 642L1234 614Z"/>
-  </g>
-  <ellipse cx="1243" cy="706" rx="16" ry="2.6" fill="#000" opacity=".45"/>
-  <path d="M1236 708L1250 708L1234 760L1210 760Z" fill="#000" opacity=".18" filter="url(#blur6)"/>
+  <path d="M1236 0V552" stroke="#0C0C0D" stroke-width="6"/>
 
   <rect width="1600" height="1000" fill="url(#vignette)"/>
-  <rect width="1600" height="1000" filter="url(#grain)" opacity=".55"/>
+  <rect width="1600" height="1000" filter="url(#grain)" opacity=".5"/>
 </svg>
