@@ -442,3 +442,40 @@ test('handler: a cached report is served without requesting the site again', asy
   assert.equal(d.requests.length, before);
   assert.ok([...store.keys()].every(k => /\/cache\/[0-9a-f]{64}$/.test(k)), 'cache keys do not contain the address');
 });
+
+/* ---------- Production remediation (October 2026) ---------- */
+test('the HTTP to HTTPS finding quotes the request it saw, and each outcome is reported', async () => {
+  const origin = 'https://acme.example.com';
+  // http:// answers 200 with no redirect: one confirmed Medium finding with the exact evidence.
+  let { report } = await audit(goodSite(origin, { 'http://acme.example.com/': { type: 'text/html', body: 'plain http' } }));
+  const f = titled(report, /HTTP address does not redirect/);
+  assert.equal(f.severity, 'Medium');
+  assert.ok(report.confirmed.includes(f));
+  assert.deepEqual(f.evidence, ['GET http://acme.example.com/ returned 200 without redirecting to https://']);
+  // A 301 to https:// passes.
+  ({ report } = await audit(goodSite(origin)));
+  assert.equal(titled(report, /HTTP address/), undefined);
+  assert.ok(report.passed.some(p => /http:\/\/acme\.example\.com\/ redirects to HTTPS/.test(p)));
+  // A redirect that stays on http:// is still flagged.
+  ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': { status: 301, location: 'http://www.acme.example.com/' }, 'http://www.acme.example.com/': { type: 'text/html', body: 'x' } })));
+  assert.ok(titled(report, /HTTP address does not redirect/));
+  // No answer on http:// is not a finding, but it is listed as not checked rather than dropped.
+  ({ report } = await audit(goodSite(origin, { 'http://acme.example.com/': () => { throw new TypeError('connection refused'); } })));
+  assert.equal(titled(report, /HTTP address/), undefined);
+  const nc = report.notChecked.find(n => /http:\/\/ redirects to https/.test(n.title));
+  assert.match(nc.reason, /did not answer/);
+  assert.ok(!report.passed.some(p => /redirects to HTTPS/.test(p)));
+});
+
+test('the opening-text excerpt leaves navigation menus out and is a raw excerpt', () => {
+  const html = page({ body: '<a href="#main">Skip to content</a><header><nav aria-label="Main"><a href="/a">Solutions</a><nav><a href="/b">Nested</a></nav><a href="/c">Work</a></nav></header><main id="main"><h1>Kitchen fitting in Leeds</h1><p>We fit kitchens.</p></main>' });
+  const h = extractHtml(html, 'https://acme.example.com/');
+  assert.equal(h.textSample, 'Skip to content Kitchen fitting in Leeds We fit kitchens.');
+  // Menu links are still collected for the link and contact checks.
+  assert.deepEqual(h.anchors.map(a => a.text), ['Skip to content', 'Solutions', 'Nested', 'Work']);
+  assert.ok(h.words >= 9, 'menu words still count towards the page’s text');
+  // A page that is nothing but a menu still shows its text instead of "None found".
+  assert.equal(extractHtml(page({ body: '<nav><a href="/">Home</a></nav>' }), 'https://acme.example.com/').textSample, 'Home');
+  // An unclosed <nav> cannot hide the rest of the page from the excerpt.
+  assert.match(extractHtml(page({ body: '<nav><a href="/">Home</a><p>Our story</p>' }), 'https://acme.example.com/').textSample, /Home/);
+});

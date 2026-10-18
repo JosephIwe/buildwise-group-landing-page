@@ -231,7 +231,7 @@
     const intro = $('reportIntro');
     intro.textContent = '';
     const i = r.introduction || {};
-    [['Title', i.title], ['Main heading', i.h1], ['Description', i.description], ['Opening text', i.text]].forEach(([k, v]) => {
+    [['Title', i.title], ['Main heading', i.h1], ['Description', i.description], ['First text on the page (raw excerpt)', i.text]].forEach(([k, v]) => {
       const row = el('div');
       row.appendChild(el('dt', null, k));
       row.appendChild(el('dd', null, v || 'None found'));
