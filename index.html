@@ -15,9 +15,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/hero-architecture.webp" imagesrcset="assets/hero-architecture-sm.webp 1200w, assets/hero-architecture.webp 2400w" imagesizes="(max-width: 899px) 1200px, 2400px" type="image/webp">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="scanner.css">
   <script>document.documentElement.classList.add('js');</script>
   <script defer src="script.js"></script>
   <script defer src="hero-story.js"></script>
+  <script defer src="analytics.js"></script>
 </head>
 <body>
   <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
@@ -153,6 +155,29 @@
       <a class="explore" href="#work" data-enter="9"><span class="explore-ring" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="explore-text">Explore<br>our approach</span></a>
     </section>
     </div>
+
+    <section class="scan-entry" id="scan" aria-labelledby="scanEntryTitle">
+      <div class="container">
+        <div class="scan-entry-grid">
+          <div>
+            <p class="label" data-reveal><span class="dot dot-blue" aria-hidden="true"></span>AI Business Opportunity Scanner</p>
+            <h2 class="section-title" id="scanEntryTitle" data-reveal>Find your next business advantage.</h2>
+          </div>
+          <div class="scan-entry-copy">
+            <p class="lead" data-reveal>Discover where AI, automation and software could help your business save time, reduce costs or unlock new revenue.</p>
+            <div class="scan-entry-actions" data-reveal>
+              <a class="btn btn-light" href="scan.html">Scan my business <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <p class="scan-entry-meta">Eight short questions. No sign-up.</p>
+            </div>
+          </div>
+        </div>
+        <ol class="scan-entry-steps">
+          <li data-reveal><span class="step-n">01</span><div><h3>Describe your business</h3><p>Your sector, size, goal and where work gets stuck.</p></div></li>
+          <li data-reveal><span class="step-n">02</span><div><h3>Get three opportunities</h3><p>Prioritised, with the reasoning, risks and a first experiment.</p></div></li>
+          <li data-reveal><span class="step-n">03</span><div><h3>Decide what’s next</h3><p>Explore further, save the report or ask us to help build it.</p></div></li>
+        </ol>
+      </div>
+    </section>
 
     <section class="approach" id="work" aria-labelledby="approachTitle">
       <div class="approach-planet" aria-hidden="true"></div>

@@ -1,0 +1,13 @@
+{
+  "name": "buildwise-site-tests",
+  "private": true,
+  "description": "Tests for the BuildWise Group static site. Kept in tests/ so the site root stays build-free.",
+  "scripts": {
+    "test": "node --test",
+    "test:engine": "node --test engine.test.js",
+    "test:ui": "node --test ui.test.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
