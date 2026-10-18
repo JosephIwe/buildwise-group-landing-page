@@ -10,7 +10,7 @@ let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { chromium = null; }
 
 const ROOT = path.resolve(__dirname, '..');
-const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png' };
+const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.avif': 'image/avif', '.png': 'image/png' };
 let server; let origin; let browser;
 
 const opts = { skip: chromium ? false : 'playwright is not installed (run npm install in tests/)' };
@@ -258,6 +258,74 @@ test('reduced motion: the flow still works without animation', opts, async () =>
   assert.equal(await page.locator('.op').first().getAttribute('data-rank'), '1');
   assert.deepEqual(errors(), []);
   await context.close();
+});
+
+async function ventureImages(page) {
+  await page.locator('#ventures').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelectorAll('.venture-media img')].every(img => img.complete && img.naturalWidth > 0));
+  return page.locator('.venture-media img').evaluateAll(imgs => imgs.map(img => ({ src: img.currentSrc, alt: img.getAttribute('alt'), w: img.naturalWidth, h: img.naturalHeight, box: img.getBoundingClientRect().toJSON() })));
+}
+
+test('ventures: three distinct images load at 4:3 in every card', opts, async () => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 860 }]) {
+    const { page, context, errors } = await open('/index.html', { viewport });
+    const imgs = await ventureImages(page);
+    assert.equal(imgs.length, 3);
+    assert.equal(new Set(imgs.map(i => i.src)).size, 3, 'each venture has its own image');
+    for (const [i, name] of ['huntly', 'tradr', 'maya'].entries()) {
+      assert.match(imgs[i].src, new RegExp(`assets/ventures/${name}-\\d+\\.(avif|webp)$`));
+      assert.equal(imgs[i].alt, '', 'imagery is decorative; the card text carries the meaning');
+      assert.ok(Math.abs(imgs[i].box.width / imgs[i].box.height - 4 / 3) < 0.02, `${name} frame keeps 4:3`);
+      assert.ok(imgs[i].w <= 1200, `${name} does not download an oversized source`);
+    }
+    if (viewport.width > 720) {
+      const spread = key => Math.max(...imgs.map(i => i.box[key])) - Math.min(...imgs.map(i => i.box[key]));
+      assert.ok(spread('top') < 1, 'images align across the grid');
+      assert.ok(spread('width') < 1 && spread('height') < 1, 'images share one size');
+    }
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'no horizontal overflow');
+    assert.deepEqual(errors(), []);
+    await context.close();
+  }
+});
+
+test('ventures: hover eases the image without moving text or resizing the card', opts, async () => {
+  const { page, context, errors } = await open('/index.html');
+  await ventureImages(page);
+  const card = page.locator('.venture').nth(1);
+  // Positions relative to the card, so a scroll caused by hovering does not count as movement.
+  const measure = () => card.evaluate(el => {
+    const c = el.getBoundingClientRect();
+    const rel = node => { const r = node.getBoundingClientRect(); return [r.left - c.left, r.top - c.top, r.width, r.height]; };
+    return { card: [c.width, c.height], title: rel(el.querySelector('h3')), text: rel(el.querySelector('p')), frame: rel(el.querySelector('.venture-media')) };
+  });
+  await page.waitForFunction(() => document.querySelectorAll('.venture.is-in').length === 3);
+  await card.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1200);
+  const before = await measure();
+  assert.equal(await card.locator('.venture-media img').evaluate(img => getComputedStyle(img).transitionDuration), '0.65s');
+  await card.hover();
+  await page.waitForTimeout(900);
+  const after = await measure();
+  assert.deepEqual(after, before, 'card, frame and text stay put');
+  const scale = await card.locator('.venture-media img').evaluate(img => new DOMMatrix(getComputedStyle(img).transform).a);
+  assert.ok(scale > 1.02 && scale < 1.04, `hover scale is restrained (${scale})`);
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('ventures: reduced motion and touch show the images without any zoom', opts, async () => {
+  for (const contextOptions of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } }]) {
+    const { page, context, errors } = await open('/index.html', contextOptions);
+    const imgs = await ventureImages(page);
+    assert.equal(imgs.length, 3);
+    const card = page.locator('.venture').first();
+    await card.hover();
+    await page.waitForTimeout(800);
+    assert.equal(await card.locator('.venture-media img').evaluate(img => new DOMMatrix(getComputedStyle(img).transform).a), 1);
+    assert.deepEqual(errors(), []);
+    await context.close();
+  }
 });
 
 test('a refresh keeps the report without putting answers in the address bar', opts, async () => {
