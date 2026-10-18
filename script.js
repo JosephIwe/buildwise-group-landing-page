@@ -11,6 +11,44 @@
 
   if (year) year.textContent = new Date().getFullYear();
 
+  /* Hero headline: one sentence that unfolds into the three-line composition */
+  const title = document.getElementById('heroTitle');
+  if (title) {
+    const words = [...title.querySelectorAll('.w')];
+    const lines = [...title.querySelectorAll('.line')];
+    const unfold = () => {
+      if (motionQuery.matches || !words.length || !title.animate) { title.classList.add('is-ready'); return; }
+      const box = title.getBoundingClientRect();
+      const rects = words.map(w => w.getBoundingClientRect());
+      const space = parseFloat(getComputedStyle(title).fontSize) * 0.24;
+      const oneLine = rects.reduce((sum, r) => sum + r.width, 0) + space * (words.length - 1);
+      const avail = Math.min(title.parentElement.clientWidth, window.innerWidth - 40);
+      const scale = Math.min(0.62, avail / oneLine);
+      const lineH = rects[0].height * scale;
+      const startY = box.top + (box.height - lineH) / 2;
+      let x = box.left;
+      title.classList.add('is-ready');
+      title.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 700, delay: 350, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'backwards' });
+      words.forEach((w, i) => {
+        const r = rects[i];
+        const dx = x - r.left, dy = startY - r.top;
+        const at = (fx, fy, fs) => `translate(${(dx * fx).toFixed(1)}px, ${(dy * fy).toFixed(1)}px) scale(${(scale + (1 - scale) * fs).toFixed(4)})`;
+        x += (r.width + space) * scale;
+        // Words drop into their line first, then glide and grow together with their line-mates,
+        // so no two words ever overlap on the way.
+        w.animate([
+          { transform: at(1, 1, 0), easing: 'cubic-bezier(.55, 0, .25, 1)' },
+          { transform: at(0.9, 0.1, 0.1), offset: 0.45, easing: 'cubic-bezier(.3, 0, .15, 1)' },
+          { transform: 'none' }
+        ], { duration: 1600, delay: 1000 + lines.indexOf(w.closest('.line')) * 90, fill: 'backwards' });
+      });
+    };
+    const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    if (motionQuery.matches) title.classList.add('is-ready');
+    else Promise.race([fontsReady, new Promise(res => setTimeout(res, 900))]).then(() => requestAnimationFrame(unfold));
+  }
+
   /* Scroll reveals: stagger siblings that enter together */
   const reveals = [...document.querySelectorAll('[data-reveal]')];
   const groups = new Map();
