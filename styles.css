@@ -408,8 +408,6 @@ a.venture-link:hover .ico { transform: translateX(5px); }
 }
 @keyframes glow { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-6%, -4%, 0); } }
 .contact-title { margin-top: 24px; font-size: clamp(40px, 6.6vw, 96px); font-weight: 500; letter-spacing: -.045em; line-height: 1; }
-.contact-email { font-size: 16px; font-weight: 500; border-bottom: 1px solid rgba(255, 255, 255, .45); padding: 4px 0; transition: border-color .3s; }
-.contact-email:hover { border-color: #fff; }
 .contact-intro { margin-top: 32px; max-width: 30em; font-size: var(--fs-lead); line-height: 1.5; color: rgba(255, 255, 255, .9); }
 .contact-grid { margin-top: var(--space-5); display: grid; gap: 40px; align-items: start; }
 .contact-routes { display: grid; gap: 0; }
@@ -417,14 +415,9 @@ a.venture-link:hover .ico { transform: translateX(5px); }
 .route:first-child { padding-top: 0; border-top: 0; }
 .route h3 { font-size: var(--fs-h3); font-weight: 600; letter-spacing: -.015em; }
 .route p { margin-top: 8px; max-width: 26em; color: rgba(255, 255, 255, .86); }
-.route .contact-email { display: inline-block; margin-top: 10px; }
 .route-btn { margin-top: 20px; }
 .contact .route-btn:hover { box-shadow: 0 14px 30px -12px rgba(11, 13, 16, .55); }
 .ico-brand { width: 20px; height: 20px; color: #128C4A; }
-.route-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; min-height: 44px; font-size: 16px; font-weight: 500; color: rgba(255, 255, 255, .92); transition: color .3s; }
-.route-link:hover { color: #fff; }
-.route-link .ico { width: 18px; height: 18px; }
-.route-ig h3 { font-size: 16px; font-weight: 500; color: rgba(255, 255, 255, .86); }
 
 /* Project enquiry form: a graphite panel on the cobalt section */
 .enquiry { background: var(--graphite); color: var(--offwhite); border-radius: 6px; padding: clamp(24px, 3.4vw, 44px); box-shadow: 0 40px 80px -40px rgba(11, 13, 16, .7); }

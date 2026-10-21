@@ -18,7 +18,7 @@
 })(typeof self !== 'undefined' ? self : this, () => {
   'use strict';
 
-  const ACCESS_KEY = '';
+  const ACCESS_KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
   const ENDPOINT = 'https://api.web3forms.com/submit';
   const SUBJECT = 'New Buildwise Project Enquiry';
   const TIMEOUT_MS = 20000;

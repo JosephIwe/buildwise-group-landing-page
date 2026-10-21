@@ -102,16 +102,13 @@ node scripts/check-production.mjs --audit   # also runs one real audit of buildw
 It prints the status and `Location` each address actually returned and exits 1 if anything is off.
 
 ## Contact and project enquiries
-The contact section (`#contact`) offers three routes: WhatsApp (`https://wa.me/2349165681202` with a prefilled greeting), a structured project enquiry form, and Instagram (`@buildwisehq`). The footer and the mobile menu repeat WhatsApp, and the footer also lists Instagram and email. There is no floating button or chat widget.
+The site offers exactly two contact routes: **WhatsApp** (`https://wa.me/2349165681202` with a prefilled greeting) and the **project enquiry form** in `#contact`. No email address is published anywhere (pages, structured data, llms.txt or scripts); `tests/contact.test.js` fails if one appears. WhatsApp is also in the footer and mobile menu, and the scanner and audit "Request help" buttons open WhatsApp with the report summary prefilled for the visitor to edit and send. There is no floating button or chat widget.
 
-**How the form is delivered.** The site has no mail service, so the form posts JSON from the browser to Web3Forms (`https://api.web3forms.com/submit`, free plan: 250 submissions a month). Web3Forms emails each accepted submission to the inbox its access key was created with; the recipient cannot be changed from the page. The email subject is "New Buildwise Project Enquiry: <project type>", the sender stays Web3Forms', and reply-to is the prospect's email. Every field is included.
+**How the form is delivered.** The form posts JSON from the browser to Web3Forms (`https://api.web3forms.com/submit`, free plan: 250 submissions a month). Web3Forms emails each accepted submission to the inbox its access key was created with. The recipient is set in the Web3Forms account, never in this repository or the page. The email subject is "New Buildwise Project Enquiry: <project type>", the sender stays Web3Forms', and reply-to is the prospect's email. Every field is included.
 
-**The access key is public, not a secret.** It is an alias for one inbox and can only send mail there, and Web3Forms' free plan is designed for keys that sit in the browser. While `ACCESS_KEY` in `contact-form.js` is empty, the form is hidden and visitors see the email and WhatsApp routes instead, so no enquiry is lost.
+**The access key is public, not a secret.** `ACCESS_KEY` in `contact-form.js` is an alias for one inbox and can only send mail there; Web3Forms' free plan is designed for keys that sit in the browser. If it is ever emptied, the form hides itself and the WhatsApp route remains.
 
-**To turn the form on:**
-1. Go to https://web3forms.com, enter `ijosephiwe@gmail.com` under "Create your Access Key", and submit. Web3Forms emails the key to that address, which is also how it confirms you own the inbox.
-2. Paste the key into `const ACCESS_KEY = '';` in `contact-form.js`, commit, and let the branch preview build.
-3. On the preview, send one enquiry whose description starts with "TEST" and check it arrives at ijosephiwe@gmail.com (including Spam). Only then merge.
+**Checking delivery:** on a preview, send one enquiry whose description starts with "TEST" and confirm it arrives in the Web3Forms account's inbox (including Spam).
 
 **Behaviour and safeguards.** Fields are validated and normalised in the browser (length limits, listed values only for project type, budget and contact method, control characters removed). A success message appears only when Web3Forms answers `success: true`; a rejection, rate limit, network error or 20-second timeout shows a plain message and keeps everything typed. The button is disabled while sending, so a double click sends once. A hidden `botcheck` honeypot is passed to Web3Forms, which rejects filled ones; Web3Forms also applies its own spam filtering. Nothing is stored by the site, and no cookies, analytics or third-party scripts are added. Web3Forms keeps submissions for 30 days on the free plan.
 
@@ -128,7 +125,7 @@ These live in the Cloudflare dashboard for the `buildwisegroup.dev` zone, not in
 - The mobile menu traps focus while open, closes on Escape and returns focus to the toggle.
 
 ## Before publishing
-1. Confirm the public contact address `hello@josephiwe.com` receives mail, or change it in `index.html` and `CONTACT` in `scanner.js`. Enquiry form emails go to the Web3Forms key's inbox instead (see Contact and project enquiries).
+1. Do not publish an email address. Enquiries come through WhatsApp and the enquiry form (see Contact and project enquiries).
 2. Confirm `https://huntlyagent.com` is the preferred public Huntly URL.
 3. Venture marks (H, T, M) are typographic placeholders, not official logos. Swap in approved logo files when they exist.
 4. Venture photos are AI-generated illustrations of each venture's theme, not product screenshots or real customers. Screens in them are deliberately unreadable so they show no figures. They are decorative (`alt=""`); the card text carries the meaning.

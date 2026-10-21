@@ -1,4 +1,4 @@
-/* Tests for the homepage contact section: WhatsApp and Instagram links, and the
+/* Tests for the homepage contact section: the WhatsApp link, the no-public-email policy, and the
  * project enquiry form (validation in Node, submission flows in Chromium).
  * Web3Forms is never contacted: browser tests answer api.web3forms.com locally. */
 const test = require('node:test');
@@ -14,7 +14,8 @@ try { ({ chromium } = require('playwright')); } catch (e) { chromium = null; }
 const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project.';
-const INSTAGRAM = 'https://www.instagram.com/buildwisehq/';
+const KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
+const PUBLIC_FILES = ['index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
 const valid = {
   name: 'Ada Lovelace', email: 'ada@example.com', company: 'Analytical Engines Ltd',
   projectType: 'AI product development', budget: 'Not sure yet',
@@ -22,10 +23,33 @@ const valid = {
 };
 
 /* ---------- Validation and payload (Node) ---------- */
-test('the access key is empty or a Web3Forms public key, and the endpoint is Web3Forms', () => {
-  // Web3Forms issues access keys as UUIDs. Empty keeps the form hidden behind the email and WhatsApp routes.
-  assert.match(E.ACCESS_KEY, /^(|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i);
+test('the Web3Forms public access key is configured and the endpoint is Web3Forms', () => {
+  assert.equal(E.ACCESS_KEY, KEY);
   assert.equal(E.ENDPOINT, 'https://api.web3forms.com/submit');
+});
+
+test('no personal or other email address is published anywhere on the public site', () => {
+  for (const file of PUBLIC_FILES) {
+    const text = read(file);
+    assert.ok(!/ijosephiwe@gmail\.com|gmail\.com|josephiwe\.com/i.test(text), `${file} exposes no personal email`);
+    assert.ok(!/mailto:[^"'`?\s]+@/i.test(text), `${file} has no mailto link with an address`);
+    assert.ok(!/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}/.test(text.replace(/name@company\.com|name@gmail/g, '')), `${file} contains no email address`);
+  }
+  const ld = JSON.parse(read('index.html').match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  assert.ok(!/"email"/.test(JSON.stringify(ld)), 'structured data lists no email');
+});
+
+test('the private recipient never appears in the payload, errors or success text', () => {
+  const { values } = E.normalizeEnquiry(valid);
+  const payload = JSON.stringify(E.buildPayload(values, { accessKey: KEY }));
+  assert.ok(!payload.includes('ijosephiwe'), 'the recipient is set in Web3Forms by the key, not sent from the page');
+  for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/@/.test(text), 'failure messages contain no email address');
+});
+
+test('Instagram is not offered as a contact route', () => {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt']) {
+    assert.ok(!/instagram/i.test(read(file)), `${file} has no Instagram link`);
+  }
 });
 
 test('required fields are enforced and optional ones are not', () => {
@@ -105,20 +129,16 @@ test('submission only succeeds when Web3Forms confirms success', async () => {
   for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/key|web3forms|status|error code/i.test(text), 'failure messages stay generic');
 });
 
-test('WhatsApp and Instagram links use the official destinations', () => {
+test('every WhatsApp link uses the business number and opens safely', () => {
   const html = read('index.html');
   const waLinks = [...html.matchAll(/href="(https:\/\/wa\.me\/[^"]+)"/g)].map(m => m[1]);
-  assert.ok(waLinks.length >= 3, 'contact section, footer and mobile menu');
+  assert.ok(waLinks.length >= 4, 'contact section, no-script panel, footer and mobile menu');
   waLinks.forEach(href => assert.equal(href, WHATSAPP));
   assert.equal(decodeURIComponent(new URL(WHATSAPP).searchParams.get('text')), 'Hello Buildwise, I visited your website and would like to discuss a project.');
-  const igLinks = [...html.matchAll(/href="(https:\/\/www\.instagram\.com\/[^"]*)"/g)].map(m => m[1]);
-  assert.ok(igLinks.length >= 2);
-  igLinks.forEach(href => assert.equal(href, INSTAGRAM));
-  for (const m of html.matchAll(/<a [^>]*href="https:\/\/(?:wa\.me|www\.instagram\.com)[^"]*"[^>]*>/g)) {
+  for (const m of html.matchAll(/<a [^>]*href="https:\/\/wa\.me[^"]*"[^>]*>/g)) {
     assert.match(m[0], /target="_blank"/);
     assert.match(m[0], /rel="noopener noreferrer"/);
   }
-  assert.match(html, /@buildwisehq/);
 });
 
 /* ---------- Browser ---------- */
@@ -147,7 +167,7 @@ test.after(async () => {
 
 /* Opens the homepage. `key` simulates a configured access key; `provider` answers
    each Web3Forms request and records what was sent. */
-async function open({ key = 'test-access-key', provider, viewport = { width: 1280, height: 860 } } = {}) {
+async function open({ key = KEY, provider, viewport = { width: 1280, height: 860 } } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion: 'reduce' });
   const page = await context.newPage();
   const errors = [];
@@ -156,7 +176,7 @@ async function open({ key = 'test-access-key', provider, viewport = { width: 128
   await page.route(/fonts\.(googleapis|gstatic)\.com/, route => route.abort());
   await page.route('**/contact-form.js', route => route.fulfill({
     contentType: 'text/javascript',
-    body: read('contact-form.js').replace("const ACCESS_KEY = '';", `const ACCESS_KEY = ${JSON.stringify(key)};`)
+    body: read('contact-form.js').replace(/const ACCESS_KEY = '[^']*';/, `const ACCESS_KEY = ${JSON.stringify(key)};`)
   }));
   await page.route('https://api.web3forms.com/**', async route => {
     sent.push(JSON.parse(route.request().postData()));
@@ -177,14 +197,30 @@ async function fill(page, overrides = {}) {
   await page.fill('#enqMessage', v.message);
 }
 
-test('form: without an access key the form stays hidden and email and WhatsApp are offered', opts, async () => {
+test('form: without an access key the form stays hidden and WhatsApp is offered, with no email address', opts, async () => {
   const { page, context, sent } = await open({ key: '' });
   assert.equal(await page.locator('#enquiryForm').isVisible(), false);
   const panel = page.locator('#enquiryUnavailable');
   assert.ok(await panel.isVisible());
-  assert.match(await panel.locator('a[href^="mailto:"]').getAttribute('href'), /^mailto:hello@josephiwe\.com/);
+  assert.equal(await panel.locator('a[href^="mailto:"]').count(), 0);
   assert.equal(await panel.locator('a[href^="https://wa.me"]').getAttribute('href'), WHATSAPP);
   assert.equal(sent.length, 0);
+  await context.close();
+});
+
+test('form: with the configured key the form shows and the fallback panel is hidden', opts, async () => {
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.route(/fonts\.(googleapis|gstatic)\.com/, route => route.abort());
+  await page.goto(`${origin}/index.html#contact`);
+  await page.waitForSelector('#enquiryForm:not([hidden])');
+  assert.equal(await page.locator('#enquiryUnavailable').isVisible(), false);
+  assert.equal(await page.locator('#enquiryTitle').textContent(), 'Send a project enquiry');
+  assert.equal((await page.locator('#whatsappCta').textContent()).trim().startsWith('Chat on WhatsApp'), true);
+  const text = await page.locator('body').textContent();
+  assert.ok(!/@[a-z0-9-]+\.[a-z]/i.test(text.replace('@company.com', '')), 'no email address is visible on the rendered page');
+  assert.equal(await page.locator('a[href^="mailto:"]').count(), 0, 'no mailto link on the homepage');
+  assert.equal(await page.locator('a[href*="instagram"]').count(), 0, 'no Instagram link on the homepage');
   await context.close();
 });
 
@@ -224,7 +260,7 @@ test('form: a confirmed submission shows success and sends every field', opts, a
   assert.equal(await page.evaluate(() => document.activeElement.textContent), 'Thank you. Your enquiry has been sent.');
   assert.equal(sent.length, 1);
   const p = sent[0];
-  assert.equal(p.access_key, 'test-access-key');
+  assert.equal(p.access_key, KEY);
   assert.equal(p.subject, 'New Buildwise Project Enquiry: AI product development');
   assert.equal(p.replyto, 'ada@example.com');
   assert.equal(p.name, 'Ada Lovelace');
@@ -250,7 +286,7 @@ test('form: provider rejection keeps everything the prospect typed', opts, async
   await page.waitForFunction(() => document.getElementById('enquiryStatus').classList.contains('is-error'));
   const status = await page.locator('#enquiryStatus').textContent();
   assert.match(status, /could not be sent/);
-  assert.ok(!/access key/i.test(status), 'provider details are not shown');
+  assert.ok(!/access key|@/i.test(status), 'provider details and email addresses are not shown');
   assert.equal(await page.locator('#enquirySuccess').isVisible(), false, 'no success without confirmation');
   assert.equal(await page.inputValue('#enqName'), valid.name);
   assert.equal(await page.inputValue('#enqMessage'), valid.message);
@@ -317,7 +353,7 @@ test('form: keyboard users can complete and send it in a logical order', opts, a
     order.push(await page.evaluate(() => document.activeElement.id || document.activeElement.name || document.activeElement.textContent.trim()));
   }
   const at = id => order.indexOf(id);
-  assert.ok(at('instagramLink') >= 0 && at('instagramLink') < at('enqName'), `routes come before the form: ${order}`);
+  assert.equal(at('enqName'), 0, `the form follows the WhatsApp button: ${order}`);
   assert.ok(at('enqName') < at('enqEmail') && at('enqEmail') < at('enqCompany') && at('enqCompany') < at('enqType') && at('enqType') < at('enqBudget') && at('enqBudget') < at('preferred_contact') && at('preferred_contact') < at('enqMessage'), `fields in visual order: ${order}`);
   assert.ok(!order.includes('botcheck'), 'the honeypot is not focusable');
   const outline = await page.locator('#enqMessage').evaluate(el => { el.focus(); return getComputedStyle(el).boxShadow; });
@@ -343,7 +379,7 @@ test('contact: no horizontal overflow, and tap targets are large enough, on phon
     const { page, context } = await open({ viewport });
     await page.waitForSelector('#enquiryForm:not([hidden])');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `no overflow at ${viewport.width}px`);
-    for (const sel of ['#whatsappCta', '#instagramLink', '#enquirySubmit', '#enqName', '#enqType', '.enq-choice span', '.footer-links a']) {
+    for (const sel of ['#whatsappCta', '#enquirySubmit', '#enqName', '#enqType', '.enq-choice span', '.footer-links a']) {
       const box = await page.locator(sel).first().boundingBox();
       assert.ok(box && box.height >= 44, `${sel} is at least 44px tall at ${viewport.width}px (${box && box.height})`);
     }

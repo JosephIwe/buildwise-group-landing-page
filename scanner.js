@@ -4,7 +4,7 @@
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const STORE_KEY = 'bw-scan-draft-v1';
   const BRIEF_URL = 'brief/brief.json';
-  const CONTACT = 'hello@josephiwe.com';
+  const WHATSAPP = 'https://wa.me/2349165681202';
   const MAILTO_LIMIT = 1800;
 
   const scanner = $('scanner');
@@ -449,6 +449,12 @@
     return lines.join('\n');
   };
 
+  // Opens WhatsApp with the text prefilled; the visitor edits and sends it themselves.
+  const whatsapp = (subject, body) => {
+    const text = body.length > MAILTO_LIMIT ? `${body.slice(0, MAILTO_LIMIT)}…` : body;
+    return `${WHATSAPP}?text=${encodeURIComponent(`${subject}\n\n${text}`)}`;
+  };
+
   const mailto = (to, subject, body) => {
     let text = body;
     if (text.length > MAILTO_LIMIT) text = `${text.slice(0, MAILTO_LIMIT)}…`;
@@ -573,7 +579,7 @@
     $('crossLead').textContent = p.website ? `Want to check how search engines and AI systems read ${p.website}?` : 'Is your website easy for search engines and AI systems to read?';
     $('crossText').textContent = 'The Website & AI Visibility Audit is a separate, free check of technical SEO, crawler access and content clarity. This scanner has not checked your website.';
 
-    $('helpLink').href = mailto(CONTACT, `Scanner report: ${top.title}`, summaryText());
+    $('helpLink').href = whatsapp(`Scanner report: ${top.title}`, summaryText());
     const selfBody = [r.headline, '', ...r.opportunities.map(o => `${o.rank}. ${o.title}\n   First experiment: ${o.experiment}`), '', `Full report: ${shareUrl()}`].join('\n');
     $('saveEmail').href = mailto('', 'My AI Business Opportunity report', selfBody);
 
@@ -602,7 +608,7 @@
   $('helpLink').addEventListener('click', () => track('help_request', { opportunity: report.opportunities[0].id }));
   $('copySummary').addEventListener('click', async () => {
     const ok = await copy(summaryText());
-    toast(ok ? `Summary copied. Paste it into an email to ${CONTACT}.` : 'Copy failed. Please use the Request help button.');
+    toast(ok ? 'Summary copied. Paste it into WhatsApp or the project enquiry form on our homepage.' : 'Copy failed. Please use the Request help button.');
     track('help_copy');
   });
   $('saveDownload').addEventListener('click', () => {
