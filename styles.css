@@ -349,7 +349,7 @@ a.venture-link:hover::before, a.venture-link:focus-visible::before { transform: 
 .venture:hover .venture-mark { transform: translateY(-4px); box-shadow: 0 14px 24px -14px rgba(11, 13, 16, .45); }
 a.venture-link:hover .venture-cta { color: var(--cobalt); }
 a.venture-link:hover .ico { transform: translateX(5px); }
-/* Each venture mark has its own small motion: Huntly scans, Tradr ticks, Maya pulses. */
+/* Each venture mark has its own small motion: Huntly scans, Traider ticks, Staff pulses. */
 .venture-mark { position: relative; overflow: hidden; isolation: isolate; }
 .venture-mark::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .mark-huntly::after { background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, .55) 50%, transparent 100%); width: 40%; transform: translateX(-160%); }

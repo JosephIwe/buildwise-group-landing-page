@@ -440,7 +440,7 @@ test('homepage structured data describes the organisation accurately', opts, asy
   assert.ok(fs.existsSync(path.join(ROOT, org.logo.slice(SITE.length))), 'logo is a local asset');
   const body = await page.locator('body').textContent();
   assert.ok(body.includes(org.email), 'email is visible on the page');
-  for (const name of ['Huntly', 'Tradr', 'Maya']) assert.ok(body.includes(name) && org.description.includes(name));
+  for (const name of ['Huntly', 'Traider', 'Staff']) assert.ok(body.includes(name) && org.description.includes(name));
   assert.equal(await page.locator('h1').count(), 1, 'one h1 on the homepage');
   await context.close();
 });

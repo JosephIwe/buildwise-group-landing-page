@@ -115,6 +115,6 @@ These live in the Cloudflare dashboard for the `buildwisegroup.dev` zone, not in
 ## Before publishing
 1. Confirm the public contact address `hello@josephiwe.com` receives mail, or change it in `index.html` and `CONTACT` in `scanner.js`.
 2. Confirm `https://huntlyagent.com` is the preferred public Huntly URL.
-3. Venture marks (H, T, M) are typographic placeholders, not official logos. Swap in approved logo files when they exist.
+3. Venture marks (H, T, S) are typographic placeholders, not official logos. Swap in approved logo files when they exist.
 4. Venture images are the founder-supplied product images, shown uncropped on a plain mat inside each 4:3 frame. They carry descriptive alt text. Any figures shown inside them are part of the supplied product images and are not repeated or restated in the site copy. The Staff image carries a small "Example employee: Maya · Receptionist" label so Staff reads as the platform and Maya as one employee built on it.
 5. No client logos, testimonials, metrics or performance claims are included. Add them only with evidence and permission.
