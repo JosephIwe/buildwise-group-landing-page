@@ -126,7 +126,14 @@ test('submission only succeeds when Web3Forms confirms success', async () => {
   assert.deepEqual(await E.submitEnquiry({}, { fetchImpl: async () => { throw new TypeError('Failed to fetch'); } }), { ok: false, reason: 'network' });
   const hang = (url, init) => new Promise((_, reject) => init.signal.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' }))));
   assert.deepEqual(await E.submitEnquiry({}, { fetchImpl: hang, timeoutMs: 20 }), { ok: false, reason: 'timeout' });
-  for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/key|web3forms|status|error code/i.test(text), 'failure messages stay generic');
+  for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/key|web3forms|form service|provider|status|error code/i.test(text), 'failure messages stay generic');
+});
+
+test('the public pages do not name the form provider or describe how the form is delivered', () => {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html']) {
+    const text = read(file).replace(/<script[\s\S]*?<\/script>/g, '');
+    assert.ok(!/web3forms|form provider|form service/i.test(text), `${file} keeps delivery details out of the page`);
+  }
 });
 
 test('every WhatsApp link uses the business number and opens safely', () => {
@@ -301,7 +308,7 @@ test('form: a network failure is explained and a retry can succeed', opts, async
   await fill(page);
   await page.click('#enquirySubmit');
   await page.waitForFunction(() => document.getElementById('enquiryStatus').classList.contains('is-error'));
-  assert.match(await page.locator('#enquiryStatus').textContent(), /could not reach the form service/);
+  assert.match(await page.locator('#enquiryStatus').textContent(), /could not be sent. Check your connection/);
   assert.equal(await page.inputValue('#enqEmail'), valid.email);
   await page.click('#enquirySubmit');
   await page.waitForSelector('#enquirySuccess:not([hidden])');

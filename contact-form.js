@@ -138,8 +138,8 @@
   const FAILURE_TEXT = {
     rejected: 'Your enquiry could not be sent. Your details are still here, so please try again, or message us on WhatsApp.',
     'rate-limited': 'Too many attempts in a short time. Please wait a minute and try again, or message us on WhatsApp.',
-    network: 'We could not reach the form service. Check your connection and try again, or message us on WhatsApp.',
-    timeout: 'The form service took too long to answer. Please try again, or message us on WhatsApp.'
+    network: 'Your enquiry could not be sent. Check your connection and try again, or message us on WhatsApp.',
+    timeout: 'Sending took too long. Your details are still here, so please try again, or message us on WhatsApp.'
   };
 
   /* ---------- Browser wiring ---------- */
