@@ -14,8 +14,8 @@ This file is a plain-text summary of the public website for AI assistants and ot
 ## Ventures
 
 - [Huntly](https://huntlyagent.com): an AI job-search assistant that helps people evaluate opportunities against their profile and prepare stronger applications.
-- Tradr (in development): a crypto research and trading-signals project for structuring market data. Signals are research inputs, not financial advice or a promise of returns.
-- Maya (in validation): an applied-AI employee platform being developed and validated for business workflows such as enquiries and bookings.
+- Traider (in development): a crypto research and trading-signals project for structuring market data. Signals are research inputs, not financial advice or a promise of returns.
+- Staff (in validation): an applied-AI employee platform being developed and validated for business workflows such as enquiries and bookings.
 
 ## Pages
 
