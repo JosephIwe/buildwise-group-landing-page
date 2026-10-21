@@ -15,7 +15,7 @@ const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project.';
 const KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
-const PUBLIC_FILES = ['index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
+const PUBLIC_FILES = ['README.md', 'index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
 const valid = {
   name: 'Ada Lovelace', email: 'ada@example.com', company: 'Analytical Engines Ltd',
   projectType: 'AI product development', budget: 'Not sure yet',
@@ -31,7 +31,7 @@ test('the Web3Forms public access key is configured and the endpoint is Web3Form
 test('no personal or other email address is published anywhere on the public site', () => {
   for (const file of PUBLIC_FILES) {
     const text = read(file);
-    assert.ok(!/ijosephiwe@gmail\.com|gmail\.com|josephiwe\.com/i.test(text), `${file} exposes no personal email`);
+    assert.ok(!/gmail\.com|josephiwe\.com/i.test(text), `${file} exposes no personal email`);
     assert.ok(!/mailto:[^"'`?\s]+@/i.test(text), `${file} has no mailto link with an address`);
     assert.ok(!/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}/.test(text.replace(/name@company\.com|name@gmail/g, '')), `${file} contains no email address`);
   }
@@ -42,7 +42,7 @@ test('no personal or other email address is published anywhere on the public sit
 test('the private recipient never appears in the payload, errors or success text', () => {
   const { values } = E.normalizeEnquiry(valid);
   const payload = JSON.stringify(E.buildPayload(values, { accessKey: KEY }));
-  assert.ok(!payload.includes('ijosephiwe'), 'the recipient is set in Web3Forms by the key, not sent from the page');
+  assert.ok(!/gmail|"to"|ccemail/i.test(payload), 'the recipient is set in Web3Forms by the key, not sent from the page');
   for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/@/.test(text), 'failure messages contain no email address');
 });
 
