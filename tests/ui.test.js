@@ -265,10 +265,10 @@ test('reduced motion: the flow still works without animation', opts, async () =>
 async function ventureImages(page) {
   await page.locator('#ventures').scrollIntoViewIfNeeded();
   await page.waitForFunction(() => [...document.querySelectorAll('.venture-media img')].every(img => img.complete && img.naturalWidth > 0));
-  return page.locator('.venture-media img').evaluateAll(imgs => imgs.map(img => ({ src: img.currentSrc, alt: img.getAttribute('alt'), w: img.naturalWidth, h: img.naturalHeight, box: img.getBoundingClientRect().toJSON() })));
+  return page.locator('.venture-media img').evaluateAll(imgs => imgs.map(img => ({ src: img.currentSrc, alt: img.getAttribute('alt'), w: img.naturalWidth, h: img.naturalHeight, box: img.getBoundingClientRect().toJSON(), frame: img.closest('.venture-media').getBoundingClientRect().toJSON() })));
 }
 
-test('ventures: three distinct images load at 4:3 in every card', opts, async () => {
+test('ventures: three distinct product images sit uncropped in 4:3 frames', opts, async () => {
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 860 }]) {
     const { page, context, errors } = await open('/index.html', { viewport });
     const imgs = await ventureImages(page);
@@ -276,22 +276,30 @@ test('ventures: three distinct images load at 4:3 in every card', opts, async ()
     assert.equal(new Set(imgs.map(i => i.src)).size, 3, 'each venture has its own image');
     for (const [i, name] of ['huntly', 'tradr', 'maya'].entries()) {
       assert.match(imgs[i].src, new RegExp(`assets/ventures/${name}-\\d+\\.(avif|webp)$`));
-      assert.equal(imgs[i].alt, '', 'imagery is decorative; the card text carries the meaning');
-      assert.ok(Math.abs(imgs[i].box.width / imgs[i].box.height - 4 / 3) < 0.02, `${name} frame keeps 4:3`);
+      assert.ok(imgs[i].alt.length > 10, `${name} product image has alt text`);
+      assert.ok(Math.abs(imgs[i].frame.width / imgs[i].frame.height - 4 / 3) < 0.02, `${name} frame keeps 4:3`);
+      assert.ok(Math.abs(imgs[i].box.width / imgs[i].box.height - imgs[i].w / imgs[i].h) < 0.02, `${name} image keeps its own aspect ratio (not cropped)`);
+      const { box, frame } = imgs[i];
+      assert.ok(box.left >= frame.left && box.right <= frame.right && box.top >= frame.top && box.bottom <= frame.bottom, `${name} image fits inside its frame`);
       assert.ok(imgs[i].w <= 1200, `${name} does not download an oversized source`);
     }
     if (viewport.width > 720) {
-      const spread = key => Math.max(...imgs.map(i => i.box[key])) - Math.min(...imgs.map(i => i.box[key]));
-      assert.ok(spread('top') < 1, 'images align across the grid');
-      assert.ok(spread('width') < 1 && spread('height') < 1, 'images share one size');
+      const frames = imgs.map(i => i.frame);
+      const fspread = key => Math.max(...frames.map(f => f[key])) - Math.min(...frames.map(f => f[key]));
+      assert.ok(fspread('top') < 1, 'frames align across the grid');
+      assert.ok(fspread('width') < 1 && fspread('height') < 1, 'frames share one size');
     }
+    const note = await page.locator('.venture-media-maya .venture-media-note').evaluate(el => ({ text: el.textContent, box: el.getBoundingClientRect().toJSON() }));
+    assert.equal(note.text, 'Example employee: Maya · Receptionist');
+    assert.ok(note.box.top >= imgs[2].box.bottom, 'the Staff example label sits below the image, never over it');
+    assert.ok(note.box.bottom <= imgs[2].frame.bottom, 'the Staff example label stays inside the frame');
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'no horizontal overflow');
     assert.deepEqual(errors(), []);
     await context.close();
   }
 });
 
-test('ventures: hover eases the image without moving text or resizing the card', opts, async () => {
+test('ventures: hover lifts the image without moving text or resizing the card', opts, async () => {
   const { page, context, errors } = await open('/index.html');
   await ventureImages(page);
   const card = page.locator('.venture').nth(1);
@@ -305,18 +313,18 @@ test('ventures: hover eases the image without moving text or resizing the card',
   await card.scrollIntoViewIfNeeded();
   await page.waitForTimeout(1200);
   const before = await measure();
-  assert.equal(await card.locator('.venture-media img').evaluate(img => getComputedStyle(img).transitionDuration), '0.65s');
+  assert.equal(await card.locator('.venture-media img').evaluate(img => getComputedStyle(img).transitionDuration), '0.65s, 0.65s');
   await card.hover();
   await page.waitForTimeout(900);
   const after = await measure();
   assert.deepEqual(after, before, 'card, frame and text stay put');
-  const scale = await card.locator('.venture-media img').evaluate(img => new DOMMatrix(getComputedStyle(img).transform).a);
-  assert.ok(scale > 1.02 && scale < 1.04, `hover scale is restrained (${scale})`);
+  const lift = await card.locator('.venture-media img').evaluate(img => new DOMMatrix(getComputedStyle(img).transform).f);
+  assert.ok(lift <= -3 && lift >= -6, `hover lift is restrained (${lift}px)`);
   assert.deepEqual(errors(), []);
   await context.close();
 });
 
-test('ventures: reduced motion and touch show the images without any zoom', opts, async () => {
+test('ventures: reduced motion and touch show the images without any movement', opts, async () => {
   for (const contextOptions of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } }]) {
     const { page, context, errors } = await open('/index.html', contextOptions);
     const imgs = await ventureImages(page);
@@ -324,7 +332,7 @@ test('ventures: reduced motion and touch show the images without any zoom', opts
     const card = page.locator('.venture').first();
     await card.hover();
     await page.waitForTimeout(800);
-    assert.equal(await card.locator('.venture-media img').evaluate(img => new DOMMatrix(getComputedStyle(img).transform).a), 1);
+    assert.ok(await card.locator('.venture-media img').evaluate(img => new DOMMatrix(getComputedStyle(img).transform).isIdentity));
     assert.deepEqual(errors(), []);
     await context.close();
   }
