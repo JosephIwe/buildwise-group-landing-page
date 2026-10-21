@@ -1,7 +1,7 @@
 (() => {
   const $ = id => document.getElementById(id);
   const API = '/api/website-audit';
-  const CONTACT = 'hello@josephiwe.com';
+  const WHATSAPP = 'https://wa.me/2349165681202';
   const MAILTO_LIMIT = 1800;
   const PREFILL_KEY = 'bw-audit-prefill';
   const STORE_KEY = 'bw-audit-report-v1';
@@ -206,9 +206,10 @@
     return lines.join('\n');
   };
 
-  const mailto = (to, subject, body) => {
+  // Opens WhatsApp with the text prefilled; the visitor edits and sends it themselves.
+  const whatsapp = (subject, body) => {
     const text = body.length > MAILTO_LIMIT ? `${body.slice(0, MAILTO_LIMIT)}…` : body;
-    return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+    return `${WHATSAPP}?text=${encodeURIComponent(`${subject}\n\n${text}`)}`;
   };
 
   const renderReport = () => {
@@ -281,7 +282,7 @@
     reqs.textContent = '';
     r.requests.forEach(q => reqs.appendChild(el('li', null, `${q.status} ${q.url}`)));
 
-    $('helpLink').href = mailto(CONTACT, `Website audit: ${site}`, summaryText());
+    $('helpLink').href = whatsapp(`Website audit: ${site}`, summaryText());
     const business = r.confirmed.concat(r.advisory).some(f => f.category === 'Content and clarity');
     $('crossTitle').textContent = business ? 'Turn more visitors into enquiries' : 'Look beyond the website';
     $('crossCopy').textContent = business
@@ -308,7 +309,7 @@
   $('copySummary').addEventListener('click', async () => {
     let ok = false;
     try { await navigator.clipboard.writeText(summaryText()); ok = true; } catch (e) { ok = false; }
-    toast(ok ? `Summary copied. Paste it into an email to ${CONTACT}.` : `Copy failed. Please use the Request help button or email ${CONTACT}.`);
+    toast(ok ? 'Summary copied. Paste it into WhatsApp or the project enquiry form on our homepage.' : 'Copy failed. Please use the Request help button.');
     track('help_copy', { ok });
   });
   $('saveDownload').addEventListener('click', () => {

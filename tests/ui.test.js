@@ -71,7 +71,8 @@ test('homepage shows the scanner entry point and keeps existing contact links', 
   assert.match(await entry.textContent(), /Discover where AI, automation and software could help your business save time, reduce costs or unlock new revenue\./);
   const cta = page.getByRole('link', { name: 'Scan my business' });
   assert.equal(await cta.getAttribute('href'), '/scan');
-  assert.match(await page.locator('.contact-actions .btn-light').getAttribute('href'), /^mailto:hello@josephiwe\.com/);
+  assert.match(await page.locator('#whatsappCta').getAttribute('href'), /^https:\/\/wa\.me\/2349165681202\?text=/);
+  assert.equal(await page.locator('#contact a[href^="mailto:"]').count(), 0, 'no public email address in the contact section');
   assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '#work', '#ventures', '#about']);
   await cta.click();
   await page.waitForURL(/\/scan$/);
@@ -153,9 +154,10 @@ test('report contains every required section and honest labelling', opts, async 
 
   // Next steps.
   const help = decodeURIComponent(await page.locator('#helpLink').getAttribute('href'));
-  assert.match(help, /^mailto:hello@josephiwe\.com\?subject=Scanner report: /);
+  assert.match(help, /^https:\/\/wa\.me\/2349165681202\?text=Scanner report: /);
   assert.match(help, /Suggested opportunities:\n1\. /);
-  assert.ok(help.length < 2400, 'mailto stays within a safe length');
+  assert.ok(help.length < 2400, 'the prefilled message stays within a safe length');
+  assert.equal(await page.locator('#helpLink').getAttribute('target'), '_blank');
   assert.match(await page.locator('#saveEmail').getAttribute('href'), /^mailto:\?subject=/);
   await page.click('#exploreToggle');
   assert.ok((await page.locator('#exploreList li').count()) >= 3);
@@ -439,7 +441,7 @@ test('homepage structured data describes the organisation accurately', opts, asy
   assert.equal(site.url, `${SITE}/`);
   assert.ok(fs.existsSync(path.join(ROOT, org.logo.slice(SITE.length))), 'logo is a local asset');
   const body = await page.locator('body').textContent();
-  assert.ok(body.includes(org.email), 'email is visible on the page');
+  assert.ok(!('email' in org), 'no personal email address in structured data');
   for (const name of ['Huntly', 'Traider', 'Staff']) assert.ok(body.includes(name) && org.description.includes(name));
   assert.equal(await page.locator('h1').count(), 1, 'one h1 on the homepage');
   await context.close();
@@ -637,7 +639,7 @@ test('audit: a report separates confirmed findings, recommendations, crawler rul
   assert.ok(!page.url().includes('acme'), 'the audited address never appears in the page URL');
 
   const help = decodeURIComponent(await page.locator('#helpLink').getAttribute('href'));
-  assert.ok(help.startsWith('mailto:hello@josephiwe.com?subject=Website audit: acme.example.com'));
+  assert.ok(help.startsWith('https://wa.me/2349165681202?text=Website audit: acme.example.com'));
   assert.match(help, /\[High\] robots\.txt blocks AI search crawlers/);
   assert.match(await page.locator('.next-card-accent').textContent(), /Nothing is sent automatically/);
   assert.match(await page.locator('#crossCopy').textContent(), /AI Business Opportunity Scanner/);

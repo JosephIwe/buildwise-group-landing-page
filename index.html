@@ -30,7 +30,6 @@
         "name": "BuildWise Group",
         "url": "https://buildwisegroup.dev/",
         "logo": "https://buildwisegroup.dev/apple-touch-icon.png",
-        "email": "hello@josephiwe.com",
         "description": "An independent technology company that designs, engineers and deploys AI-powered products and operational systems, and builds its own ventures: Huntly, Traider and Staff."
       },
       {
@@ -53,6 +52,7 @@
   <script>document.documentElement.classList.add('js');</script>
   <script defer src="script.js"></script>
   <script defer src="hero-story.js"></script>
+  <script defer src="contact-form.js"></script>
   <script defer src="analytics.js"></script>
 </head>
 <body>
@@ -72,6 +72,7 @@
       <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.8 5.6 13.4h5.8l-.8 7.8 7.6-10.6h-5.8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
       <symbol id="i-code" viewBox="0 0 24 24"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5M13.4 4.5l-2.8 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20.5h16M6.5 20.5v-6h3v6M10.5 20.5v-10h3v10M14.5 20.5V5.5h3v15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+      <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M12 2.8a9.2 9.2 0 0 0-7.9 13.9L2.9 21.1l4.6-1.2A9.2 9.2 0 1 0 12 2.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.2 7.4c-.3 0-.6 0-.9.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.2 2.2 3.4 5.3 4.6 2.6 1 3.1.8 3.7.8.6-.1 1.8-.7 2-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.4l-2-1c-.3-.1-.5-.2-.7.1l-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2.1-.4 0-.5l-.9-2.3c-.3-.6-.5-.6-.7-.6Z" fill="currentColor"/></symbol>
     </defs>
   </svg>
 
@@ -107,6 +108,7 @@
     </nav>
     <div class="mobile-foot">
       <a class="btn btn-light" href="#contact">Let’s Talk <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="mobile-wa" href="https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Chat on WhatsApp<span class="sr-only"> (opens WhatsApp)</span></a>
       <p class="label">AI products. Business systems. Real impact.</p>
     </div>
   </div>
@@ -358,14 +360,109 @@
       <div class="container contact-inner">
         <p class="label" data-reveal><span class="dot" aria-hidden="true"></span>Let’s talk</p>
         <h2 class="contact-title" id="contactTitle">
-          <span class="line" data-reveal><span>Have a real problem</span></span>
-          <span class="line" data-reveal><span>to solve?</span></span>
+          <span class="line" data-reveal><span>Have a product or</span></span>
+          <span class="line" data-reveal><span>business problem</span></span>
+          <span class="line" data-reveal><span>worth solving?</span></span>
         </h2>
-        <div class="contact-row" data-reveal>
-          <p>Tell us what you’re trying to change, where the friction is and what a successful outcome would look like.</p>
-          <div class="contact-actions">
-            <a class="btn btn-light" href="mailto:hello@josephiwe.com?subject=BuildWise%20Group%20%E2%80%94%20Project%20conversation">Discuss a project <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            <a class="contact-email" href="mailto:hello@josephiwe.com">hello@josephiwe.com</a>
+        <p class="contact-intro" data-reveal>Tell us what you’re building. We’ll review your enquiry and get back to you.</p>
+
+        <div class="contact-grid">
+          <div class="contact-routes" data-reveal>
+            <div class="route route-wa">
+              <h3>Chat on WhatsApp</h3>
+              <p>For a quick question, or if you’d rather talk the idea through first. Prefer to write it down? Send a project enquiry instead.</p>
+              <a class="btn btn-light route-btn" id="whatsappCta" href="https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer"><svg class="ico ico-brand" aria-hidden="true"><use href="#i-whatsapp"/></svg>Chat on WhatsApp<span class="sr-only"> (opens WhatsApp in a new tab)</span></a>
+            </div>
+          </div>
+
+          <div class="enquiry" data-reveal>
+            <h3 class="enquiry-title" id="enquiryTitle">Send a project enquiry</h3>
+            <p class="enquiry-sub">A few details help us understand the work before we reply.</p>
+
+            <form class="enq" id="enquiryForm" aria-labelledby="enquiryTitle" hidden>
+              <p class="enq-note">Fields marked <span aria-hidden="true">*</span><span class="sr-only">with an asterisk</span> are required.</p>
+              <div class="enq-grid">
+                <div class="enq-field">
+                  <label for="enqName">Full name <span class="enq-req" aria-hidden="true">*</span></label>
+                  <input class="enq-input" id="enqName" name="name" type="text" autocomplete="name" maxlength="100" required aria-describedby="enq-name-error">
+                  <p class="enq-error" id="enq-name-error"></p>
+                </div>
+                <div class="enq-field">
+                  <label for="enqEmail">Work email <span class="enq-req" aria-hidden="true">*</span></label>
+                  <input class="enq-input" id="enqEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required aria-describedby="enq-email-error">
+                  <p class="enq-error" id="enq-email-error"></p>
+                </div>
+                <div class="enq-field">
+                  <label for="enqCompany">Company or organisation <span class="enq-opt">Optional</span></label>
+                  <input class="enq-input" id="enqCompany" name="company" type="text" autocomplete="organization" maxlength="120" aria-describedby="enq-company-error">
+                  <p class="enq-error" id="enq-company-error"></p>
+                </div>
+                <div class="enq-field">
+                  <label for="enqType">Project type <span class="enq-req" aria-hidden="true">*</span></label>
+                  <select class="enq-input enq-select" id="enqType" name="project_type" required aria-describedby="enq-projectType-error">
+                    <option value="">Choose a project type</option>
+                    <option>AI agents and AI employees</option>
+                    <option>AI product development</option>
+                    <option>SaaS or web application development</option>
+                    <option>Business automation and integrations</option>
+                    <option>Existing product improvement</option>
+                    <option>Other</option>
+                  </select>
+                  <p class="enq-error" id="enq-projectType-error"></p>
+                </div>
+                <div class="enq-field">
+                  <label for="enqBudget">Budget range <span class="enq-opt">Optional</span></label>
+                  <select class="enq-input enq-select" id="enqBudget" name="budget" aria-describedby="enq-budget-error">
+                    <option value="">Choose a range</option>
+                    <option>Under $5,000</option>
+                    <option>$5,000 to $15,000</option>
+                    <option>$15,000 to $50,000</option>
+                    <option>Over $50,000</option>
+                    <option>Not sure yet</option>
+                  </select>
+                  <p class="enq-error" id="enq-budget-error"></p>
+                </div>
+                <fieldset class="enq-field enq-fieldset">
+                  <legend>Preferred contact method <span class="enq-opt">Optional</span></legend>
+                  <div class="enq-choices" aria-describedby="enq-contactMethod-error">
+                    <label class="enq-choice"><input type="radio" name="preferred_contact" value="Email"><span>Email</span></label>
+                    <label class="enq-choice"><input type="radio" name="preferred_contact" value="WhatsApp"><span>WhatsApp</span></label>
+                  </div>
+                  <p class="enq-error" id="enq-contactMethod-error"></p>
+                </fieldset>
+                <div class="enq-field enq-wide" id="enqPhoneRow" hidden>
+                  <label for="enqPhone">WhatsApp number <span class="enq-opt">Optional</span></label>
+                  <input class="enq-input" id="enqPhone" name="whatsapp_number" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="+44 7700 900123" aria-describedby="enq-phone-hint enq-phone-error">
+                  <p class="enq-hint" id="enq-phone-hint">Include your country code. Leave it empty and we’ll ask by email.</p>
+                  <p class="enq-error" id="enq-phone-error"></p>
+                </div>
+                <div class="enq-field enq-wide">
+                  <label for="enqMessage">Project description <span class="enq-req" aria-hidden="true">*</span></label>
+                  <p class="enq-hint" id="enq-message-hint">What are you building or trying to change, who is it for, and what would a good outcome look like? Mention any deadline or existing systems.</p>
+                  <textarea class="enq-input enq-textarea" id="enqMessage" name="message" rows="6" minlength="20" maxlength="4000" required aria-describedby="enq-message-hint enq-message-error enqMessageCount"></textarea>
+                  <div class="enq-under"><p class="enq-error" id="enq-message-error"></p><span class="enq-count" id="enqMessageCount" aria-live="off">0 / 4000</span></div>
+                </div>
+              </div>
+              <div class="enq-hp" aria-hidden="true">
+                <label>Leave this box unticked <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></label>
+              </div>
+              <div class="enq-foot">
+                <button class="btn btn-light enq-submit" id="enquirySubmit" type="submit"><span class="enq-spinner" aria-hidden="true"></span><span id="enquirySubmitText">Send project enquiry</span><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+                <p class="enq-privacy">We use these details only to reply to your enquiry. The form is delivered by our form provider, <a href="https://web3forms.com/" target="_blank" rel="noopener noreferrer">Web3Forms<span class="sr-only"> (opens in a new tab)</span></a>, which emails it to us. No cookies or tracking are added.</p>
+              </div>
+              <p class="enq-status" id="enquiryStatus" role="status" aria-live="polite"></p>
+            </form>
+
+            <div class="enq-panel" id="enquirySuccess" hidden>
+              <h4>Thank you. Your enquiry has been sent.</h4>
+              <p>Our form service has accepted it and passes it on to us by email. We’ll review it and reply to the address you gave.</p>
+              <button class="enq-again" id="enquiryAgain" type="button">Send another enquiry</button>
+            </div>
+
+            <div class="enq-panel" id="enquiryUnavailable">
+              <h4>The enquiry form needs JavaScript</h4>
+              <p>Turn on JavaScript to send a project enquiry, or message us on <a href="https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer">WhatsApp<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -379,6 +476,10 @@
         <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
       </a>
       <p class="label footer-line">AI products. Business systems. Real impact.</p>
+      <ul class="footer-links" aria-label="Contact BuildWise">
+        <li><a href="https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>WhatsApp<span class="sr-only"> (opens in a new tab)</span></a></li>
+        <li><a href="#contact"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>Send a project enquiry</a></li>
+      </ul>
       <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
     </div>
   </footer>
