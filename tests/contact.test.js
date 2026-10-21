@@ -15,7 +15,7 @@ const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project.';
 const KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
-const PUBLIC_FILES = ['README.md', 'index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
+const PUBLIC_FILES = ['README.md', 'index.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
 const valid = {
   name: 'Ada Lovelace', email: 'ada@example.com', company: 'Analytical Engines Ltd',
   projectType: 'AI product development', budget: 'Not sure yet',
@@ -47,7 +47,7 @@ test('the private recipient never appears in the payload, errors or success text
 });
 
 test('Instagram is not offered as a contact route', () => {
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt']) {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt']) {
     assert.ok(!/instagram/i.test(read(file)), `${file} has no Instagram link`);
   }
 });
@@ -126,7 +126,30 @@ test('submission only succeeds when Web3Forms confirms success', async () => {
   assert.deepEqual(await E.submitEnquiry({}, { fetchImpl: async () => { throw new TypeError('Failed to fetch'); } }), { ok: false, reason: 'network' });
   const hang = (url, init) => new Promise((_, reject) => init.signal.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' }))));
   assert.deepEqual(await E.submitEnquiry({}, { fetchImpl: hang, timeoutMs: 20 }), { ok: false, reason: 'timeout' });
-  for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/key|web3forms|status|error code/i.test(text), 'failure messages stay generic');
+  for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/key|web3forms|form service|provider|status|error code/i.test(text), 'failure messages stay generic');
+});
+
+test('the privacy policy is linked from the form and every footer, and makes no unverified claims', () => {
+  const policy = read('privacy.html');
+  assert.match(policy, /Web3Forms/, 'the form processor is disclosed on the policy page');
+  assert.match(policy, /Cloudflare Web Analytics/);
+  assert.match(policy, /Google Fonts/);
+  assert.ok(!/30 days|thirty days/i.test(policy), 'no retention period that is not verified');
+  assert.ok(!/no (cookies or )?tracking/i.test(policy), 'no blanket no-tracking claim');
+  assert.match(policy, /href="https:\/\/wa\.me\/2349165681202"/, 'requests go to the verified WhatsApp number');
+  const form = read('index.html').match(/<p class="enq-privacy">[\s\S]*?<\/p>/)[0];
+  assert.match(form, /href="\/privacy"/);
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', 'privacy.html']) {
+    const footer = read(file).match(/<footer[\s\S]*?<\/footer>/)[0];
+    assert.match(footer, /href="\/privacy"/, `${file} footer links to the privacy policy`);
+  }
+});
+
+test('the public pages do not name the form provider or describe how the form is delivered', () => {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html']) {
+    const text = read(file).replace(/<script[\s\S]*?<\/script>/g, '');
+    assert.ok(!/web3forms|form provider|form service/i.test(text), `${file} keeps delivery details out of the page`);
+  }
 });
 
 test('every WhatsApp link uses the business number and opens safely', () => {
@@ -301,7 +324,7 @@ test('form: a network failure is explained and a retry can succeed', opts, async
   await fill(page);
   await page.click('#enquirySubmit');
   await page.waitForFunction(() => document.getElementById('enquiryStatus').classList.contains('is-error'));
-  assert.match(await page.locator('#enquiryStatus').textContent(), /could not reach the form service/);
+  assert.match(await page.locator('#enquiryStatus').textContent(), /could not be sent. Check your connection/);
   assert.equal(await page.inputValue('#enqEmail'), valid.email);
   await page.click('#enquirySubmit');
   await page.waitForSelector('#enquirySuccess:not([hidden])');

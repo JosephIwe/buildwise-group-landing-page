@@ -453,12 +453,13 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), 'the site is not blocked');
   assert.match(robots, new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
   const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`]);
+  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`]);
   assert.match(robots, /^Disallow: \/api\/$/m);
   assert.ok(!read('sitemap.xml').includes('#'), 'no report links in the sitemap');
   assert.match(read('index.html'), new RegExp(`rel="canonical" href="${locs[0]}"`));
   assert.match(read('scan.html'), new RegExp(`rel="canonical" href="${locs[1]}"`));
   assert.match(read('website-audit.html'), new RegExp(`rel="canonical" href="${locs[2]}"`));
+  assert.match(read('privacy.html'), new RegExp(`rel="canonical" href="${locs[3]}"`));
 });
 
 test('unknown paths get a real 404 page that is not indexed', () => {
@@ -505,7 +506,7 @@ test('local links and assets on every page resolve', () => {
 });
 
 test('public files point only at the canonical domain', () => {
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
+  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
     assert.ok(!read(file).includes('pages.dev'), `${file} does not reference the pages.dev address`);
   }
 });
