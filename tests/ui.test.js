@@ -71,7 +71,7 @@ test('homepage shows the scanner entry point and keeps existing contact links', 
   assert.match(await entry.textContent(), /Discover where AI, automation and software could help your business save time, reduce costs or unlock new revenue\./);
   const cta = page.getByRole('link', { name: 'Scan my business' });
   assert.equal(await cta.getAttribute('href'), '/scan');
-  assert.match(await page.locator('.contact-actions .btn-light').getAttribute('href'), /^mailto:hello@josephiwe\.com/);
+  assert.match(await page.locator('#contact .contact-email').getAttribute('href'), /^mailto:hello@josephiwe\.com/);
   assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '#work', '#ventures', '#about']);
   await cta.click();
   await page.waitForURL(/\/scan$/);

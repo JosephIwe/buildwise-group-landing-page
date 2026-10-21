@@ -19,6 +19,7 @@ Then visit `http://localhost:8000`. There is no build step; Cloudflare Pages ser
 - `scan.html`, `scanner.css`, `scanner.js`: the AI Business Opportunity Scanner page and its homepage entry point (`#scan`)
 - `scanner-engine.js`: the scanner's questions, opportunity library and rule-based report engine
 - `website-audit.html`, `website-audit.css`, `website-audit.js`: the Website & AI Visibility Audit page; `functions/api/website-audit.js` and `lib/audit/`: its server-side checks; `_routes.json`: runs Functions only for `/api/*`
+- `contact-form.js`: the project enquiry form in the contact section (validation and delivery through Web3Forms; off until an access key is added)
 - `analytics.js`: Cloudflare Web Analytics loader (off until a site token is added)
 - `brief/brief.json`: entries for the future Business Opportunity Brief (empty for now)
 - `tests/`: engine and browser tests
@@ -100,6 +101,20 @@ node scripts/check-production.mjs --audit   # also runs one real audit of buildw
 ```
 It prints the status and `Location` each address actually returned and exits 1 if anything is off.
 
+## Contact and project enquiries
+The contact section (`#contact`) offers three routes: WhatsApp (`https://wa.me/2349165681202` with a prefilled greeting), a structured project enquiry form, and Instagram (`@buildwisehq`). The footer and the mobile menu repeat WhatsApp, and the footer also lists Instagram and email. There is no floating button or chat widget.
+
+**How the form is delivered.** The site has no mail service, so the form posts JSON from the browser to Web3Forms (`https://api.web3forms.com/submit`, free plan: 250 submissions a month). Web3Forms emails each accepted submission to the inbox its access key was created with; the recipient cannot be changed from the page. The email subject is "New Buildwise Project Enquiry: <project type>", the sender stays Web3Forms', and reply-to is the prospect's email. Every field is included.
+
+**The access key is public, not a secret.** It is an alias for one inbox and can only send mail there, and Web3Forms' free plan is designed for keys that sit in the browser. While `ACCESS_KEY` in `contact-form.js` is empty, the form is hidden and visitors see the email and WhatsApp routes instead, so no enquiry is lost.
+
+**To turn the form on:**
+1. Go to https://web3forms.com, enter `ijosephiwe@gmail.com` under "Create your Access Key", and submit. Web3Forms emails the key to that address, which is also how it confirms you own the inbox.
+2. Paste the key into `const ACCESS_KEY = '';` in `contact-form.js`, commit, and let the branch preview build.
+3. On the preview, send one enquiry whose description starts with "TEST" and check it arrives at ijosephiwe@gmail.com (including Spam). Only then merge.
+
+**Behaviour and safeguards.** Fields are validated and normalised in the browser (length limits, listed values only for project type, budget and contact method, control characters removed). A success message appears only when Web3Forms answers `success: true`; a rejection, rate limit, network error or 20-second timeout shows a plain message and keeps everything typed. The button is disabled while sending, so a double click sends once. A hidden `botcheck` honeypot is passed to Web3Forms, which rejects filled ones; Web3Forms also applies its own spam filtering. Nothing is stored by the site, and no cookies, analytics or third-party scripts are added. Web3Forms keeps submissions for 30 days on the free plan.
+
 ## Cloudflare settings
 These live in the Cloudflare dashboard for the `buildwisegroup.dev` zone, not in this repository.
 - **HTTP to HTTPS:** SSL/TLS > Edge Certificates > **Always Use HTTPS** on. It answers every `http://` request on the zone with a 301 to the same host, path and query on `https://`. Pages does not do this for custom domains by itself, and `_redirects` cannot match on scheme. `*.pages.dev` is not part of the zone, so it is unaffected.
@@ -113,7 +128,7 @@ These live in the Cloudflare dashboard for the `buildwisegroup.dev` zone, not in
 - The mobile menu traps focus while open, closes on Escape and returns focus to the toggle.
 
 ## Before publishing
-1. Confirm the public contact address `hello@josephiwe.com` receives mail, or change it in `index.html` and `CONTACT` in `scanner.js`.
+1. Confirm the public contact address `hello@josephiwe.com` receives mail, or change it in `index.html` and `CONTACT` in `scanner.js`. Enquiry form emails go to the Web3Forms key's inbox instead (see Contact and project enquiries).
 2. Confirm `https://huntlyagent.com` is the preferred public Huntly URL.
 3. Venture marks (H, T, M) are typographic placeholders, not official logos. Swap in approved logo files when they exist.
 4. Venture photos are AI-generated illustrations of each venture's theme, not product screenshots or real customers. Screens in them are deliberately unreadable so they show no figures. They are decorative (`alt=""`); the card text carries the meaning.
