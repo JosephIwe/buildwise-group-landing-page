@@ -285,6 +285,18 @@ button.scan-step-item:hover { color: var(--offwhite); }
 }
 
 /* ---------- Print ---------- */
+/* ---------- Privacy policy ---------- */
+.policy { max-width: 760px; padding-top: calc(var(--header-h) + var(--space-5)); padding-bottom: var(--space-6); }
+.policy-title { max-width: none; }
+.policy-updated { margin-top: 16px; font-size: 13px; color: var(--slate-light); }
+.policy-lead { margin-top: var(--space-3); font-size: var(--fs-lead); line-height: 1.5; color: rgba(250, 250, 248, .86); }
+.policy h2 { margin-top: var(--space-5); font-size: var(--fs-h3); font-weight: 600; letter-spacing: -.01em; }
+.policy p, .policy li { margin-top: 14px; max-width: 40em; line-height: 1.65; color: rgba(250, 250, 248, .78); }
+.policy ul { margin-top: 6px; padding-left: 1.2em; list-style: disc; }
+.policy strong { color: var(--offwhite); font-weight: 600; }
+.policy a { color: var(--offwhite); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(250, 250, 248, .4); }
+.policy a:hover { text-decoration-color: currentColor; }
+
 @media print {
   body.scan-page { background: #fff; color: #000; }
   .scan-page .site-header, .scan-page .site-footer, .scan-page .progress, .scan-page .skip-link, .scanner,
