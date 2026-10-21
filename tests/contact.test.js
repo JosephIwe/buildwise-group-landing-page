@@ -22,8 +22,9 @@ const valid = {
 };
 
 /* ---------- Validation and payload (Node) ---------- */
-test('the access key is not committed and the endpoint is Web3Forms', () => {
-  assert.equal(E.ACCESS_KEY, '', 'paste the public key only when it is issued for the enquiry inbox');
+test('the access key is empty or a Web3Forms public key, and the endpoint is Web3Forms', () => {
+  // Web3Forms issues access keys as UUIDs. Empty keeps the form hidden behind the email and WhatsApp routes.
+  assert.match(E.ACCESS_KEY, /^(|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i);
   assert.equal(E.ENDPOINT, 'https://api.web3forms.com/submit');
 });
 
