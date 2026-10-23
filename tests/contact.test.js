@@ -15,7 +15,7 @@ const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project.';
 const KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
-const PUBLIC_FILES = ['README.md', 'index.html', 'cybersecurity.html', 'cybersecurity.css', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
+const PUBLIC_FILES = ['README.md', 'index.html', 'cybersecurity.html', 'cybersecurity.css', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'security.html', 'SECURITY.md', '.well-known/security.txt', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
 const valid = {
   name: 'Ada Lovelace', email: 'ada@example.com', company: 'Analytical Engines Ltd',
   projectType: 'AI product development', budget: 'Not sure yet',
@@ -47,7 +47,7 @@ test('the private recipient never appears in the payload, errors or success text
 });
 
 test('Instagram is not offered as a contact route', () => {
-  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'security.html', 'llms.txt']) {
     assert.ok(!/instagram/i.test(read(file)), `${file} has no Instagram link`);
   }
 });
@@ -140,7 +140,7 @@ test('the privacy policy is linked from the form and every footer, and makes no 
   assert.match(policy, /href="https:\/\/wa\.me\/2349165681202"/, 'requests go to the verified WhatsApp number');
   const form = read('index.html').match(/<p class="enq-privacy">[\s\S]*?<\/p>/)[0];
   assert.match(form, /href="\/privacy"/);
-  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html']) {
     const footer = read(file).match(/<footer[\s\S]*?<\/footer>/)[0];
     assert.match(footer, /href="\/privacy"/, `${file} footer links to the privacy policy`);
   }

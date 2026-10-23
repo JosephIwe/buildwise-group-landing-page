@@ -296,6 +296,11 @@ button.scan-step-item:hover { color: var(--offwhite); }
 .policy strong { color: var(--offwhite); font-weight: 600; }
 .policy a { color: var(--offwhite); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(250, 250, 248, .4); }
 .policy a:hover { text-decoration-color: currentColor; }
+.policy h3 { margin-top: var(--space-4); font-size: 18px; font-weight: 600; letter-spacing: -.005em; }
+.policy code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; overflow-wrap: anywhere; color: var(--offwhite); }
+.policy .policy-cta { margin-top: var(--space-3); }
+.policy a.btn { color: var(--graphite); text-decoration: none; }
+.policy .policy-note { margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid rgba(250, 250, 248, .12); font-size: 15px; }
 
 @media print {
   body.scan-page { background: #fff; color: #000; }
