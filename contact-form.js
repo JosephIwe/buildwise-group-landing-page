@@ -25,6 +25,7 @@
 
   const LIMITS = { name: 100, email: 254, company: 120, phone: 24, message: 4000, messageMin: 20 };
   const PROJECT_TYPES = [
+    'Application and cloud security review',
     'AI agents and AI employees',
     'AI product development',
     'SaaS or web application development',
@@ -223,13 +224,14 @@
       el.addEventListener('change', recheck);
     });
 
+    const idleText = submitText.textContent;
     let sending = false;
     const setSending = on => {
       sending = on;
       submit.disabled = on;
       submit.setAttribute('aria-busy', String(on));
       form.classList.toggle('is-sending', on);
-      submitText.textContent = on ? 'Sending enquiry…' : 'Send project enquiry';
+      submitText.textContent = on ? 'Sending enquiry…' : idleText;
     };
 
     form.addEventListener('submit', async event => {
@@ -250,7 +252,7 @@
       const payload = buildPayload(values, {
         accessKey,
         botcheck: form.elements.botcheck && form.elements.botcheck.checked,
-        page: 'https://buildwisegroup.dev/#contact'
+        page: form.dataset.page || 'https://buildwisegroup.dev/#contact'
       });
       setSending(true);
       status.textContent = 'Sending your enquiry…';

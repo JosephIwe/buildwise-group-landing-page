@@ -15,7 +15,7 @@ const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project.';
 const KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
-const PUBLIC_FILES = ['README.md', 'index.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
+const PUBLIC_FILES = ['README.md', 'index.html', 'cybersecurity.html', 'cybersecurity.css', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt', 'robots.txt', 'sitemap.xml', 'contact-form.js', 'script.js', 'scanner.js', 'scanner-engine.js', 'website-audit.js', 'analytics.js', 'hero-story.js'];
 const valid = {
   name: 'Ada Lovelace', email: 'ada@example.com', company: 'Analytical Engines Ltd',
   projectType: 'AI product development', budget: 'Not sure yet',
@@ -47,7 +47,7 @@ test('the private recipient never appears in the payload, errors or success text
 });
 
 test('Instagram is not offered as a contact route', () => {
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'llms.txt']) {
     assert.ok(!/instagram/i.test(read(file)), `${file} has no Instagram link`);
   }
 });
@@ -73,7 +73,8 @@ test('project type, budget and contact method only accept listed values', () => 
   assert.ok(E.normalizeEnquiry({ ...valid, projectType: 'Crypto mining' }).errors.projectType);
   assert.ok(E.normalizeEnquiry({ ...valid, budget: '$1' }).errors.budget);
   assert.ok(E.normalizeEnquiry({ ...valid, contactMethod: 'Fax' }).errors.contactMethod);
-  assert.equal(E.PROJECT_TYPES.length, 6);
+  assert.equal(E.PROJECT_TYPES.length, 7);
+  assert.ok(E.PROJECT_TYPES.includes('Application and cloud security review'));
   assert.ok(E.BUDGETS.includes('Not sure yet'));
 });
 
@@ -139,14 +140,14 @@ test('the privacy policy is linked from the form and every footer, and makes no 
   assert.match(policy, /href="https:\/\/wa\.me\/2349165681202"/, 'requests go to the verified WhatsApp number');
   const form = read('index.html').match(/<p class="enq-privacy">[\s\S]*?<\/p>/)[0];
   assert.match(form, /href="\/privacy"/);
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', 'privacy.html']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html']) {
     const footer = read(file).match(/<footer[\s\S]*?<\/footer>/)[0];
     assert.match(footer, /href="\/privacy"/, `${file} footer links to the privacy policy`);
   }
 });
 
 test('the public pages do not name the form provider or describe how the form is delivered', () => {
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', '404.html']) {
     const text = read(file).replace(/<script[\s\S]*?<\/script>/g, '');
     assert.ok(!/web3forms|form provider|form service/i.test(text), `${file} keeps delivery details out of the page`);
   }
@@ -190,7 +191,7 @@ test.after(async () => {
 
 /* Opens the homepage. `key` simulates a configured access key; `provider` answers
    each Web3Forms request and records what was sent. */
-async function open({ key = KEY, provider, viewport = { width: 1280, height: 860 } } = {}) {
+async function open({ key = KEY, provider, viewport = { width: 1280, height: 860 }, url = '/index.html#contact' } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion: 'reduce' });
   const page = await context.newPage();
   const errors = [];
@@ -206,7 +207,7 @@ async function open({ key = KEY, provider, viewport = { width: 1280, height: 860
     if (provider) return provider(route, sent.length);
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true,"message":"Email sent successfully!"}' });
   });
-  await page.goto(`${origin}/index.html#contact`);
+  await page.goto(origin + url);
   return { page, context, sent, errors: () => errors };
 }
 
@@ -410,4 +411,59 @@ test('contact: no horizontal overflow, and tap targets are large enough, on phon
     assert.equal(fixed, 0, 'no floating buttons');
     await context.close();
   }
+});
+
+/* ---------- Security review enquiries (/cybersecurity) ---------- */
+const SECURITY_WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20would%20like%20to%20discuss%20an%20application%20and%20cloud%20security%20review.';
+
+test('security page: every WhatsApp link uses the business number, names the security review and opens safely', () => {
+  const html = read('cybersecurity.html');
+  const links = [...html.matchAll(/<a [^>]*href="(https:\/\/wa\.me\/[^"]+)"[^>]*>/g)];
+  assert.ok(links.length >= 4, 'conversion section, no-script panel, footer and mobile menu');
+  for (const [tag, href] of links) {
+    assert.equal(href, SECURITY_WHATSAPP);
+    assert.match(tag, /target="_blank"/);
+    assert.match(tag, /rel="noopener noreferrer"/);
+  }
+  assert.equal(new URL(SECURITY_WHATSAPP).pathname, '/2349165681202');
+});
+
+test('security page: the homepage and security forms list the same project types as the validator', () => {
+  for (const file of ['index.html', 'cybersecurity.html']) {
+    const select = read(file).match(/<select[^>]*id="enqType"[\s\S]*?<\/select>/)[0];
+    const options = [...select.matchAll(/<option(?: selected)?>([^<]+)<\/option>/g)].map(m => m[1]);
+    assert.deepEqual([...options].sort(), [...E.PROJECT_TYPES].sort(), `${file} offers every listed type`);
+  }
+});
+
+test('security page: the enquiry is preselected as a security review and says where it came from', opts, async () => {
+  const { page, context, sent, errors } = await open({ url: '/cybersecurity.html#enquire' });
+  await page.waitForSelector('#enquiryForm:not([hidden])');
+  assert.equal(await page.inputValue('#enqType'), 'Application and cloud security review');
+  await page.fill('#enqName', 'Grace Hopper');
+  await page.fill('#enqEmail', 'grace@example.com');
+  await page.fill('#enqMessage', 'A multi-tenant SaaS app on AWS with a public API and an AI support assistant.');
+  await page.click('#enquirySubmit');
+  await page.waitForSelector('#enquirySuccess:not([hidden])');
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].project_type, 'Application and cloud security review');
+  assert.equal(sent[0].subject, 'New Buildwise Project Enquiry: Application and cloud security review');
+  assert.equal(sent[0].page, 'https://buildwisegroup.dev/cybersecurity#enquire');
+  await page.click('#enquiryAgain');
+  assert.equal(await page.inputValue('#enqType'), 'Application and cloud security review', 'a new request keeps the preselection');
+  assert.equal(await page.locator('#enquirySubmitText').textContent(), 'Request a Security Review', 'the button keeps its own label');
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('homepage: enquiries still report the homepage as their source', opts, async () => {
+  const { page, context, sent } = await open();
+  await page.waitForSelector('#enquiryForm:not([hidden])');
+  assert.equal(await page.inputValue('#enqType'), '', 'no project type is preselected on the homepage');
+  await fill(page);
+  await page.click('#enquirySubmit');
+  await page.waitForSelector('#enquirySuccess:not([hidden])');
+  assert.equal(sent[0].page, 'https://buildwisegroup.dev/#contact');
+  assert.equal(await page.locator('#enquirySubmitText').textContent(), 'Send project enquiry');
+  await context.close();
 });

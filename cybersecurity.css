@@ -1,0 +1,160 @@
+/* Application & Cloud Security Review page (/cybersecurity).
+   Builds on styles.css: the same tokens, header, footer, section rhythm and the homepage
+   contact section, which this page reuses for its enquiry form. */
+
+/* ---------- Hero ---------- */
+.sec-hero { position: relative; overflow: hidden; isolation: isolate; padding: calc(var(--header-h) + clamp(48px, 8vw, 112px)) 0 clamp(72px, 9vw, 128px); background: var(--graphite); }
+.sec-hero-glow {
+  position: absolute; z-index: -1; pointer-events: none;
+  width: min(1100px, 140vw); aspect-ratio: 1; border-radius: 50%;
+  right: -28%; top: -46%;
+  background: radial-gradient(closest-side, rgba(30, 79, 255, .2), rgba(30, 79, 255, 0) 70%);
+}
+.sec-hero-grid { display: grid; gap: clamp(48px, 6vw, 88px); align-items: center; }
+.sec-title { margin-top: 26px; font-size: clamp(38px, 4.6vw, 72px); font-weight: 500; line-height: 1.02; letter-spacing: -.045em; }
+.sec-lead { margin-top: 28px; max-width: 32em; font-size: var(--fs-lead); line-height: 1.55; color: rgba(250, 250, 248, .82); }
+.sec-actions { margin-top: 36px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; }
+.sec-link { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; font-size: 15px; font-weight: 600; color: var(--offwhite); border-bottom: 1px solid transparent; transition: border-color .3s; }
+.sec-link:hover { border-bottom-color: rgba(250, 250, 248, .5); }
+.sec-link:hover .ico { transform: translateY(3px); }
+.sec-facts { margin-top: 44px; display: grid; gap: 10px; padding-top: 24px; border-top: 1px solid var(--line-dark); }
+.sec-facts li { position: relative; padding-left: 22px; font-size: 14px; color: var(--slate-light); }
+.sec-facts li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 1px; background: var(--cobalt-soft); }
+@media (min-width: 700px) { .sec-facts { grid-template-columns: repeat(3, auto); justify-content: start; gap: 10px 32px; } }
+
+/* The scope figure: four stacked layers inside a dashed boundary. Structural only; it shows no findings. */
+.sec-scope { margin: 0; max-width: 560px; width: 100%; justify-self: center; }
+.scope-svg { width: 100%; height: auto; overflow: visible; }
+.scope-bound { fill: none; stroke: var(--cobalt-soft); stroke-width: 1.2; stroke-dasharray: 6 7; opacity: .75; }
+.scope-tag { font: 500 11px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; fill: var(--cobalt-soft); }
+.scope-rails path { fill: none; stroke: rgba(250, 250, 248, .12); stroke-width: 1; }
+.scope-plane { fill: url(#sc-plane); stroke: rgba(250, 250, 248, .26); stroke-width: 1.1; stroke-linejoin: round; }
+.scope-layer-ai .scope-plane { fill: url(#sc-top); stroke: var(--cobalt-soft); }
+.scope-grid { fill: none; stroke: rgba(201, 213, 255, .35); stroke-width: 1; }
+.scope-lead { fill: none; stroke: rgba(250, 250, 248, .3); stroke-width: 1; }
+.scope-n { font: 500 11px/1 var(--sans); letter-spacing: .16em; fill: var(--cobalt-soft); }
+.scope-name { font: 600 15px/1 var(--sans); letter-spacing: -.01em; fill: var(--offwhite); }
+.sec-scope-cap { margin-top: 18px; max-width: 34em; font-size: 13px; line-height: 1.55; color: var(--slate-light); }
+.js .scope-layer { animation: scopeRise 1.1s var(--ease-out) both; animation-delay: calc(.7s + var(--i) * .14s); }
+.js .scope-bound { stroke-dashoffset: 0; animation: fadeIn 1.4s ease 1.3s both; }
+@keyframes scopeRise { from { opacity: 0; transform: translate3d(0, 22px, 0); } to { opacity: 1; transform: none; } }
+.js .sec-hero [data-enter] { animation: rise 1s var(--ease-out) both; }
+.js .sec-hero .line[data-enter] { animation: none; }
+.js .sec-hero .line[data-enter] > span { animation: lineUp 1.1s var(--ease-out) both; }
+.js .sec-hero [data-enter="1"] { animation-delay: .15s; }
+.js .sec-hero [data-enter="2"] > span { animation-delay: .25s; }
+.js .sec-hero [data-enter="3"] > span { animation-delay: .34s; }
+.js .sec-hero [data-enter="4"] > span { animation-delay: .43s; }
+.js .sec-hero [data-enter="5"] { animation-delay: .6s; }
+.js .sec-hero [data-enter="6"] { animation-delay: .72s; }
+.js .sec-hero [data-enter="7"] { animation-delay: .84s; }
+@media (min-width: 1040px) {
+  .sec-hero-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+  .sec-scope { justify-self: end; }
+}
+
+/* ---------- Bands ---------- */
+.sec-band { padding: var(--space-6) 0; }
+.sec-dark { background: var(--graphite); border-top: 1px solid var(--line-dark); }
+.sec-light, .sec-paper { --slate: #5D6471; color: var(--graphite); }
+.sec-light { background: var(--offwhite); }
+.sec-paper { background: var(--paper); }
+.sec-light .label, .sec-paper .label { color: var(--slate); }
+.sec-light :focus-visible, .sec-paper :focus-visible { outline-color: var(--cobalt); }
+.sec-dark .section-note { color: var(--slate-light); }
+.sec-band h3 { font-size: var(--fs-h3); font-weight: 600; letter-spacing: -.015em; line-height: 1.3; }
+
+/* Problems */
+.sec-problems { display: grid; border-top: 1px solid var(--line-light); }
+.sec-problems li { display: grid; grid-template-columns: 56px 1fr; column-gap: 8px; row-gap: 6px; padding: 28px 0; border-bottom: 1px solid var(--line-light); }
+.sec-problems .step-n { grid-row: span 2; color: var(--cobalt); }
+.sec-problems p { color: var(--slate); max-width: 34em; }
+@media (min-width: 900px) {
+  .sec-problems { grid-template-columns: 1fr 1fr; column-gap: clamp(40px, 6vw, 96px); }
+  .sec-problems li { padding: 36px 0; }
+  .sec-problems li:last-child { grid-column: 1 / -1; }
+}
+
+/* Capabilities */
+.sec-caps { display: grid; border-top: 1px solid var(--line-dark); }
+.sec-cap { position: relative; padding: 36px 0 40px; border-bottom: 1px solid var(--line-dark); }
+.sec-cap::before { content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 100%; background: var(--cobalt-soft); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
+.sec-cap.is-in::before { transform: scaleX(1); transition-delay: calc(var(--d, 0s) + .3s); }
+.sec-cap-icon { width: 30px; height: 30px; color: var(--cobalt-soft); }
+.sec-cap-k { margin-top: 28px; }
+.sec-cap h3 { margin-top: 8px; font-size: clamp(21px, 1.7vw, 26px); letter-spacing: -.025em; }
+.sec-cap-lead { margin-top: 10px; color: rgba(250, 250, 248, .82); max-width: 28em; }
+.sec-ticks { margin-top: 24px; display: grid; gap: 12px; }
+.sec-ticks li { position: relative; padding-left: 20px; font-size: 15px; line-height: 1.55; color: var(--slate-light); }
+.sec-ticks li::before { content: ""; position: absolute; left: 0; top: .72em; width: 6px; height: 6px; border: 1px solid var(--cobalt-soft); border-radius: 50%; transform: translateY(-50%); }
+@media (min-width: 900px) {
+  .sec-caps { grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line-dark); }
+  .sec-cap { padding: 40px 32px 48px 0; border-bottom: 0; }
+  .sec-cap + .sec-cap { padding-left: 32px; border-left: 1px solid var(--line-dark); }
+}
+
+/* Process */
+.sec-process { display: grid; border-top: 1px solid var(--line-light); counter-reset: none; }
+.sec-process li { display: grid; grid-template-columns: 56px 1fr; column-gap: 8px; row-gap: 6px; padding: 26px 0; border-bottom: 1px solid var(--line-light); }
+.sec-process .step-n { grid-row: span 2; color: var(--cobalt); }
+.sec-process p { color: var(--slate); max-width: 34em; }
+.sec-opt { display: inline-block; margin-left: 8px; padding: 3px 9px; border: 1px solid rgba(11, 13, 16, .2); border-radius: 999px; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); vertical-align: 3px; }
+@media (min-width: 1100px) {
+  .sec-process { grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--line-light); }
+  .sec-process li { grid-template-columns: 1fr; row-gap: 12px; padding: 28px 24px 36px 0; border-bottom: 0; }
+  .sec-process li + li { padding-left: 24px; border-left: 1px solid var(--line-light); }
+  .sec-process .step-n { grid-row: auto; }
+  .sec-opt { display: table; margin: 8px 0 0; vertical-align: 0; }
+}
+
+/* Deliverables */
+.sec-deliv-grid { display: grid; gap: var(--space-5); }
+.sec-deliv-lead { margin-top: 28px; max-width: 26em; color: rgba(250, 250, 248, .82); }
+.sec-report { border: 1px solid var(--line-dark); border-radius: 6px; background: linear-gradient(180deg, rgba(250, 250, 248, .035), rgba(250, 250, 248, .01)); }
+.sec-report li { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 24px clamp(20px, 3vw, 32px); }
+.sec-report li + li { border-top: 1px solid var(--line-dark); }
+.sec-report-n { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(125, 151, 255, .55); display: grid; place-items: center; font-size: 13px; font-weight: 600; color: var(--cobalt-soft); font-variant-numeric: tabular-nums; }
+.sec-report p { margin-top: 4px; color: var(--slate-light); }
+@media (min-width: 1000px) { .sec-deliv-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: start; } }
+
+/* Who it is for */
+.sec-who { display: grid; border-top: 1px solid var(--line-light); }
+.sec-who li { display: grid; gap: 6px; padding: 26px 0; border-bottom: 1px solid var(--line-light); }
+.sec-who p { color: var(--slate); max-width: 30em; }
+@media (min-width: 720px) { .sec-who { grid-template-columns: 1fr 1fr; column-gap: 48px; } }
+@media (min-width: 1100px) {
+  .sec-who { grid-template-columns: repeat(5, 1fr); column-gap: 0; border-bottom: 1px solid var(--line-light); }
+  .sec-who li { padding: 28px 24px 36px 0; border-bottom: 0; }
+  .sec-who li + li { padding-left: 24px; border-left: 1px solid var(--line-light); }
+}
+.sec-auth { margin-top: var(--space-5); max-width: 52em; padding: 22px 24px; border-left: 2px solid var(--cobalt); background: rgba(30, 79, 255, .06); color: var(--graphite); }
+.sec-auth strong { font-weight: 600; }
+
+/* FAQ */
+.sec-faq-grid { display: grid; gap: var(--space-5); }
+.sec-faq { border-top: 1px solid var(--line-dark); }
+.sec-faq details { border-bottom: 1px solid var(--line-dark); }
+.sec-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 64px; padding: 18px 0; font-size: var(--fs-h3); font-weight: 600; letter-spacing: -.015em; line-height: 1.35; cursor: pointer; list-style: none; transition: color .3s; }
+.sec-faq summary::-webkit-details-marker { display: none; }
+.sec-faq summary:hover { color: var(--cobalt-soft); }
+.sec-faq summary .ico { width: 20px; height: 20px; color: var(--cobalt-soft); transition: transform .4s var(--ease); }
+.sec-faq details[open] summary .ico { transform: rotate(45deg); }
+.sec-faq details p { padding: 0 48px 26px 0; max-width: 42em; color: var(--slate-light); }
+@media (min-width: 1000px) { .sec-faq-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } }
+
+/* ---------- Conversion (reuses the homepage contact section) ---------- */
+.sec-page .contact-title { font-size: clamp(40px, 6vw, 88px); }
+.sec-include { margin-top: 14px; display: grid; gap: 10px; }
+.sec-include li { position: relative; padding-left: 20px; color: rgba(255, 255, 255, .9); max-width: 26em; }
+.sec-include li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 1px; background: #fff; }
+.sec-dont { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, .28); font-size: 14px; color: rgba(255, 255, 255, .86); max-width: 26em; }
+.sec-page .route:first-child { padding-bottom: 28px; }
+
+@media (max-width: 520px) {
+  .sec-actions .btn { width: 100%; justify-content: center; }
+  .sec-faq details p { padding-right: 0; }
+  .scope-name { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec-cap::before { transform: scaleX(1); }
+}

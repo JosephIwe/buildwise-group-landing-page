@@ -73,7 +73,7 @@ test('homepage shows the scanner entry point and keeps existing contact links', 
   assert.equal(await cta.getAttribute('href'), '/scan');
   assert.match(await page.locator('#whatsappCta').getAttribute('href'), /^https:\/\/wa\.me\/2349165681202\?text=/);
   assert.equal(await page.locator('#contact a[href^="mailto:"]').count(), 0, 'no public email address in the contact section');
-  assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '#work', '#ventures', '#about']);
+  assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '/cybersecurity', '#work', '#ventures', '#about']);
   await cta.click();
   await page.waitForURL(/\/scan$/);
   await page.waitForSelector('#scanForm:not([hidden])');
@@ -453,13 +453,14 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), 'the site is not blocked');
   assert.match(robots, new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
   const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`]);
+  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`, `${SITE}/cybersecurity`]);
   assert.match(robots, /^Disallow: \/api\/$/m);
   assert.ok(!read('sitemap.xml').includes('#'), 'no report links in the sitemap');
   assert.match(read('index.html'), new RegExp(`rel="canonical" href="${locs[0]}"`));
   assert.match(read('scan.html'), new RegExp(`rel="canonical" href="${locs[1]}"`));
   assert.match(read('website-audit.html'), new RegExp(`rel="canonical" href="${locs[2]}"`));
   assert.match(read('privacy.html'), new RegExp(`rel="canonical" href="${locs[3]}"`));
+  assert.match(read('cybersecurity.html'), new RegExp(`rel="canonical" href="${locs[4]}"`));
 });
 
 test('unknown paths get a real 404 page that is not indexed', () => {
@@ -491,7 +492,7 @@ test('a page showing a report is marked noindex, and the questionnaire is not', 
 
 test('local links and assets on every page resolve', () => {
   const missing = [];
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'privacy.html', 'scan.html', 'website-audit.html', '404.html', 'llms.txt']) {
     const refs = [...read(file).matchAll(/(?:href|src)="([^"]+)"|](https:\/\/buildwisegroup\.dev[^)]*)\)/g)].map(m => m[1] || m[2]);
     for (let ref of refs) {
       if (ref.startsWith(SITE)) ref = ref.slice(SITE.length) || '/';
@@ -506,7 +507,7 @@ test('local links and assets on every page resolve', () => {
 });
 
 test('public files point only at the canonical domain', () => {
-  for (const file of ['index.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
+  for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
     assert.ok(!read(file).includes('pages.dev'), `${file} does not reference the pages.dev address`);
   }
 });
@@ -773,4 +774,89 @@ test('scanner report suggests the website audit and hands the address over witho
   await completeScan(other.page);
   assert.ok(await other.page.locator('#reportCross').isHidden());
   await other.context.close();
+});
+
+/* ---------- Application & Cloud Security Review (/cybersecurity) ---------- */
+test('security page: loads at /cybersecurity with one h1, its own metadata and the required sections', opts, async () => {
+  const { page, context, errors } = await open('/cybersecurity');
+  assert.equal(await page.locator('h1').count(), 1);
+  assert.match(await page.locator('h1').textContent(), /apps,\s*APIs and cloud/);
+  assert.equal(await page.title(), 'Application & Cloud Security Review — BuildWise Group');
+  assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), `${SITE}/cybersecurity`);
+  assert.equal(await page.locator('meta[property="og:url"]').getAttribute('content'), `${SITE}/cybersecurity`);
+  assert.ok((await page.locator('meta[name="description"]').getAttribute('content')).length > 80);
+  assert.equal(await page.locator('meta[name="robots"]').count(), 0, 'the page is indexable');
+  for (const id of ['problems', 'capabilities', 'approach', 'deliverables', 'who', 'faq', 'enquire']) {
+    assert.equal(await page.locator(`section#${id}`).count(), 1, `#${id} section`);
+  }
+  assert.equal(await page.locator('#problems li').count(), 5);
+  assert.equal(await page.locator('#capabilities .sec-cap').count(), 3);
+  assert.equal(await page.locator('#approach li').count(), 5);
+  assert.equal(await page.locator('#deliverables li').count(), 5);
+  assert.equal(await page.locator('#who .sec-who li').count(), 5);
+  assert.ok(await page.locator('#faq details').count() >= 5);
+  const primary = page.getByRole('link', { name: 'Request a Security Review' }).first();
+  assert.equal(await primary.getAttribute('href'), '#enquire');
+  assert.equal(await page.getByRole('link', { name: 'Explore Our Approach' }).getAttribute('href'), '#approach');
+  await primary.click();
+  await page.waitForFunction(() => location.hash === '#enquire');
+  assert.ok(await page.locator('#enquiryForm').isVisible(), 'the primary CTA reaches the enquiry form');
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('security page: structured data is a Service provided by the BuildWise organisation, with a breadcrumb', () => {
+  const data = JSON.parse(read('cybersecurity.html').match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const service = data['@graph'].find(n => n['@type'] === 'Service');
+  const crumbs = data['@graph'].find(n => n['@type'] === 'BreadcrumbList');
+  assert.equal(service.url, `${SITE}/cybersecurity`);
+  assert.equal(service.provider['@id'], `${SITE}/#organization`);
+  assert.deepEqual(crumbs.itemListElement.map(i => i.item), [`${SITE}/`, `${SITE}/cybersecurity`]);
+  const types = JSON.stringify(data).match(/"@type":"[^"]+"/g);
+  for (const type of ['AggregateRating', 'Review', 'Offer', 'FAQPage']) assert.ok(!types.includes(`"@type":"${type}"`), `no ${type} markup`);
+});
+
+test('security page: is reachable from the homepage navigation, services list and every footer', opts, async () => {
+  const { page, context, errors } = await open('/');
+  assert.equal(await page.locator('.desktop-nav a[href="/cybersecurity"]').count(), 1);
+  assert.equal(await page.locator('#mobileNav a[href="/cybersecurity"]').count(), 1);
+  assert.equal(await page.locator('.site-footer a[href="/cybersecurity"]').count(), 1);
+  const cap = page.locator('#solutions .cap-feature');
+  assert.match(await cap.textContent(), /Application & Cloud Security Review/);
+  await cap.click({ position: { x: 400, y: 20 } });
+  await page.waitForURL(/\/cybersecurity$/);
+  assert.equal(await page.locator('.desktop-nav a[aria-current="page"]').textContent(), 'Security');
+  for (const file of ['scan.html', 'website-audit.html', 'privacy.html', '404.html']) assert.match(read(file), /href="\/cybersecurity"/, `${file} links to the security page`);
+  assert.match(read('llms.txt'), /https:\/\/buildwisegroup\.dev\/cybersecurity/);
+  assert.deepEqual(errors(), []);
+  await context.close();
+});
+
+test('security page: makes no unsupported claims and keeps testing authorised', () => {
+  const text = read('cybersecurity.html').replace(/<script[\s\S]*?<\/script>/g, '').replace(/<select[\s\S]*?<\/select>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  const banned = [/24\/7/, /round[- ]the[- ]clock/i, /incident response/i, /\bSOC ?2\b/, /ISO ?27001/i, /\bCREST\b/, /\bOSCP\b|\bCISSP\b/, /certified/i, /trusted by/i, /testimonial/i, /case stud/i, /our clients include/i, /\$\s?\d/, /\b\d+\s*(?:days|weeks|hours)\b/i, /guaranteed?\b(?! a system)/i, /vulnerability[- ]free/i, /bank[- ]grade|military[- ]grade/i, /penetration testing services/i];
+  for (const re of banned) assert.ok(!re.test(text), `no claim matching ${re}`);
+  assert.match(text, /no review can guarantee a system is free of vulnerabilities/);
+  assert.match(text, /written authorisation/i);
+  assert.match(text, /don’t accept requests to test third-party systems/);
+  assert.match(text, /Not every review includes every check/);
+  for (const name of ['Huntly', 'Traider', 'Staff']) assert.ok(!text.includes(name), 'the ventures are not repositioned here');
+});
+
+test('security page: no horizontal overflow, readable text and working FAQ on phone, tablet and desktop', opts, async () => {
+  for (const viewport of [{ width: 360, height: 780 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
+    const { page, context, errors } = await open('/cybersecurity', { viewport, reducedMotion: 'reduce' });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    assert.equal(overflow, 0, `no sideways scroll at ${viewport.width}px`);
+    const small = await page.evaluate(() => [...document.querySelectorAll('main p, main li, main summary')].filter(el => el.offsetParent && !el.classList.contains('label') && parseFloat(getComputedStyle(el).fontSize) < 13).length);
+    assert.equal(small, 0, `body text is at least 13px at ${viewport.width}px`);
+    const first = page.locator('#faq summary').first();
+    await first.focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#faq details').first().getAttribute('open'), '', 'the FAQ opens from the keyboard');
+    const tiny = await page.evaluate(() => [...document.querySelectorAll('main a, main button, main summary')].filter(el => el.offsetParent && el.getBoundingClientRect().height < 40 && !el.closest('p, li')).map(el => el.textContent.trim()));
+    assert.deepEqual(tiny, [], `tap targets are tall enough at ${viewport.width}px`);
+    assert.deepEqual(errors(), []);
+    await context.close();
+  }
 });
