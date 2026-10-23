@@ -91,7 +91,8 @@
   update();
 
   /* Active section in the main navigation */
-  const navLinks = [...document.querySelectorAll('.desktop-nav a')];
+  // Only in-page links are tracked; links to other pages (such as /cybersecurity) are left alone.
+  const navLinks = [...document.querySelectorAll('.desktop-nav a[href^="#"]')];
   const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
   if (sections.length && 'IntersectionObserver' in window) {
     const navObserver = new IntersectionObserver(entries => {

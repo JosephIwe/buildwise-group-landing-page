@@ -162,6 +162,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mobile-nav.is-open nav a:nth-child(2) { transition-delay: .05s; }
 .mobile-nav.is-open nav a:nth-child(3) { transition-delay: .1s; }
 .mobile-nav.is-open nav a:nth-child(4) { transition-delay: .15s; }
+.mobile-nav.is-open nav a:nth-child(5) { transition-delay: .2s; }
 .mn-index { font-size: 11px; letter-spacing: .2em; color: var(--slate-light); font-weight: 500; }
 .mobile-foot { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
 
@@ -300,9 +301,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .cap:hover .cap-icon { color: var(--cobalt); transform: translateY(-2px); }
 .cap:hover h3, .cap:hover p { transform: translateX(4px); }
 .cap:hover .cap-arrow { opacity: 1; color: var(--cobalt); transform: none; }
+/* The security review has its own page: the whole row is the link. */
+.cap-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.cap-link:focus-visible { outline: none; }
+.cap-link:focus-visible::after { outline: 2px solid var(--cobalt); outline-offset: 4px; border-radius: 4px; }
+.cap-more { display: inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--cobalt); transition: transform .5s var(--ease); }
+.cap-feature:hover h3, .cap-feature:hover p { transform: none; } /* a transform would shrink the row link to the heading */
+.cap-feature:hover .cap-more { transform: translateX(4px); }
+.cap-feature .cap-arrow { opacity: 1; color: var(--cobalt); transform: none; }
 @media (min-width: 900px) {
   .cap-list { grid-template-columns: 1fr 1fr; column-gap: clamp(40px, 6vw, 96px); }
   .cap { padding: 40px 0; }
+  .cap-feature { grid-column: 1 / -1; }
+  .cap-feature p { max-width: 46em; }
 }
 
 /* ---------- Ventures ---------- */
@@ -541,7 +552,8 @@ a.venture-link:hover .ico { transform: translateX(5px); }
 .js .desktop-nav a:nth-child(2) { animation-delay: .18s; }
 .js .desktop-nav a:nth-child(3) { animation-delay: .24s; }
 .js .desktop-nav a:nth-child(4) { animation-delay: .3s; }
-.js .header-cta, .js .menu-toggle { animation-delay: .36s; }
+.js .desktop-nav a:nth-child(5) { animation-delay: .36s; }
+.js .header-cta, .js .menu-toggle { animation-delay: .42s; }
 
 .js .hero-stage { animation: fadeIn 1.8s ease both; }
 .js [data-enter] { animation: rise 1s var(--ease-out) both; }
