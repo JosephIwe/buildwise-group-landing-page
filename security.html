@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B0D10">
+  <meta name="description" content="How to report a security vulnerability in the BuildWise Group website privately, what to include, testing guidelines and how reports are handled.">
+  <title>Report a security vulnerability — BuildWise Group</title>
+  <link rel="canonical" href="https://buildwisegroup.dev/security">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="scanner.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="script.js"></script>
+</head>
+<body class="scan-page policy-page">
+  <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="bw-fold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="currentColor" stop-opacity=".45"/>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+      </linearGradient>
+      <symbol id="bw-mark" viewBox="0 0 100 112">
+        <path fill="currentColor" d="M0 0H54C68.4 0 79 10.6 79 24.2C79 34.6 73.4 42.3 66.6 45.8L28 53.6V112H0Z"/>
+        <path fill="url(#bw-fold)" d="M28 53.6L60 47.2L44 58.6L28 61.8Z"/>
+        <path fill="currentColor" d="M44 67.4L74.4 52.6C89.4 56.4 100 68 100 82.6C100 99 87 112 70.4 112H44Z"/>
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="BuildWise Group home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+      </a>
+      <a class="scan-back" href="/"><svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>Back to site</a>
+    </div>
+  </header>
+
+  <main id="main" class="scan-main">
+    <article class="container policy">
+      <p class="label"><span class="dot dot-blue" aria-hidden="true"></span>Security</p>
+      <h1 class="scanner-title policy-title">Reporting a security vulnerability</h1>
+      <p class="policy-updated">Last updated 23 October 2026</p>
+      <p class="policy-lead">If you think you have found a security vulnerability in this website or its code, please tell us privately so we can investigate and fix it before it is discussed in public. This page explains how to report it, what to include and what to expect from us.</p>
+
+      <h2 id="report">How to report</h2>
+      <p>Report vulnerabilities privately through <strong>GitHub private vulnerability reporting</strong> on the repository that holds this website’s code. Only you and the repository’s maintainers can see the report, and we can discuss it, and agree on a fix, in the same private thread.</p>
+      <p class="policy-cta"><a class="btn btn-light" href="https://github.com/JosephIwe/buildwise-group-landing-page/security/advisories/new" target="_blank" rel="noopener noreferrer">Report a vulnerability privately<span class="sr-only"> (opens in a new tab)</span><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+      <p>You need a free GitHub account to send a report. The link opens a private advisory form on <code>github.com/JosephIwe/buildwise-group-landing-page</code>.</p>
+
+      <h3>Issues in the live website or its hosting</h3>
+      <p>Use the same private report for problems you find on the live site at <code>buildwisegroup.dev</code> rather than in the code: for example in a page, in the website audit service at <code>/api/website-audit</code>, or in how the site is configured and served. Start the title with “Live site:” and give the exact address you tested. The repository is the source of the live site, so the report reaches the same people either way.</p>
+
+      <h3>If you can’t use GitHub</h3>
+      <p>Message us on <a href="https://wa.me/2349165681202" target="_blank" rel="noopener noreferrer">WhatsApp<span class="sr-only"> (opens in a new tab)</span></a> or send a <a href="/#contact">project enquiry</a> that says only that you have a security report and how you would like to be contacted. <strong>Do not include any vulnerability details there.</strong> Those channels are for ordinary conversations and enquiries, and we will agree a private way to receive the details before you share them.</p>
+
+      <h2>What to include</h2>
+      <ul>
+        <li>The affected address, page, API endpoint or file, and the date and time you tested.</li>
+        <li>What the vulnerability is and what an attacker could do with it.</li>
+        <li>Clear steps to reproduce it, with the smallest proof of concept that shows the problem.</li>
+        <li>Any requests, responses or screenshots that support it, with other people’s data removed.</li>
+        <li>Whether you would like to be credited, and the name to use.</li>
+      </ul>
+
+      <h2>Testing guidelines</h2>
+      <p>Please act in good faith and keep any testing to the minimum needed to confirm a problem.</p>
+      <ul>
+        <li><strong>Respect privacy.</strong> Don’t access, copy, change or delete data that isn’t yours. If you come across personal or confidential information, stop, don’t keep it, and tell us in your report.</li>
+        <li><strong>Don’t disrupt the service.</strong> No denial-of-service or load testing, no high-volume automated scanning and no destructive payloads. Keep request rates low.</li>
+        <li><strong>Don’t send test enquiries.</strong> Every project enquiry is delivered to a real inbox. If you have found a problem with the form, describe it instead of submitting it repeatedly.</li>
+        <li><strong>Don’t use the website audit against other people’s sites</strong> to test it. Point it only at addresses you own or control.</li>
+        <li><strong>No social engineering</strong>, phishing or physical attempts against anyone connected with BuildWise.</li>
+        <li><strong>Keep it private until we have coordinated.</strong> Please don’t publish or share details before we have had a reasonable chance to investigate and fix the issue, and we have agreed on disclosure with you.</li>
+      </ul>
+
+      <h2>What this covers</h2>
+      <ul>
+        <li>The website at <code>buildwisegroup.dev</code> and <code>www.buildwisegroup.dev</code>, including the website audit service.</li>
+        <li>The code in the <code>JosephIwe/buildwise-group-landing-page</code> repository.</li>
+      </ul>
+      <p>Services run by other companies that this site uses, such as Cloudflare, Web3Forms, WhatsApp and Google Fonts, are outside this policy. Please report issues in them to those companies directly. Our venture products, such as Huntly, are separate products and are not covered by this page.</p>
+
+      <h2>How we handle reports</h2>
+      <ul>
+        <li>We read every report and reply in the private advisory once we have reviewed it.</li>
+        <li>If we can reproduce the issue, we will work on a fix and keep you informed of progress in the same thread. If we can’t, or decide it is not a vulnerability, we will tell you why.</li>
+        <li>We will agree with you when and how the issue is disclosed, which may include publishing a GitHub security advisory once it is fixed.</li>
+        <li>If you would like credit, we will name you in any advisory we publish.</li>
+      </ul>
+      <p>We are a small company and do not run a bug bounty programme, so we can’t offer payment for reports.</p>
+
+      <h2>Good-faith research</h2>
+      <p>If you follow this page while researching and reporting, we will treat your research as authorised, work with you to understand and resolve the issue, and will not pursue legal action against you for it. This applies only to the systems listed above; we can’t authorise testing of services run by other companies.</p>
+
+      <p class="policy-note">Looking to have your own application or cloud setup reviewed? That is a separate service: see our <a href="/cybersecurity">Application &amp; Cloud Security Review</a>. Machine-readable contact details for this policy are in <a href="/.well-known/security.txt">security.txt</a>.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand" href="/" aria-label="BuildWise Group home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+      </a>
+      <p class="label footer-line">AI products. Business systems. Real impact.</p>
+      <ul class="footer-links" aria-label="Site information">
+        <li><a href="/cybersecurity">Cybersecurity</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/security" aria-current="page">Report a vulnerability</a></li>
+      </ul>
+      <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
+    </div>
+  </footer>
+</body>
+</html>
