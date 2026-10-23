@@ -305,9 +305,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .cap-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .cap-link:focus-visible { outline: none; }
 .cap-link:focus-visible::after { outline: 2px solid var(--cobalt); outline-offset: 4px; border-radius: 4px; }
-.cap-more { display: inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--cobalt); transition: transform .5s var(--ease); }
+.cap-more { display: inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--cobalt); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 4px; transition: text-decoration-color .3s; }
 .cap-feature:hover h3, .cap-feature:hover p { transform: none; } /* a transform would shrink the row link to the heading */
-.cap-feature:hover .cap-more { transform: translateX(4px); }
+.cap-feature:hover .cap-more { text-decoration-color: currentColor; } /* no transform here either: it would shrink the row link */
 .cap-feature .cap-arrow { opacity: 1; color: var(--cobalt); transform: none; }
 @media (min-width: 900px) {
   .cap-list { grid-template-columns: 1fr 1fr; column-gap: clamp(40px, 6vw, 96px); }
