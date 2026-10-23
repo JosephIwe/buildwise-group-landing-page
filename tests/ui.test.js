@@ -822,7 +822,12 @@ test('security page: is reachable from the homepage navigation, services list an
   assert.equal(await page.locator('#mobileNav a[href="/cybersecurity"]').count(), 1);
   assert.equal(await page.locator('.site-footer a[href="/cybersecurity"]').count(), 1);
   const cap = page.locator('#solutions .cap-feature');
-  assert.match(await cap.textContent(), /Application & Cloud Security Review/);
+  assert.equal(await page.locator('#solutions .cap').count(), 5, 'the four existing services stay, with one security row');
+  assert.equal(await cap.locator('h3').textContent(), 'Cybersecurity: Application & Cloud Security');
+  assert.equal(await cap.locator('p').textContent(), 'Security assessments for applications, APIs, cloud infrastructure, and AI-powered products.');
+  const link = page.getByRole('link', { name: 'Explore Cybersecurity' });
+  assert.equal(await link.getAttribute('href'), '/cybersecurity');
+  assert.ok(await link.isVisible());
   await cap.click({ position: { x: 400, y: 20 } });
   await page.waitForURL(/\/cybersecurity$/);
   assert.equal(await page.locator('.desktop-nav a[aria-current="page"]').textContent(), 'Security');
