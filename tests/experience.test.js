@@ -115,6 +115,25 @@ test('faq: the ten questions are in the page HTML, answered without unsupported 
   assert.match(read('index.html'), /<a href="#faq">FAQ<\/a>/, 'the FAQ is in the main navigation');
 });
 
+/* ---------- Palette ---------- */
+test('palette: the four approved brand colours are the site tokens, and the old values are gone', () => {
+  const root = read('styles.css').match(/:root \{([\s\S]*?)\n\}/)[1];
+  for (const [name, value] of [['obsidian', '#0B0D12'], ['warm-white', '#F4F1EA'], ['graphite', '#303640'], ['cobalt', '#4764FF']]) {
+    assert.match(root, new RegExp(`--${name}: ${value};`), `--${name} is ${value}`);
+  }
+  for (const file of ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css', ...PAGES, '404.html', 'favicon.svg']) {
+    assert.ok(!/#0B0D10|#FAFAF8|#1E4FFF|rgba\(30, 79, 255|rgba\(250, 250, 248|rgba\(11, 13, 16,/i.test(read(file)), `${file} uses only the approved palette`);
+  }
+});
+
+test('palette: cobalt text on light backgrounds uses the accessible shade, and text on cobalt is solid white', () => {
+  const css = ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css'].map(read).join('\n');
+  const decorative = /^\.(cap:hover \.cap-icon|cap:hover \.cap-arrow|cap-feature \.cap-arrow|dot-blue|faq-list summary \.ico) /;
+  const textCobalt = css.split('\n').filter(line => /(?<![-\w])color: var\(--cobalt\)/.test(line) && !decorative.test(line));
+  assert.deepEqual(textCobalt, [], 'text uses --cobalt-deep (6.1:1 on warm white), not --cobalt (4.1:1)');
+  assert.ok(!/[^-]color: rgba\(255, 255, 255, \.\d+\)/.test(css), 'no translucent white text, which drops below 4.5:1 on cobalt');
+});
+
 /* ---------- Typeface, metadata and headers ---------- */
 test('the typeface is self-hosted, preloaded and licensed; no page calls Google Fonts', () => {
   assert.ok(fs.statSync(path.join(ROOT, 'assets/fonts/manrope-latin.woff2')).size > 10000);

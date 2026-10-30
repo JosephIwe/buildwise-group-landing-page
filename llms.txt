@@ -17,7 +17,7 @@ This file is a plain-text summary of the public website for AI assistants and ot
 
 Each area is labelled by where the experience comes from. BuildWise names clients only with their permission.
 
-- Healthcare and aesthetics (client engagement): ongoing website maintenance for an aesthetics business, and work with Maya, the AI receptionist from Staff.
+- Healthcare and aesthetics (client engagement): website maintenance for an aesthetics business, and work with Maya, the AI receptionist from Staff.
 - Recruitment and career technology (BuildWise product): Huntly.
 - Financial technology and trading tools (BuildWise product, in development): Traider.
 - Business operations and automation (BuildWise product, in validation): Staff.
