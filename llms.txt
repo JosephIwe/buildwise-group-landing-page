@@ -10,7 +10,18 @@ This file is a plain-text summary of the public website for AI assistants and ot
 - Business automation: operations and customer workflows, with human oversight where it matters.
 - Custom software systems: integrated systems that connect the tools and data a team already uses.
 - Product and technical advisory: clarifying the problem, testing the riskiest assumptions and shaping a practical path.
+- Websites and digital experiences: fast, accessible websites and web experiences, with ongoing maintenance.
 - Application & Cloud Security Review: scoped, authorised security assessments of web applications, APIs, cloud deployments and AI-enabled products, with evidence-based findings, a prioritised remediation plan and optional remediation support and verification. It is not a compliance certification or a guarantee that a system is free of vulnerabilities.
+
+## Industry experience
+
+Each area is labelled by where the experience comes from. BuildWise names clients only with their permission.
+
+- Healthcare and aesthetics (client engagement): ongoing website maintenance for an aesthetics business, and work with Maya, the AI receptionist from Staff.
+- Recruitment and career technology (BuildWise product): Huntly.
+- Financial technology and trading tools (BuildWise product, in development): Traider.
+- Business operations and automation (BuildWise product, in validation): Staff.
+- Digital products and software (capability): websites, web applications and tools built in-house, including the scanner and website audit on this site.
 
 ## Ventures
 
@@ -20,7 +31,7 @@ This file is a plain-text summary of the public website for AI assistants and ot
 
 ## Pages
 
-- [Homepage](https://buildwisegroup.dev/): services, approach, ventures and contact.
+- [Homepage](https://buildwisegroup.dev/): services, approach, products, industry experience, frequently asked questions and contact.
 - [AI Business Opportunity Scanner](https://buildwisegroup.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to BuildWise Group.
 - [Application & Cloud Security Review](https://buildwisegroup.dev/cybersecurity): what the security review covers, how it is scoped and authorised, what clients receive, and how to request one.
 - [Website & AI Visibility Audit](https://buildwisegroup.dev/website-audit): an automated, read-only check of a public website's technical SEO, robots.txt rules for search and AI crawlers, and content clarity, with evidence for each finding. It is not a guarantee of rankings or AI citations.

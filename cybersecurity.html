@@ -48,13 +48,12 @@
     ]
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="cybersecurity.css">
   <script>document.documentElement.classList.add('js');</script>
   <script defer src="script.js"></script>
+  <script defer src="social-links.js"></script>
   <script defer src="contact-form.js"></script>
   <script defer src="analytics.js"></script>
 </head>
@@ -85,16 +84,17 @@
 
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
-      <a class="brand" href="/" aria-label="BuildWise Group home">
+      <a class="brand" href="/">
         <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
-        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+        <span class="brand-word">BuildWise <span>Group</span></span><span class="sr-only">, home</span>
       </a>
       <nav class="desktop-nav" aria-label="Main">
         <a href="/#solutions">Solutions</a>
+        <a href="/#ventures">Products</a>
+        <a href="/#industries">Industries</a>
         <a href="/cybersecurity" aria-current="page">Security</a>
-        <a href="/#work">Work</a>
-        <a href="/#ventures">Ventures</a>
         <a href="/#about">About</a>
+        <a href="/#faq">FAQ</a>
       </nav>
       <a class="btn btn-light btn-sm header-cta" href="#enquire">Request a review <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <button class="menu-toggle" id="menuToggle" type="button" aria-controls="mobileNav" aria-expanded="false">
@@ -107,10 +107,11 @@
   <div class="mobile-nav" id="mobileNav" hidden>
     <nav aria-label="Mobile">
       <a href="/#solutions"><span class="mn-index" aria-hidden="true">01</span>Solutions</a>
-      <a href="/cybersecurity" aria-current="page"><span class="mn-index" aria-hidden="true">02</span>Security</a>
-      <a href="/#work"><span class="mn-index" aria-hidden="true">03</span>Work</a>
-      <a href="/#ventures"><span class="mn-index" aria-hidden="true">04</span>Ventures</a>
+      <a href="/#ventures"><span class="mn-index" aria-hidden="true">02</span>Products</a>
+      <a href="/#industries"><span class="mn-index" aria-hidden="true">03</span>Industries</a>
+      <a href="/cybersecurity" aria-current="page"><span class="mn-index" aria-hidden="true">04</span>Security</a>
       <a href="/#about"><span class="mn-index" aria-hidden="true">05</span>About</a>
+      <a href="/#faq"><span class="mn-index" aria-hidden="true">06</span>FAQ</a>
     </nav>
     <div class="mobile-foot">
       <a class="btn btn-light" href="#enquire">Request a Security Review <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -420,6 +421,7 @@
                     <option>AI agents and AI employees</option>
                     <option>AI product development</option>
                     <option>SaaS or web application development</option>
+                    <option>Website or digital experience</option>
                     <option>Business automation and integrations</option>
                     <option>Existing product improvement</option>
                     <option>Other</option>
@@ -487,17 +489,20 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <a class="brand" href="/" aria-label="BuildWise Group home">
+      <a class="brand" href="/">
         <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
-        <span class="brand-word" aria-hidden="true">BuildWise<span>Group</span></span>
+        <span class="brand-word">BuildWise <span>Group</span></span><span class="sr-only">, home</span>
       </a>
       <p class="label footer-line">AI products. Business systems. Real impact.</p>
       <ul class="footer-links" aria-label="Site information">
         <li><a href="https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20would%20like%20to%20discuss%20an%20application%20and%20cloud%20security%20review." target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>WhatsApp<span class="sr-only"> (opens in a new tab)</span></a></li>
+        <li><a href="#enquire">Send a project enquiry</a></li>
+        <li><a href="/#faq">FAQ</a></li>
         <li><a href="/cybersecurity" aria-current="page">Cybersecurity</a></li>
         <li><a href="/privacy">Privacy</a></li>
         <li><a href="/security">Report a vulnerability</a></li>
       </ul>
+      <ul class="footer-social" data-social-links aria-label="BuildWise Group on social media" hidden></ul>
       <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
     </div>
   </footer>
