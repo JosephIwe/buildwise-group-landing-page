@@ -12,6 +12,7 @@ let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { chromium = null; }
 
 const ROOT = path.resolve(__dirname, '..');
+const { loadSocial } = require('./social-config.cjs');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const WHATSAPP = 'https://wa.me/2349165681202?text=Hello%20Buildwise%2C%20I%20visited%20your%20website%20and%20would%20like%20to%20discuss%20a%20project.';
 const KEY = '5abaf1c0-5ac4-4c1d-8d26-dac30dfa159b';
@@ -46,9 +47,11 @@ test('the private recipient never appears in the payload, errors or success text
   for (const text of Object.values(E.FAILURE_TEXT)) assert.ok(!/@/.test(text), 'failure messages contain no email address');
 });
 
-test('Instagram is not offered as a contact route', () => {
+test('Instagram appears only as a verified profile from social-links.js', () => {
+  const verified = loadSocial().map(profile => profile.url);
   for (const file of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', '404.html', 'privacy.html', 'security.html', 'llms.txt']) {
-    assert.ok(!/instagram/i.test(read(file)), `${file} has no Instagram link`);
+    const text = verified.reduce((html, url) => html.split(url).join(''), read(file));
+    assert.ok(!/instagram/i.test(text), `${file} has no unverified Instagram link`);
   }
 });
 
@@ -73,7 +76,7 @@ test('project type, budget and contact method only accept listed values', () => 
   assert.ok(E.normalizeEnquiry({ ...valid, projectType: 'Crypto mining' }).errors.projectType);
   assert.ok(E.normalizeEnquiry({ ...valid, budget: '$1' }).errors.budget);
   assert.ok(E.normalizeEnquiry({ ...valid, contactMethod: 'Fax' }).errors.contactMethod);
-  assert.equal(E.PROJECT_TYPES.length, 7);
+  assert.equal(E.PROJECT_TYPES.length, 8);
   assert.ok(E.PROJECT_TYPES.includes('Application and cloud security review'));
   assert.ok(E.BUDGETS.includes('Not sure yet'));
 });
@@ -134,7 +137,8 @@ test('the privacy policy is linked from the form and every footer, and makes no 
   const policy = read('privacy.html');
   assert.match(policy, /Web3Forms/, 'the form processor is disclosed on the policy page');
   assert.match(policy, /Cloudflare Web Analytics/);
-  assert.match(policy, /Google Fonts/);
+  assert.ok(!/fonts\.googleapis|fonts\.gstatic/.test(policy), 'the typeface is self-hosted');
+  assert.match(policy, /typeface is served from this website/, 'the policy says no font provider is contacted');
   assert.ok(!/30 days|thirty days/i.test(policy), 'no retention period that is not verified');
   assert.ok(!/no (cookies or )?tracking/i.test(policy), 'no blanket no-tracking claim');
   assert.match(policy, /href="https:\/\/wa\.me\/2349165681202"/, 'requests go to the verified WhatsApp number');
@@ -244,7 +248,9 @@ test('form: with the configured key the form shows and the fallback panel is hid
   const text = await page.locator('body').textContent();
   assert.ok(!/@[a-z0-9-]+\.[a-z]/i.test(text.replace('@company.com', '')), 'no email address is visible on the rendered page');
   assert.equal(await page.locator('a[href^="mailto:"]').count(), 0, 'no mailto link on the homepage');
-  assert.equal(await page.locator('a[href*="instagram"]').count(), 0, 'no Instagram link on the homepage');
+  const instagram = await page.locator('a[href*="instagram"]').evaluateAll(els => els.map(a => a.getAttribute('href')));
+  assert.deepEqual(instagram, loadSocial().filter(p => p.id === 'instagram').map(p => p.url), 'the only Instagram link is the verified profile in the footer');
+  assert.equal(await page.locator('#contact a[href*="instagram"]').count(), 0, 'Instagram is not offered as a contact route');
   await context.close();
 });
 

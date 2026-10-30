@@ -436,7 +436,11 @@
     const btn = li.querySelector('button');
     if (!btn) return;
     btn.tabIndex = 0;
-    btn.setAttribute('aria-label', `${btn.querySelector('.rail-t').textContent}: show this step of the story`);
+    // The visible text stays the accessible name (WCAG 2.5.3, label in name); the hint only adds to it.
+    const hint = document.createElement('span');
+    hint.className = 'sr-only';
+    hint.textContent = ', show this step of the story';
+    btn.appendChild(hint);
     btn.addEventListener('click', () => {
       if (still) { goStill(i === CHAPTERS.length - 2 ? T : CHAPTERS[i + 1] - 0.4); return; }
       state.target = CHAPTERS[i] + 0.01;
