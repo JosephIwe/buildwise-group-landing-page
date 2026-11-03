@@ -8,7 +8,7 @@ status: draft
 ctaHeading: Losing leads between channels?
 ctaText: Describe how leads reach you and what happens next. We’ll map the gaps and suggest a first automated workflow.
 ---
-Most small and growing businesses don’t lack leads as much as they lose them: a WhatsApp message nobody answered, a website form that went to an unread inbox, a promising call never followed up. An AI-powered sales system closes those gaps. It is not a single tool but a chain of small, reliable steps.
+Many small and growing businesses don’t lack leads so much as lose them: a WhatsApp message nobody answered, a website form that went to an unread inbox, a promising call never followed up. An AI-powered sales system closes those gaps. It is not a single tool but a chain of small, reliable steps.
 
 ## The five parts of a sales system
 

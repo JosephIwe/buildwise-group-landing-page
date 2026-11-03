@@ -9,11 +9,11 @@ status: draft
 ctaHeading: Want help automating support?
 ctaText: Send us a description of your support channels and the questions you get most. We’ll suggest what to automate first and what should stay with your team.
 ---
-Customer support automation has a bad reputation, mostly earned by bots that loop customers through menus and never let them reach a person. Done well, AI support automation does the opposite: it answers simple questions instantly and gets complex ones to the right person faster. Here is how to do it well.
+Customer support automation has a bad reputation, mostly earned by bots that loop customers through menus and never let them reach a person. Done well, AI support automation does the opposite: it answers simple questions instantly and gets complex ones to the right person faster. Here is how.
 
 ## Step 1: Find out what customers actually ask
 
-Collect a few hundred recent conversations from WhatsApp, email, web chat and social media. Group them by topic. In most businesses, a handful of topics (prices, order status, delivery, opening hours, returns) make up most of the volume. Those are your automation candidates.
+Collect a few hundred recent conversations (or as many as you have) from WhatsApp, email, web chat and social media. Group them by topic. In most businesses, a handful of topics (prices, order status, delivery, opening hours, returns) make up most of the volume. Those are your automation candidates.
 
 Note the conversations that went badly too. They show you what must always go to a person.
 

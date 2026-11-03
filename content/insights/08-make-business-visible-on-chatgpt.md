@@ -21,7 +21,7 @@ AI assistants with search features don’t just rely on what the model learned d
 - **Google’s AI Overviews and AI Mode** use Google’s normal search index. Google’s guidance, [AI features and your website](https://developers.google.com/search/docs/appearance/ai-features), says there are no additional requirements beyond normal SEO: pages must be indexed and eligible to appear in Search.
 - **Perplexity**, **Bing** (which powers parts of several assistants) and others have their own crawlers.
 
-Check your `robots.txt` file, and **check your CDN or firewall too**. Services such as Cloudflare offer settings that block AI crawlers before they ever read robots.txt. Many businesses are invisible to AI search because of a setting they didn’t know was on.
+Check your `robots.txt` file, and **check your CDN or firewall too**. Services such as Cloudflare offer settings that block AI crawlers before they ever read robots.txt. Some businesses are invisible to AI search because of a setting they didn’t know was on.
 
 ## Step 2: Say clearly who you are and what you do
 
@@ -54,7 +54,7 @@ Never buy fake reviews or create fake “independent” articles about your busi
 
 ## Myths to ignore
 
-- **“One file gets you into ChatGPT.”** Files such as llms.txt are harmless, but no major provider has said they use them to decide citations.
+- **“One file gets you into ChatGPT.”** Files such as llms.txt are harmless, but at the time of writing no major AI search provider has said it uses them to decide citations.
 - **“Guaranteed AI recommendations.”** Nobody controls what an AI system recommends.
 - **“Stuff the page with keywords and questions.”** Thin, repetitive pages help no one.
 
