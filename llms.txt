@@ -48,6 +48,12 @@ Each area is labelled by where the experience comes from. BuildWise names client
 - [Website & AI Visibility Audit](https://buildwisegroup.dev/website-audit): an automated, read-only check of a public website's technical SEO, robots.txt rules for search and AI crawlers, and content clarity, with evidence for each finding. It is not a guarantee of rankings or AI citations.
 - [Report a security vulnerability](https://buildwisegroup.dev/security): how to report a vulnerability in this website privately, through GitHub private vulnerability reporting.
 
+## Insights
+
+- [Insights](https://buildwisegroup.dev/insights): practical guides to AI, automation and software for growing businesses.
+- [WhatsApp AI automation for Nigerian businesses](https://buildwisegroup.dev/insights/whatsapp-ai-automation-nigeria): how WhatsApp automation works on the official WhatsApp Business Platform, what it can do, the rules to follow and how to plan running costs.
+- [How to choose an AI automation company in Nigeria](https://buildwisegroup.dev/insights/choose-ai-automation-company-nigeria): a buyer's checklist with questions to ask, red flags, how to compare proposals and what a good first project looks like.
+
 ## Contact
 
 - Project enquiries: the form in the contact section of https://buildwisegroup.dev/
