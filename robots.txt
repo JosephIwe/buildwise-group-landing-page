@@ -4,14 +4,22 @@
 # browsers never send to the server, and a page showing a report is marked noindex.
 # Drafts under /insights are marked noindex on the page itself until they are approved.
 #
-# Search and AI-search crawlers are named explicitly so the decision is on record.
+# This file is not the whole robots.txt that crawlers receive. Cloudflare's managed
+# robots.txt prepends a "Managed Content" block to it in production. That block
+# declares the content signals (search permitted, AI training not permitted, use
+# restricted to reference) and explicitly disallows the AI training crawlers, such as
+# GPTBot, Google-Extended and CCBot. Those crawlers are therefore blocked in production
+# even though this file does not name them. Check the live /robots.txt to see the full
+# response; Cloudflare, not this repository, controls the managed block.
+#
+# Search and AI-search crawlers are named explicitly below so the decision is on record.
 # A crawler obeys only the most specific group that names it, so each group repeats
-# the /api/ rule. Training crawlers (GPTBot, Google-Extended, CCBot, ...) are not
-# named and fall under "*", which allows them: blocking them is a separate business
-# decision and does not affect search visibility, according to OpenAI and Google.
+# the /api/ rule. OAI-SearchBot, which crawls for ChatGPT Search, is allowed everywhere
+# except /api/. ChatGPT-User only fetches a page when a ChatGPT user's request leads
+# to it; it is not the automatic crawler for ChatGPT Search.
 #
 # Robots rules are not the whole story: Cloudflare's bot settings (Block AI bots,
-# AI Crawl Control, managed robots.txt) can block crawlers before they read this file.
+# AI Crawl Control) can also block crawlers before they read this file.
 
 # Google Search (including AI Overviews and AI Mode)
 User-agent: Googlebot
@@ -23,12 +31,12 @@ User-agent: Bingbot
 Allow: /
 Disallow: /api/
 
-# ChatGPT search results
+# ChatGPT Search crawler: allowed, except /api/
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /api/
 
-# Pages a ChatGPT user asks it to open
+# User-initiated page access from ChatGPT (not the ChatGPT Search crawler)
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /api/
