@@ -19,6 +19,14 @@
   X-Robots-Tag: noindex
 /scripts/*
   X-Robots-Tag: noindex
+# The buildwise-group.pages.dev host serves the same pages as buildwisegroup.dev.
+# Keep it (and any *.pages.dev alias) out of search results so only the canonical
+# domain is indexed. Cloudflare already adds noindex to branch preview deployments.
+# These patterns match pages.dev hosts only, never buildwisegroup.dev.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
 # Baseline security headers for every response. Cloudflare Pages joins
 # repeated headers with a comma, so the rules below must not set these again.
 /*
