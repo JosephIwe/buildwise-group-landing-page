@@ -6,6 +6,10 @@ All notable changes to the BuildWise Group website. Newest first.
 
 Built on top of PR #16 (/security) and PR #17 (experience/SEO upgrade), which are approved to merge first.
 
+### Changed after owner review (3 Nov 2026)
+- The phone field's example on every enquiry form (homepage, /cybersecurity and the eight service pages) is now the neutral `+[country code] 000 000 0000` instead of a UK number; the validation message matches.
+- Regression tests guard the approved decisions: the homepage headline, the AI receptionist channel wording (WhatsApp and web chat first, voice assessed per project), drafts staying unpublished, analytics staying off, per-service form preselection and WhatsApp prefills.
+
 ### Added
 - Eight service landing pages, each with one search intent: `/ai-automation-nigeria`, `/ai-automation-lagos`, `/ai-agents`, `/whatsapp-automation`, `/custom-software-development`, `/ai-visibility`, `/business-automation`, `/ai-receptionist`. Each page has a definition section, use cases, process, honest evidence, a "what we won't promise" note, an FAQ, related services and an embedded enquiry form.
 - `WebPage` + `Service` + `BreadcrumbList` JSON-LD on every service page; `Article` + `BreadcrumbList` on articles.

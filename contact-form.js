@@ -90,7 +90,7 @@
 
     if (values.contactMethod && !CONTACT_METHODS.includes(values.contactMethod)) errors.contactMethod = 'Choose email or WhatsApp.';
     if (values.contactMethod !== 'WhatsApp') values.phone = '';
-    else if (values.phone && !PHONE.test(values.phone)) errors.phone = 'Enter a phone number with its country code, like +44 7700 900123.';
+    else if (values.phone && !PHONE.test(values.phone)) errors.phone = 'Enter a phone number with its country code, for example +[country code] 000 000 0000.';
 
     return { values, errors, valid: Object.keys(errors).length === 0 };
   }

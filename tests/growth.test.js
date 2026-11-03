@@ -275,3 +275,61 @@ test('homepage: the new positioning says what, who and where in the first screen
   assert.match(await page.title(), /AI Automation, AI Agents & Custom Software/);
   await context.close();
 });
+
+/* ---------- Review decisions (Osim, 3 Nov 2026): regression guards ---------- */
+const FORM_PAGES = ['index.html', 'cybersecurity.html', ...SLUGS.map(s => `${s}.html`)];
+const NEUTRAL_PHONE = '+[country code] 000 000 0000';
+
+test('review: no UK-specific phone example on any form; every form uses the neutral international example', () => {
+  const served = fs.readdirSync(ROOT).filter(f => /\.(html|js)$/.test(f)).concat(fs.readdirSync(path.join(ROOT, 'insights')).map(f => `insights/${f}`));
+  for (const f of served) assert.ok(!/\+44\s?7700|7700 900123/.test(read(f)), `${f} has no UK placeholder number`);
+  for (const f of FORM_PAGES) {
+    const input = read(f).match(/<input[^>]*id="enqPhone"[^>]*>/)[0];
+    assert.ok(input.includes(`placeholder="${NEUTRAL_PHONE}"`), `${f}: neutral phone placeholder`);
+  }
+  const { errors } = E.normalizeEnquiry({ name: 'Ada Obi', email: 'ada@example.com', projectType: E.PROJECT_TYPES[0], message: 'We need help answering customer messages faster.', contactMethod: 'WhatsApp', phone: 'call me' });
+  assert.ok(errors.phone.includes(NEUTRAL_PHONE) && !/\+44/.test(errors.phone), errors.phone);
+  assert.match(read('contact-form.js'), /for example \+\[country code\] 000 000 0000/);
+});
+
+test('review: WhatsApp links go to the official number with a prefilled message naming the service', () => {
+  for (const s of content.SERVICES) {
+    const links = [...read(`${s.slug}.html`).matchAll(/href="(https:\/\/wa\.me\/[^"]+)"/g)].map(m => new URL(m[1].replace(/&amp;/g, '&')));
+    assert.ok(links.length >= 1, `${s.slug} has a WhatsApp link`);
+    for (const u of links) {
+      assert.equal(u.pathname, '/2349165681202');
+      assert.equal(u.searchParams.get('text'), s.waText, `${s.slug}: prefilled message`);
+      assert.match(s.waText, /^Hello Buildwise/);
+    }
+  }
+  for (const u of [...read('index.html').matchAll(/href="(https:\/\/wa\.me\/[^"]+)"/g)].map(m => new URL(m[1].replace(/&amp;/g, '&')))) {
+    assert.equal(u.pathname, '/2349165681202');
+    assert.ok(u.searchParams.get('text').startsWith('Hello Buildwise'));
+  }
+});
+
+test('review: approved copy decisions stay in place', () => {
+  assert.match(text(read('index.html')), /Building intelligent businesses\./);
+  const rec = text(read('ai-receptionist.html'));
+  assert.match(rec, /WhatsApp and web chat first/);
+  assert.match(rec, /Phone and voice assessed per project/);
+  assert.ok(!/24\/7 phone|answers every call|guaranteed/i.test(rec), 'voice is not promised');
+  assert.match(read('analytics.js'), /const TOKEN = '';/);
+  assert.match(read('analytics.js'), /const GA4_ID = '';/);
+  for (const f of fs.readdirSync(path.join(ROOT, 'content/insights'))) assert.match(read(`content/insights/${f}`), /^status: draft$/m, `${f} stays a draft`);
+});
+
+test('review: every service form preselects its service and shows the neutral phone example on phone and desktop', opts, async () => {
+  for (const width of [360, 1440]) {
+    for (const s of content.SERVICES) {
+      const { page, context, errors } = await open(`/${s.slug}#enquire`, { width, height: 860 });
+      await page.waitForSelector('#enquiryForm:not([hidden])');
+      assert.equal(await page.inputValue('#enqType'), s.projectType, `${s.slug} at ${width}px`);
+      assert.equal(await page.getAttribute('#enqPhone', 'placeholder'), NEUTRAL_PHONE);
+      assert.ok(await page.isVisible('#enquirySubmit'), `${s.slug}: submit visible at ${width}px`);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), 0);
+      assert.deepEqual(errors, []);
+      await context.close();
+    }
+  }
+});
