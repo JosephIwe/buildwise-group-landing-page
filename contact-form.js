@@ -29,6 +29,7 @@
     'AI agents and AI employees',
     'AI product development',
     'SaaS or web application development',
+    'Website or digital experience',
     'Business automation and integrations',
     'Existing product improvement',
     'Other'
@@ -196,6 +197,12 @@
     };
     const order = ['name', 'email', 'company', 'projectType', 'budget', 'message', 'contactMethod', 'phone'];
     const showErrors = errors => order.forEach(name => setError(name, errors[name]));
+
+    // Service links ("Discuss an AI product", …) carry the matching project type.
+    doc.addEventListener('click', event => {
+      const link = event.target.closest && event.target.closest('a[data-project-type]');
+      if (link && PROJECT_TYPES.includes(link.dataset.projectType)) fields.projectType.value = link.dataset.projectType;
+    });
 
     const syncPhone = () => {
       const wantsWhatsApp = read().contactMethod === 'WhatsApp';

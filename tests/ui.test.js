@@ -73,7 +73,7 @@ test('homepage shows the scanner entry point and keeps existing contact links', 
   assert.equal(await cta.getAttribute('href'), '/scan');
   assert.match(await page.locator('#whatsappCta').getAttribute('href'), /^https:\/\/wa\.me\/2349165681202\?text=/);
   assert.equal(await page.locator('#contact a[href^="mailto:"]').count(), 0, 'no public email address in the contact section');
-  assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '/cybersecurity', '#work', '#ventures', '#about']);
+  assert.deepEqual(await page.locator('.desktop-nav a').evaluateAll(a => a.map(x => x.getAttribute('href'))), ['#solutions', '#ventures', '#industries', '/cybersecurity', '#about', '#faq']);
   await cta.click();
   await page.waitForURL(/\/scan$/);
   await page.waitForSelector('#scanForm:not([hidden])');
@@ -823,7 +823,7 @@ test('security page: is reachable from the homepage navigation, services list an
   assert.equal(await page.locator('#mobileNav a[href="/cybersecurity"]').count(), 1);
   assert.equal(await page.locator('.site-footer a[href="/cybersecurity"]').count(), 1);
   const cap = page.locator('#solutions .cap-feature');
-  assert.equal(await page.locator('#solutions .cap').count(), 5, 'the four existing services stay, with one security row');
+  assert.equal(await page.locator('#solutions .cap').count(), 6, 'five services, with one security row');
   assert.equal(await cap.locator('h3').textContent(), 'Cybersecurity: Application & Cloud Security');
   assert.equal(await cap.locator('p').textContent(), 'Security assessments for applications, APIs, cloud infrastructure, and AI-powered products.');
   const link = page.getByRole('link', { name: 'Explore Cybersecurity' });
