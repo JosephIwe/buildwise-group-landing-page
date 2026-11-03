@@ -5,7 +5,7 @@ seoTitle: "WhatsApp AI Automation for Nigerian Businesses: A Practical Guide"
 description: How WhatsApp automation works on the official WhatsApp Business Platform, what it can do for Nigerian businesses, the rules you must follow, and how to plan running costs.
 date: 2026-11-03
 service: whatsapp-automation
-status: draft
+status: published
 ctaHeading: Ready to automate your WhatsApp inbox?
 ctaText: Tell us how your team uses WhatsApp today. We’ll review a sample of anonymised conversations and recommend what to automate first.
 ---

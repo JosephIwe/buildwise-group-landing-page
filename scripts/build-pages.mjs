@@ -450,7 +450,9 @@ function articlePage(a, all) {
       }
     ]
   };
-  const more = all.filter(x => x.slug !== a.slug && (x.service === a.service || x.order % 3 === a.order % 3)).slice(0, 3);
+  // A published article links on only to other published articles, so drafts stay unlinked from public pages.
+  const pool = draft ? all : all.filter(x => x.status === 'published');
+  const more = (draft ? pool.filter(x => x.slug !== a.slug && (x.service === a.service || x.order % 3 === a.order % 3)) : pool.filter(x => x.slug !== a.slug)).slice(0, 3);
   const body = `
 <body class="sec-page svc-page art-page">
 ${SPRITE}
@@ -518,7 +520,7 @@ ${anyPublished ? '' : `        <p class="art-draft" role="note"><strong>Drafts f
     </section>
     <div class="container art-narrow">
       <ol class="art-list">
-${all.map(a => `        <li><a href="/insights/${a.slug}"><span class="art-list-title">${esc(a.title)}</span><span class="art-list-dek">${esc(a.description)}</span>${a.status !== 'published' ? '<span class="art-tag">Draft</span>' : ''}</a></li>`).join('\n')}
+${(anyPublished ? all.filter(a => a.status === 'published') : all).map(a => `        <li><a href="/insights/${a.slug}"><span class="art-list-title">${esc(a.title)}</span><span class="art-list-dek">${esc(a.description)}</span>${a.status !== 'published' ? '<span class="art-tag">Draft</span>' : ''}</a></li>`).join('\n')}
       </ol>
     </div>
   </main>

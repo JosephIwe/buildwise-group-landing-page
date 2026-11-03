@@ -4,7 +4,7 @@ short: Choosing an AI automation company
 description: A buyer’s checklist for choosing an AI automation company or agency in Nigeria: questions to ask, red flags, how to compare proposals and what a good first project looks like.
 date: 2026-11-03
 service: ai-automation-nigeria
-status: draft
+status: published
 ctaHeading: Put these questions to us
 ctaText: Book a consultation and ask us everything on this list. If we’re not the right fit for your project, we’ll say so.
 ---

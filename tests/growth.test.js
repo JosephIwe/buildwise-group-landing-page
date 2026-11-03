@@ -316,7 +316,13 @@ test('review: approved copy decisions stay in place', () => {
   assert.ok(!/24\/7 phone|answers every call|guaranteed/i.test(rec), 'voice is not promised');
   assert.match(read('analytics.js'), /const TOKEN = '';/);
   assert.match(read('analytics.js'), /const GA4_ID = '';/);
-  for (const f of fs.readdirSync(path.join(ROOT, 'content/insights'))) assert.match(read(`content/insights/${f}`), /^status: draft$/m, `${f} stays a draft`);
+  // Osim approved publishing articles 03 and 10 on 3 Nov 2026. Every other article stays a draft.
+  const APPROVED = ['03-whatsapp-ai-automation-nigeria.md', '10-choose-ai-automation-company-nigeria.md'];
+  for (const f of fs.readdirSync(path.join(ROOT, 'content/insights'))) assert.match(read(`content/insights/${f}`), APPROVED.includes(f) ? /^status: published$/m : /^status: draft$/m, `${f} has its approved status`);
+  // Public pages never link to a draft
+  const drafts = builder.loadArticles().filter(a => a.status !== 'published').map(a => a.slug);
+  const published = builder.loadArticles().filter(a => a.status === 'published').map(a => `insights/${a.slug}.html`);
+  for (const f of ['insights.html', ...published]) for (const d of drafts) assert.ok(!read(f).includes(`href="/insights/${d}"`), `${f} doesn't link the draft ${d}`);
 });
 
 test('review: every service form preselects its service and shows the neutral phone example on phone and desktop', opts, async () => {
