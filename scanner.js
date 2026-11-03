@@ -430,7 +430,7 @@
   const summaryText = () => {
     const p = report.profile;
     const lines = [
-      'Hello BuildWise Group,',
+      'Hello Buildwise Group,',
       '',
       'I used the AI Business Opportunity Scanner and would like to talk about implementing one of these opportunities.',
       '',

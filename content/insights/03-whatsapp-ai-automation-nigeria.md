@@ -70,4 +70,4 @@ Ask any provider to show all three before you commit.
 3. Set up a Meta Business account and decide which phone number to use for the platform.
 4. Build, test with real messages, launch to a small group, then expand.
 
-BuildWise Group builds [WhatsApp automation](/whatsapp-automation) on the official platform for businesses across Nigeria.
+Buildwise Group builds [WhatsApp automation](/whatsapp-automation) on the official platform for businesses across Nigeria.

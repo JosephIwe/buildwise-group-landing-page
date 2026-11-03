@@ -1,5 +1,5 @@
 /*
- * BuildWise project enquiry form: validation and delivery through Web3Forms.
+ * Buildwise project enquiry form: validation and delivery through Web3Forms.
  *
  * Web3Forms emails each accepted submission to the inbox its access key was created
  * with. The key is a public form identifier (an alias for that inbox), not a secret:

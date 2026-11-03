@@ -79,7 +79,7 @@ function header({ current, ctaHref, ctaLabel, waLink, tagline }) {
     <div class="header-inner">
       <a class="brand" href="/">
         <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
-        <span class="brand-word">BuildWise <span>Group</span></span><span class="sr-only">, home</span>
+        <span class="brand-word">Buildwise <span>Group</span></span><span class="sr-only">, home</span>
       </a>
       <nav class="desktop-nav" aria-label="Main">
 ${NAV.map(([h, t]) => `        <a href="${h}"${h === current ? ' aria-current="page"' : ''}>${t}</a>`).join('\n')}
@@ -111,7 +111,7 @@ ${FOOTER_SERVICES()}
     <div class="container footer-inner">
       <a class="brand" href="/">
         <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
-        <span class="brand-word">BuildWise <span>Group</span></span><span class="sr-only">, home</span>
+        <span class="brand-word">Buildwise <span>Group</span></span><span class="sr-only">, home</span>
       </a>
       <p class="label footer-line">Building intelligent businesses.</p>
       <ul class="footer-links" aria-label="Site information">
@@ -122,8 +122,8 @@ ${FOOTER_SERVICES()}
         <li><a href="/privacy">Privacy</a></li>
         <li><a href="/security">Report a vulnerability</a></li>
       </ul>
-      <ul class="footer-social" data-social-links aria-label="BuildWise Group on social media" hidden></ul>
-      <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
+      <ul class="footer-social" data-social-links aria-label="Buildwise Group on social media" hidden></ul>
+      <p class="label footer-copy">© <span id="year">2026</span> Buildwise Group</p>
     </div>
   </footer>`;
 }
@@ -138,7 +138,7 @@ function head({ title, description, canonical, ogTitle, ogDescription, jsonld, r
 ${robots ? `  <meta name="robots" content="${robots}">\n` : ''}  <meta name="description" content="${esc(description)}">
   <title>${esc(title)}</title>
   <link rel="canonical" href="${canonical}">
-  <meta property="og:site_name" content="BuildWise Group">
+  <meta property="og:site_name" content="Buildwise Group">
   <meta property="og:title" content="${esc(ogTitle || title)}">
   <meta property="og:description" content="${esc(ogDescription || description)}">
   <meta property="og:type" content="${ogType}">
@@ -146,7 +146,7 @@ ${robots ? `  <meta name="robots" content="${robots}">\n` : ''}  <meta name="des
   <meta property="og:image" content="${SITE}/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="BuildWise Group: AI products. Business systems. Real impact.">
+  <meta property="og:image:alt" content="Buildwise Group: AI products. Business systems. Real impact.">
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@buildwisex">
@@ -166,7 +166,7 @@ ${css.map(c => `  <link rel="stylesheet" href="/${c}">`).join('\n')}
 </head>`;
 }
 
-const ORG_REF = { '@type': 'Organization', '@id': `${SITE}/#organization`, name: 'BuildWise Group', url: `${SITE}/` };
+const ORG_REF = { '@type': 'Organization', '@id': `${SITE}/#organization`, name: 'Buildwise Group', url: `${SITE}/` };
 const AREA = [{ '@type': 'Country', name: 'Nigeria' }, { '@type': 'Place', name: 'Worldwide' }];
 
 /* ---------- Service page ---------- */
@@ -188,7 +188,7 @@ function servicePage(s) {
       {
         '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`,
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'BuildWise Group', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 1, name: 'Buildwise Group', item: `${SITE}/` },
           { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/#solutions` },
           { '@type': 'ListItem', position: 3, name: s.navName, item: url }
         ]
@@ -363,7 +363,7 @@ ${s.enquire.include.map(i => `                <li>${html(i)}</li>`).join('\n')}
 
           <div class="enquiry" data-reveal>
             <h3 class="enquiry-title" id="enquiryTitle">${esc(s.cta)}</h3>
-            <p class="enquiry-sub">Your enquiry reaches the same team as every BuildWise project enquiry. We reply to arrange a short discovery conversation.</p>
+            <p class="enquiry-sub">Your enquiry reaches the same team as every Buildwise project enquiry. We reply to arrange a short discovery conversation.</p>
 
 ${enquiryForm(s)}          </div>
         </div>
@@ -445,7 +445,7 @@ function articlePage(a, all) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'BuildWise Group', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 1, name: 'Buildwise Group', item: `${SITE}/` },
           { '@type': 'ListItem', position: 2, name: 'Insights', item: `${SITE}/insights` },
           { '@type': 'ListItem', position: 3, name: a.title, item: url }
         ]
@@ -458,7 +458,7 @@ function articlePage(a, all) {
   const body = `
 <body class="sec-page svc-page art-page">
 ${SPRITE}
-${header({ current: null, ctaHref: service ? `/${service.slug}#enquire` : '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'BuildWise Insights' })}
+${header({ current: null, ctaHref: service ? `/${service.slug}#enquire` : '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'Buildwise Insights' })}
   <main id="main">
     <article class="art" aria-labelledby="pageTitle">
       <header class="art-head">
@@ -468,14 +468,14 @@ ${header({ current: null, ctaHref: service ? `/${service.slug}#enquire` : '/#con
           </nav>
 ${draft ? `          <p class="art-draft" role="note"><strong>Draft for review.</strong> Not published: hidden from search engines and not linked from the site until approved.</p>\n` : ''}          <h1 class="art-title" id="pageTitle">${esc(a.title)}</h1>
           <p class="art-dek">${esc(a.description)}</p>
-          <p class="art-meta">By the BuildWise Group team · <time datetime="${a.date}">${new Date(a.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time> · ${a.minutes} min read</p>
+          <p class="art-meta">By the Buildwise Group team · <time datetime="${a.date}">${new Date(a.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time> · ${a.minutes} min read</p>
         </div>
       </header>
       <div class="container art-narrow art-body">
 ${mdToHtml(a.body).replace(/^/gm, '        ')}
       </div>
       <aside class="container art-narrow art-cta" aria-labelledby="artCtaTitle">
-        <p class="label">${service ? esc(service.navName) : 'Work with BuildWise'}</p>
+        <p class="label">${service ? esc(service.navName) : 'Work with Buildwise'}</p>
         <h2 id="artCtaTitle">${esc(a.ctaHeading || 'Talk to us about your business.')}</h2>
         <p>${esc(a.ctaText || 'Tell us how the work happens today. We’ll tell you plainly whether automation, AI or software is worth it, and what a first version would look like.')}</p>
         <div class="art-cta-actions">
@@ -496,7 +496,7 @@ ${footer({ waLink, enquireHref: service ? `/${service.slug}#enquire` : '/#contac
 </body>
 </html>
 `;
-  return head({ title: `${a.seoTitle || a.title} | BuildWise Group`, description: a.description, canonical: url, jsonld, robots: draft ? 'noindex, follow' : null, css: ['cybersecurity.css', 'services.css'], ogType: 'article' }) + '\n' + body;
+  return head({ title: `${a.seoTitle || a.title} | Buildwise Group`, description: a.description, canonical: url, jsonld, robots: draft ? 'noindex, follow' : null, css: ['cybersecurity.css', 'services.css'], ogType: 'article' }) + '\n' + body;
 }
 
 function insightsIndex(all) {
@@ -504,20 +504,20 @@ function insightsIndex(all) {
   const anyPublished = all.some(a => a.status === 'published');
   const jsonld = {
     '@context': 'https://schema.org',
-    '@graph': [{ '@type': 'CollectionPage', '@id': `${url}#webpage`, url, name: 'Insights — BuildWise Group', isPartOf: { '@id': `${SITE}/#website` }, publisher: { '@id': `${SITE}/#organization` } }]
+    '@graph': [{ '@type': 'CollectionPage', '@id': `${url}#webpage`, url, name: 'Insights — Buildwise Group', isPartOf: { '@id': `${SITE}/#website` }, publisher: { '@id': `${SITE}/#organization` } }]
   };
   const waLink = wa('Hello Buildwise, I visited your website and would like to discuss a project.');
   const body = `
 <body class="sec-page svc-page art-page">
 ${SPRITE}
-${header({ current: null, ctaHref: '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'BuildWise Insights' })}
+${header({ current: null, ctaHref: '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'Buildwise Insights' })}
   <main id="main">
     <section class="art-head" aria-labelledby="pageTitle">
       <div class="container art-narrow">
         <p class="label">Insights</p>
 ${anyPublished ? '' : `        <p class="art-draft" role="note"><strong>Drafts for review.</strong> No article is published yet. This page is hidden from search engines until at least one is approved.</p>\n`}
         <h1 class="art-title" id="pageTitle">Practical guides to AI, automation and software for growing businesses.</h1>
-        <p class="art-dek">Written by the BuildWise Group team for owners and managers in Nigeria and beyond: what works, what it costs in effort, and what to watch out for.</p>
+        <p class="art-dek">Written by the Buildwise Group team for owners and managers in Nigeria and beyond: what works, what it costs in effort, and what to watch out for.</p>
       </div>
     </section>
     <div class="container art-narrow">
@@ -531,7 +531,7 @@ ${footer({ waLink, enquireHref: '/#contact' })}
 </body>
 </html>
 `;
-  return head({ title: 'Insights: AI, Automation & Software Guides | BuildWise Group', description: 'Practical guides from BuildWise Group on AI automation, AI agents, WhatsApp automation, custom software and AI search visibility for businesses in Nigeria and beyond.', canonical: url, jsonld, robots: anyPublished ? null : 'noindex, follow', css: ['cybersecurity.css', 'services.css'] }) + '\n' + body;
+  return head({ title: 'Insights: AI, Automation & Software Guides | Buildwise Group', description: 'Practical guides from Buildwise Group on AI automation, AI agents, WhatsApp automation, custom software and AI search visibility for businesses in Nigeria and beyond.', canonical: url, jsonld, robots: anyPublished ? null : 'noindex, follow', css: ['cybersecurity.css', 'services.css'] }) + '\n' + body;
 }
 
 /* ---------- Sitemap ---------- */

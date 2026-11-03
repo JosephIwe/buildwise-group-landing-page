@@ -3,7 +3,7 @@
  *
  * Claims rules (see tests/growth.test.js): no client results, testimonials, prices,
  * turnaround promises, rankings, "leading"/"best"/"number one", guaranteed AI
- * recommendations, office addresses or local staff. BuildWise is remote-first.
+ * recommendations, office addresses or local staff. Buildwise is remote-first.
  * Evidence comes only from what the site already shows: Huntly (live), Traider (in
  * development), Staff with its example employee Maya (in validation), the scanner and
  * website audit on this site, and website maintenance for an aesthetics business
@@ -40,9 +40,9 @@ export const SERVICES = [
     navName: 'AI automation in Nigeria',
     summary: 'AI agents, WhatsApp and workflow automation for Nigerian businesses, delivered remotely.',
     lastmod: '2026-11-03',
-    title: 'AI Automation Company in Nigeria | BuildWise Group',
-    ogTitle: 'AI Automation Solutions for Businesses in Nigeria — BuildWise Group',
-    description: 'BuildWise Group builds AI automation for Nigerian businesses: AI agents, WhatsApp automation, lead handling and workflow automation, delivered remotely across Nigeria.',
+    title: 'AI Automation Company in Nigeria | Buildwise Group',
+    ogTitle: 'AI Automation Solutions for Businesses in Nigeria — Buildwise Group',
+    description: 'Buildwise Group builds AI automation for Nigerian businesses: AI agents, WhatsApp automation, lead handling and workflow automation, delivered remotely across Nigeria.',
     serviceName: 'AI automation for businesses in Nigeria',
     serviceType: 'AI automation services',
     projectType: 'AI automation audit',
@@ -65,7 +65,7 @@ export const SERVICES = [
       paras: [
         '<strong>AI automation</strong> is the use of software, including AI models that can read and write language, to complete business tasks that used to need a person at every step. Classic automation follows fixed rules: when a form is submitted, copy it to a spreadsheet. AI automation can also deal with messy input, such as a customer’s WhatsApp message, a scanned invoice or an email asking three questions at once.',
         'For a Nigerian business, that usually means answering the same customer questions at any hour, qualifying leads before a salesperson calls, booking appointments, moving data between systems without retyping it, and producing routine documents and reports.',
-        'BuildWise Group is a remote-first technology company. We work with businesses in Lagos, Abuja, Port Harcourt and across Nigeria, and with international clients, without a physical office. Discovery, design, delivery and support all happen remotely.'
+        'Buildwise Group is a remote-first technology company. We work with businesses in Lagos, Abuja, Port Harcourt and across Nigeria, and with international clients, without a physical office. Discovery, design, delivery and support all happen remotely.'
       ]
     },
     uses: {
@@ -102,7 +102,7 @@ export const SERVICES = [
     honesty: { title: 'What we won’t promise.', text: 'We don’t quote percentage savings before we have seen your workflow, and AI is not the answer to every problem. If a spreadsheet, a better form or a clearer process would solve it, the audit will say so.' },
     faq: [
       ['How much does AI automation cost in Nigeria?', 'It depends on the workflow, the number of systems involved and the volume of messages or tasks. We quote after the discovery call and audit, in naira or US dollars. Running costs, such as WhatsApp message charges from Meta and AI model usage, are shown separately so you can see what you pay each month.'],
-      ['Do you have an office in Lagos or Abuja?', 'No. BuildWise Group is remote-first and does not have a physical office. We work with clients across Nigeria and internationally by video call, WhatsApp and shared documents, and that is how discovery, delivery and support happen.'],
+      ['Do you have an office in Lagos or Abuja?', 'No. Buildwise Group is remote-first and does not have a physical office. We work with clients across Nigeria and internationally by video call, WhatsApp and shared documents, and that is how discovery, delivery and support happen.'],
       ['What is an AI automation audit?', 'A short, structured review of where time goes in your business. After one call (and any examples you can share), we send a written view of the two or three workflows most worth automating, what each would involve, the risks, and a suggested first version. If automation isn’t worth it yet, we say so.'],
       ['Will AI replace my staff?', 'That is not how we design systems. Automation takes over repetitive steps, such as answering the same question or retyping data, so your team can spend time on customers and decisions. Every system we build has a clear way for a person to step in.'],
       ['Is customer data safe, and what about the NDPA?', 'We design with the Nigeria Data Protection Act 2023 in mind: collect only what the workflow needs, tell customers how their data is used, control who can access it and choose providers carefully. We can’t give legal advice, so we recommend you confirm your obligations with a data protection professional.'],
@@ -125,9 +125,9 @@ export const SERVICES = [
     navName: 'AI automation in Lagos',
     summary: 'Remote AI automation for Lagos businesses: enquiries, bookings, leads and operations.',
     lastmod: '2026-11-03',
-    title: 'AI Automation Services in Lagos | BuildWise Group',
-    ogTitle: 'AI Automation Services for Businesses in Lagos — BuildWise Group',
-    description: 'AI automation for Lagos businesses: WhatsApp assistants, AI agents, booking and lead automation. BuildWise Group is a remote-first company serving Lagos clients.',
+    title: 'AI Automation Services in Lagos | Buildwise Group',
+    ogTitle: 'AI Automation Services for Businesses in Lagos — Buildwise Group',
+    description: 'AI automation for Lagos businesses: WhatsApp assistants, AI agents, booking and lead automation. Buildwise Group is a remote-first company serving Lagos clients.',
     serviceName: 'AI automation for businesses in Lagos',
     serviceType: 'AI automation services',
     areaServed: [{ '@type': 'City', name: 'Lagos', containedInPlace: { '@type': 'Country', name: 'Nigeria' } }],
@@ -150,7 +150,7 @@ export const SERVICES = [
       paras: [
         'In Lagos, a customer who waits an hour for a reply has often bought somewhere else. Many businesses still rely on one or two people answering WhatsApp, checking DMs and copying orders into a notebook or spreadsheet. That works until it doesn’t: at weekends, after hours, or the day the order volume doubles.',
         '<strong>AI automation</strong> lets software handle the predictable part of that work: answering common questions from your own price list, taking booking details, qualifying a lead, confirming an order and updating your records, while your staff handle negotiation, complaints and anything unusual.',
-        'BuildWise Group is a <strong>remote-first</strong> technology company. We serve Lagos businesses remotely and do not have a physical office, local walk-in service or field staff in Lagos. For most automation projects that is an advantage: no one sits in traffic for a meeting, and everything we agree is written down.'
+        'Buildwise Group is a <strong>remote-first</strong> technology company. We serve Lagos businesses remotely and do not have a physical office, local walk-in service or field staff in Lagos. For most automation projects that is an advantage: no one sits in traffic for a meeting, and everything we agree is written down.'
       ]
     },
     uses: {
@@ -180,7 +180,7 @@ export const SERVICES = [
     },
     honesty: { title: 'Remote-first, stated plainly.', text: 'We don’t have a Lagos office, and we won’t pretend to. If your project needs someone on site, such as installing hardware, we’ll tell you at the start so you can arrange it locally.' },
     faq: [
-      ['Is BuildWise based in Lagos?', 'BuildWise Group is a remote-first company and does not have a physical office in Lagos. We serve Lagos businesses remotely, and all discovery, delivery and support happens by video call, WhatsApp and shared documents.'],
+      ['Is Buildwise based in Lagos?', 'Buildwise Group is a remote-first company and does not have a physical office in Lagos. We serve Lagos businesses remotely, and all discovery, delivery and support happens by video call, WhatsApp and shared documents.'],
       ['Can we meet in person?', 'Our standard way of working is remote. If an in-person session would genuinely help your project, raise it on the discovery call and we’ll tell you honestly whether we can arrange it.'],
       ['How quickly can a first version go live?', 'It depends on the workflow and how quickly accounts such as WhatsApp Business Platform access can be set up. We give you a plan with stages after discovery rather than a promise before we understand the work.'],
       ['Will the assistant understand Pidgin or Yoruba?', 'Modern AI models handle Nigerian English and Pidgin reasonably well, and Yoruba, Igbo and Hausa less consistently. We test with real messages from your customers before launch, and anything the assistant isn’t sure about goes to a person.'],
@@ -203,9 +203,9 @@ export const SERVICES = [
     navName: 'AI agents',
     summary: 'Custom AI agents for support, sales, enquiries and internal operations, with guardrails.',
     lastmod: '2026-11-03',
-    title: 'Custom AI Agent Development | BuildWise Group',
-    ogTitle: 'Custom AI Agents for Business Operations — BuildWise Group',
-    description: 'BuildWise Group designs and builds custom AI agents for customer support, sales, enquiries and internal operations, with limited permissions, logging and human handover.',
+    title: 'Custom AI Agent Development | Buildwise Group',
+    ogTitle: 'Custom AI Agents for Business Operations — Buildwise Group',
+    description: 'Buildwise Group designs and builds custom AI agents for customer support, sales, enquiries and internal operations, with limited permissions, logging and human handover.',
     serviceName: 'Custom AI agent development',
     serviceType: 'AI agent development',
     projectType: 'AI agents and AI employees',
@@ -286,8 +286,8 @@ export const SERVICES = [
     navName: 'WhatsApp automation',
     summary: 'WhatsApp AI assistants for enquiries, lead qualification, bookings and notifications.',
     lastmod: '2026-11-03',
-    title: 'WhatsApp Automation & AI Chatbots in Nigeria | BuildWise Group',
-    ogTitle: 'WhatsApp Business Automation and AI Chatbots — BuildWise Group',
+    title: 'WhatsApp Automation & AI Chatbots in Nigeria | Buildwise Group',
+    ogTitle: 'WhatsApp Business Automation and AI Chatbots — Buildwise Group',
     description: 'WhatsApp automation for Nigerian businesses: AI chatbots that answer enquiries, qualify leads, book appointments, send notifications and hand over to your team.',
     serviceName: 'WhatsApp business automation',
     serviceType: 'WhatsApp chatbot and automation development',
@@ -332,7 +332,7 @@ export const SERVICES = [
       label: 'Our experience',
       heading: 'WhatsApp is how we talk to clients too.',
       paras: [
-        'WhatsApp is one of the two ways to contact BuildWise, so we design for it as users, not just builders. Our AI employee platform, <strong>Staff</strong>, is being validated on enquiry and booking workflows, the same jobs most WhatsApp assistants do.',
+        'WhatsApp is one of the two ways to contact Buildwise, so we design for it as users, not just builders. Our AI employee platform, <strong>Staff</strong>, is being validated on enquiry and booking workflows, the same jobs most WhatsApp assistants do.',
         'We also review the security of AI assistants that handle customer data: see <a href="/cybersecurity">Application &amp; Cloud Security Review</a>.'
       ]
     },
@@ -361,9 +361,9 @@ export const SERVICES = [
     navName: 'Custom software development',
     summary: 'Web apps, mobile apps, SaaS products, internal tools and integrations.',
     lastmod: '2026-11-03',
-    title: 'Custom Software Development Company in Nigeria | BuildWise Group',
-    ogTitle: 'Custom Software Development — BuildWise Group',
-    description: 'BuildWise Group builds custom software for businesses in Nigeria and abroad: web and mobile apps, SaaS products, internal tools, integrations and AI-powered features.',
+    title: 'Custom Software Development Company in Nigeria | Buildwise Group',
+    ogTitle: 'Custom Software Development — Buildwise Group',
+    description: 'Buildwise Group builds custom software for businesses in Nigeria and abroad: web and mobile apps, SaaS products, internal tools, integrations and AI-powered features.',
     serviceName: 'Custom software development',
     serviceType: 'Custom software development',
     projectType: 'SaaS or web application development',
@@ -386,7 +386,7 @@ export const SERVICES = [
       paras: [
         '<strong>Custom software development</strong> is designing and building software for a specific business need, instead of adapting a generic product. It makes sense when your process is a competitive advantage, when you are building a product to sell, or when the tools you pay for don’t talk to each other and your team fills the gaps by hand.',
         'It doesn’t make sense when a well-supported product already does the job. Part of our work is telling you which is which, before you spend money.',
-        'BuildWise Group builds and owns its own products, so we approach client software the same way: define the problem, ship a focused first version, measure, then extend. We work remotely with clients in Nigeria and internationally.'
+        'Buildwise Group builds and owns its own products, so we approach client software the same way: define the problem, ship a focused first version, measure, then extend. We work remotely with clients in Nigeria and internationally.'
       ]
     },
     uses: {
@@ -455,8 +455,8 @@ export const SERVICES = [
     navName: 'AI search visibility',
     summary: 'Help search engines and AI assistants understand, trust and cite your business.',
     lastmod: '2026-11-03',
-    title: 'AI Search Visibility & GEO Services | BuildWise Group',
-    ogTitle: 'AI Search Visibility Services — BuildWise Group',
+    title: 'AI Search Visibility & GEO Services | Buildwise Group',
+    ogTitle: 'AI Search Visibility Services — Buildwise Group',
     description: 'Help Google, ChatGPT, Gemini and Perplexity find, understand and cite your business: technical fixes, clear content, structured data and genuine authority.',
     serviceName: 'AI search visibility and generative engine optimisation',
     serviceType: 'AI search optimisation',
@@ -538,9 +538,9 @@ export const SERVICES = [
     navName: 'Business process automation',
     summary: 'Workflow automation that connects your tools and removes manual data entry.',
     lastmod: '2026-11-03',
-    title: 'Business Process Automation Services | BuildWise Group',
-    ogTitle: 'Business Process & Workflow Automation — BuildWise Group',
-    description: 'Business process automation from BuildWise Group: connect your tools, remove manual data entry and automate approvals, documents and reporting, with people in control.',
+    title: 'Business Process Automation Services | Buildwise Group',
+    ogTitle: 'Business Process & Workflow Automation — Buildwise Group',
+    description: 'Business process automation from Buildwise Group: connect your tools, remove manual data entry and automate approvals, documents and reporting, with people in control.',
     serviceName: 'Business process automation',
     serviceType: 'Business process and workflow automation',
     projectType: 'Business automation and integrations',
@@ -611,9 +611,9 @@ export const SERVICES = [
     navName: 'AI receptionists',
     summary: 'AI receptionists for enquiries, appointment booking and after-hours cover.',
     lastmod: '2026-11-03',
-    title: 'AI Receptionist & Appointment Booking Automation | BuildWise Group',
-    ogTitle: 'AI Receptionists for Enquiries and Bookings — BuildWise Group',
-    description: 'AI receptionists from BuildWise Group answer enquiries, book appointments and send reminders on WhatsApp and web chat, with your staff always in control.',
+    title: 'AI Receptionist & Appointment Booking Automation | Buildwise Group',
+    ogTitle: 'AI Receptionists for Enquiries and Bookings — Buildwise Group',
+    description: 'AI receptionists from Buildwise Group answer enquiries, book appointments and send reminders on WhatsApp and web chat, with your staff always in control.',
     serviceName: 'AI receptionist and appointment booking automation',
     serviceType: 'AI receptionist and automated customer service',
     projectType: 'AI receptionist or voice agent',

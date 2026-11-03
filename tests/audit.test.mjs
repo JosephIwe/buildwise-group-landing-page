@@ -113,7 +113,7 @@ test('requests are read-only GETs that identify the audit and carry no credentia
   assert.ok(net.requests.length > 3);
   for (const r of net.requests) {
     assert.equal(r.method, 'GET');
-    assert.match(r.headers['user-agent'], /^BuildWiseAudit\/1\.0 \(\+https:\/\/buildwisegroup\.dev\/website-audit\)$/);
+    assert.match(r.headers['user-agent'], /^BuildwiseAudit\/1\.0 \(\+https:\/\/buildwisegroup\.dev\/website-audit\)$/);
     assert.ok(!('cookie' in r.headers) && !('authorization' in r.headers));
   }
   assert.ok(net.requests.length <= LIMITS.targetRequests);

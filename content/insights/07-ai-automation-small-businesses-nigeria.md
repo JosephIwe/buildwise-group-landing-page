@@ -95,4 +95,4 @@ This costs almost nothing and makes any later automation project faster, cheaper
 
 Our free [AI Business Opportunity Scanner](/scan) asks eight short questions about your business and produces a rule-based report on where AI, automation or software could help. Nothing is sent to us unless you choose to contact us.
 
-When you’re ready for help, BuildWise Group builds [AI automation for Nigerian businesses](/ai-automation-nigeria), remotely, starting with a small, measurable first version.
+When you’re ready for help, Buildwise Group builds [AI automation for Nigerian businesses](/ai-automation-nigeria), remotely, starting with a small, measurable first version.

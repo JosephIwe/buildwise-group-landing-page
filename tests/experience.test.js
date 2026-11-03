@@ -21,16 +21,16 @@ const section = (html, id) => html.match(new RegExp(`<section[^>]*id="${id}"[\\s
 const orgOf = html => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(n => n['@type'] === 'Organization');
 
 const FAQ = [
-  'What does BuildWise Group do?',
+  'What does Buildwise Group do?',
   'What types of AI products do you build?',
-  'Can BuildWise automate existing business processes?',
-  'Does BuildWise build custom software?',
+  'Can Buildwise automate existing business processes?',
+  'Does Buildwise build custom software?',
   'Can you build an AI employee for my business?',
   'What industries do you work with?',
   'How does a typical project begin?',
   'How do I request a consultation or proposal?',
   'Do you provide ongoing maintenance and support?',
-  'How can I contact BuildWise?'
+  'How can I contact Buildwise?'
 ];
 
 /* ---------- Social profiles ---------- */
@@ -65,7 +65,7 @@ test('social profiles: every page footer has the shared, hidden social slot and 
   for (const file of PAGES) {
     const html = read(file);
     const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
-    assert.match(footer, /<ul class="footer-social" data-social-links aria-label="BuildWise Group on social media" hidden><\/ul>/, `${file} footer has the social slot`);
+    assert.match(footer, /<ul class="footer-social" data-social-links aria-label="Buildwise Group on social media" hidden><\/ul>/, `${file} footer has the social slot`);
     assert.match(html, /<script defer src="\/?social-links\.js"><\/script>/, `${file} loads social-links.js`);
     assert.match(footer, /href="https:\/\/wa\.me\/2349165681202/, `${file} footer offers WhatsApp`);
     assert.match(footer, /Send a project enquiry/, `${file} footer offers the enquiry form`);
@@ -74,7 +74,7 @@ test('social profiles: every page footer has the shared, hidden social slot and 
 });
 
 /* ---------- Industry experience ---------- */
-test('industries: every area is labelled as client work, a BuildWise product or a capability', () => {
+test('industries: every area is labelled as client work, a Buildwise product or a capability', () => {
   const html = section(read('index.html'), 'industries');
   assert.match(html, /<h2 class="section-title" id="industriesTitle"[^>]*>Technology built for real-world industries\.<\/h2>/);
   const items = [...html.matchAll(/<li class="ind"[\s\S]*?<\/li>/g)].map(m => m[0]);
@@ -87,7 +87,7 @@ test('industries: every area is labelled as client work, a BuildWise product or 
   assert.match(byName['Healthcare & aesthetics'].text, /website maintenance/i);
   assert.match(byName['Healthcare & aesthetics'].text, /Maya/);
   for (const [name, product] of [['Recruitment & career technology', 'Huntly'], ['Financial technology & trading tools', 'Traider'], ['Business operations & automation', 'Staff']]) {
-    assert.equal(byName[name].tag, 'product', `${product} is a BuildWise product, not client work`);
+    assert.equal(byName[name].tag, 'product', `${product} is a Buildwise product, not client work`);
     assert.match(byName[name].text, new RegExp(product));
   }
   assert.equal(byName['Digital products & software'].tag, 'cap');
@@ -148,7 +148,7 @@ test('the typeface is self-hosted, preloaded and licensed; no page calls Google 
 test('homepage metadata and organisation data describe the real business', () => {
   const html = read('index.html');
   const title = html.match(/<title>([^<]+)<\/title>/)[1].replace(/&amp;/g, '&');
-  assert.match(title, /^BuildWise Group — /);
+  assert.match(title, /^Buildwise Group — /);
   assert.ok(title.length <= 70, 'title fits in search results');
   const org = orgOf(html);
   assert.equal(org.contactPoint.telephone, '+2349165681202', 'the only phone is the published WhatsApp number');
@@ -212,8 +212,8 @@ async function open(urlPath, contextOptions = {}, setup) {
 }
 
 const LIVE = [
-  ['https://www.instagram.com/buildwisehq/', 'BuildWise Group on Instagram (opens in a new tab)'],
-  ['https://x.com/buildwisex', 'BuildWise Group on X (formerly Twitter) (opens in a new tab)']
+  ['https://www.instagram.com/buildwisehq/', 'Buildwise Group on Instagram (opens in a new tab)'],
+  ['https://x.com/buildwisex', 'Buildwise Group on X (formerly Twitter) (opens in a new tab)']
 ];
 
 test('social footer: the verified profiles show on every page, on phone and desktop, as safe, labelled links', opts, async () => {
@@ -304,7 +304,32 @@ test('the homepage loads nothing from other origins and uses the self-hosted fon
 test('brand links use their visible text as their accessible name', opts, async () => {
   const { page, context } = await open('/', { reducedMotion: 'no-preference' });
   const names = await page.locator('a.brand').evaluateAll(els => els.map(el => el.textContent.replace(/\s+/g, ' ').trim()));
-  assert.deepEqual(names, ['BuildWise Group, back to top', 'BuildWise Group, back to top']);
+  assert.deepEqual(names, ['Buildwise Group, back to top', 'Buildwise Group, back to top']);
   assert.equal(await page.locator('a.brand[aria-label]').count(), 0);
   await context.close();
+});
+
+/* ---------- Parent company and products ---------- */
+test('products: every product with a live site is linked from its card and its brand node, and only those', () => {
+  // Permanent brand architecture (founder, 2026-11-03). A product joins this list only once its
+  // official domain and ownership are verified; Traider and Staff have no public site yet, and
+  // AskNex (owner-confirmed 2026-11-03) joins this map in the PR that adds its card.
+  const LIVE = { Huntly: 'https://huntlyagent.com/' };
+  const html = read('index.html');
+  const org = orgOf(html);
+  assert.equal(org['@id'], `${SITE}/#organization`, 'product sites reference this exact @id');
+  assert.equal(org.name, 'Buildwise Group', 'canonical spelling (founder, 2026-11-03)');
+  assert.equal(org.alternateName, 'BuildWise Group', 'the earlier spelling still resolves to this entity');
+  assert.ok(!/BuildWise/.test(html.replace(/"alternateName": "BuildWise Group"/, '')), 'the old spelling appears nowhere else');
+  for (const brand of org.brand) {
+    if (LIVE[brand.name]) {
+      assert.equal(brand.url, LIVE[brand.name]);
+      assert.equal(brand['@id'], `${SITE}/#brand-${brand.name.toLowerCase()}`);
+    } else {
+      assert.ok(!('url' in brand), `${brand.name} has no verified site, so no url`);
+    }
+  }
+  const ventures = section(html, 'ventures');
+  const links = [...ventures.matchAll(/<a class="venture-link" href="([^"]+)"/g)].map(m => m[1].replace(/\/?$/, '/'));
+  assert.deepEqual(links, Object.values(LIVE), 'only verified product sites are linked from the cards');
 });

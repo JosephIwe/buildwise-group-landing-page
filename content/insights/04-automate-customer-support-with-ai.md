@@ -69,4 +69,4 @@ Compare against the baseline you recorded before launch.
 
 If answering properly means *doing* something, such as rescheduling a booking or processing a return, you need an AI agent with carefully limited permissions rather than a chatbot. Read [AI agents vs traditional chatbots](/insights/ai-agents-vs-chatbots).
 
-BuildWise Group builds support automation as [AI agents](/ai-agents) and [WhatsApp assistants](/whatsapp-automation), with handover and logging designed in.
+Buildwise Group builds support automation as [AI agents](/ai-agents) and [WhatsApp assistants](/whatsapp-automation), with handover and logging designed in.

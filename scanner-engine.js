@@ -1,5 +1,5 @@
 /*
- * BuildWise AI Business Opportunity Scanner: report engine.
+ * Buildwise AI Business Opportunity Scanner: report engine.
  *
  * A transparent, rule-based engine that runs entirely in the visitor's browser.
  * It does not call an AI model or any server. Each opportunity in LIBRARY lists
@@ -1043,7 +1043,7 @@
       opportunities,
       roadmap: buildRoadmap(opportunities),
       scoring: 'Points come only from your answers. Your biggest bottleneck, repetitive tasks and notes count as specific evidence and decide the match label. Options are ordered by match label first, then by points. Your objective, sector and size add smaller amounts, and within the same label, lower-complexity and non-AI options rank higher. Only one option per problem area is shown.',
-      method: `These recommendations were generated in your browser by a rule-based engine. It ranks a fixed library of ${LIBRARY.length} AI, automation and software patterns, written by BuildWise Group, against the answers you gave. No AI model, market research or data about your business beyond your answers was used.`,
+      method: `These recommendations were generated in your browser by a rule-based engine. It ranks a fixed library of ${LIBRARY.length} AI, automation and software patterns, written by Buildwise Group, against the answers you gave. No AI model, market research or data about your business beyond your answers was used.`,
       // The website is never fetched, so the report says so instead of implying it was checked.
       websiteNote: profile.website ? `You added ${profile.website}, but the scanner did not visit or check it. This report is based only on your answers.` : '',
       limits: 'Because the library is fixed and the ranking depends only on your answers, it may miss opportunities that suit your business. These are general recommendations, not verified findings: confirming any of them would need a look at your actual processes and data. Benefits are possible outcomes to test, not measured results, and nothing here is a guaranteed outcome. Every option has costs, and the AI-based ones need human review.'
@@ -1106,7 +1106,7 @@
   function toPlainText(report) {
     const lines = [];
     const rule = '-'.repeat(60);
-    lines.push('BuildWise Group · AI Business Opportunity Scanner', report.headline, `Generated ${report.generatedAt.slice(0, 10)}`, '');
+    lines.push('Buildwise Group · AI Business Opportunity Scanner', report.headline, `Generated ${report.generatedAt.slice(0, 10)}`, '');
     lines.push('ABOUT THIS REPORT', report.method, report.scoring, report.limits, '');
     if (report.shortfall) lines.push(report.shortfall, '');
     if (report.sharpen.length) lines.push('TO GET A SHARPER REPORT', ...report.sharpen.map(t => `- ${t}`), '');
