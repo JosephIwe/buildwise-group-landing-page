@@ -1,0 +1,17 @@
+# Read-only production verification. Runs only on pushes to the verify-production
+# branch, which is never merged. It fetches public URLs and prints the evidence.
+name: Verify production (read-only)
+on:
+  push:
+    branches: [verify-production]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check buildwisegroup.dev
+        run: python3 .github/verify/check.py
