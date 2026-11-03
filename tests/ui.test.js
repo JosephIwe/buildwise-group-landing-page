@@ -464,6 +464,12 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.match(read('security.html'), new RegExp(`rel="canonical" href="${locs[5]}"`));
 });
 
+test('scan.html ships no mailto: placeholder for Cloudflare email obfuscation to rewrite', () => {
+  // Cloudflare's Email Address Obfuscation rewrote href="mailto:" into a /cdn-cgi/l/email-protection
+  // link that returns 404 to crawlers. scanner.js sets the real mailto: link once a report exists.
+  assert.ok(!/href="mailto:/.test(read('scan.html')), 'no static mailto: href in scan.html');
+});
+
 test('the pages.dev hosts are noindex, and the canonical domain is not', () => {
   const h = read('_headers');
   assert.match(h, /^https:\/\/:project\.pages\.dev\/\*\n\s+X-Robots-Tag: noindex$/m);
