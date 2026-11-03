@@ -32,6 +32,10 @@
     'Website or digital experience',
     'Business automation and integrations',
     'Existing product improvement',
+    'AI automation audit',
+    'WhatsApp automation',
+    'AI receptionist or voice agent',
+    'AI search visibility',
     'Other'
   ];
   const BUDGETS = ['Under $5,000', '$5,000 to $15,000', '$15,000 to $50,000', 'Over $50,000', 'Not sure yet'];
@@ -86,7 +90,7 @@
 
     if (values.contactMethod && !CONTACT_METHODS.includes(values.contactMethod)) errors.contactMethod = 'Choose email or WhatsApp.';
     if (values.contactMethod !== 'WhatsApp') values.phone = '';
-    else if (values.phone && !PHONE.test(values.phone)) errors.phone = 'Enter a phone number with its country code, like +44 7700 900123.';
+    else if (values.phone && !PHONE.test(values.phone)) errors.phone = 'Enter a phone number with its country code, for example +[country code] 000 000 0000.';
 
     return { values, errors, valid: Object.keys(errors).length === 0 };
   }
@@ -270,6 +274,8 @@
         status.textContent = '';
         form.hidden = true;
         success.hidden = false;
+        // For analytics.js: a lead was delivered. Carries no personal details.
+        try { doc.dispatchEvent(new CustomEvent('bw:enquiry-sent', { detail: { projectType: values.projectType, page: payload.page || '' } })); } catch (e) { /* old browsers */ }
         const heading = success.querySelector('h4, h3');
         if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus(); }
         form.reset();

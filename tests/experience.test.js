@@ -14,7 +14,7 @@ try { ({ chromium } = require('playwright')); } catch (e) { chromium = null; }
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://buildwisegroup.dev';
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
-const PAGES = ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html'];
+const PAGES = ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html', 'ai-automation-nigeria.html', 'ai-automation-lagos.html', 'ai-agents.html', 'whatsapp-automation.html', 'custom-software-development.html', 'ai-visibility.html', 'business-automation.html', 'ai-receptionist.html'];
 const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.avif': 'image/avif', '.png': 'image/png', '.jpg': 'image/jpeg', '.woff2': 'font/woff2' };
 const text = html => html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 const section = (html, id) => html.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?</section>`))[0];
@@ -66,7 +66,7 @@ test('social profiles: every page footer has the shared, hidden social slot and 
     const html = read(file);
     const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
     assert.match(footer, /<ul class="footer-social" data-social-links aria-label="BuildWise Group on social media" hidden><\/ul>/, `${file} footer has the social slot`);
-    assert.match(html, /<script defer src="social-links\.js"><\/script>/, `${file} loads social-links.js`);
+    assert.match(html, /<script defer src="\/?social-links\.js"><\/script>/, `${file} loads social-links.js`);
     assert.match(footer, /href="https:\/\/wa\.me\/2349165681202/, `${file} footer offers WhatsApp`);
     assert.match(footer, /Send a project enquiry/, `${file} footer offers the enquiry form`);
     assert.match(footer, /href="\/?#faq"/, `${file} footer links to the FAQ`);
