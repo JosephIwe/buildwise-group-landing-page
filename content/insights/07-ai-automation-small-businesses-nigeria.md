@@ -3,7 +3,6 @@ title: AI Automation Opportunities for Small Businesses in Nigeria
 short: AI for small businesses
 description: Low-cost, practical AI automation ideas for Nigerian small businesses, by sector, with advice on what to try first, what it costs to run and what to avoid.
 date: 2026-11-03
-minutes: 8
 service: ai-automation-nigeria
 status: draft
 ctaHeading: Want a quick view of your opportunities?
@@ -82,6 +81,15 @@ Ask for monthly running costs in writing before building anything.
 - **Bots with no way to reach a person.** Customers will leave.
 - **Automating a messy process.** Fix the process first.
 - **Collecting more personal data than you need.** The Nigeria Data Protection Act 2023 applies to small businesses too.
+
+## A simple first-month plan
+
+1. **Week 1:** write down the ten questions customers ask most, with the correct answers, and set up quick replies or a catalogue in the WhatsApp Business app.
+2. **Week 2:** count how many messages arrive each day and how long replies take. This is your baseline.
+3. **Week 3:** put every enquiry into one spreadsheet or CRM, with where it came from and what happened to it.
+4. **Week 4:** look at the numbers. If messages are still going unanswered, or leads are being lost, that is the workflow worth automating properly, and you now have the information a provider needs to quote accurately.
+
+This costs almost nothing and makes any later automation project faster, cheaper and easier to measure.
 
 ## Try it yourself
 

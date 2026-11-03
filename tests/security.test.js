@@ -13,7 +13,7 @@ const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const SITE = 'https://buildwisegroup.dev';
 const REPORT = 'https://github.com/JosephIwe/buildwise-group-landing-page/security/advisories/new';
-const PAGES = ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html'];
+const PAGES = ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html', 'ai-automation-nigeria.html', 'ai-automation-lagos.html', 'ai-agents.html', 'whatsapp-automation.html', 'custom-software-development.html', 'ai-visibility.html', 'business-automation.html', 'ai-receptionist.html'];
 const DAY = 24 * 60 * 60 * 1000;
 const text = html => html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 

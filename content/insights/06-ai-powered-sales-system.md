@@ -3,7 +3,6 @@ title: How to Build an AI-Powered Sales System
 short: AI-powered sales system
 description: How to combine lead capture, AI qualification, CRM automation and timely follow-up into a sales system that responds faster without losing the human touch.
 date: 2026-11-03
-minutes: 8
 service: business-automation
 status: draft
 ctaHeading: Losing leads between channels?

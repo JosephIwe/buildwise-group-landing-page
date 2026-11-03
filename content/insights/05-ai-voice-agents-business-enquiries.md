@@ -3,7 +3,6 @@ title: How AI Voice Agents Can Handle Business Enquiries
 short: AI voice agents
 description: What AI voice agents are, how they answer business phone calls, where they work well, their limits in Nigeria, and how to decide between voice and WhatsApp.
 date: 2026-11-03
-minutes: 7
 service: ai-receptionist
 status: draft
 ctaHeading: Wondering whether voice is right for you?

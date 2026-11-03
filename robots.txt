@@ -1,8 +1,48 @@
 # BuildWise Group
-# The homepage and the scanner's start page are public and open to search
-# engines and AI assistants alike. Scanner answers never appear in a URL a
-# crawler can request: report links keep them after "#", which browsers never
-# send to the server, and a page showing a report is marked noindex.
+# Every public page is open to search engines and AI search assistants. Scanner answers
+# never appear in a URL a crawler can request: report links keep them after "#", which
+# browsers never send to the server, and a page showing a report is marked noindex.
+# Drafts under /insights are marked noindex on the page itself until they are approved.
+#
+# Search and AI-search crawlers are named explicitly so the decision is on record.
+# A crawler obeys only the most specific group that names it, so each group repeats
+# the /api/ rule. Training crawlers (GPTBot, Google-Extended, CCBot, ...) are not
+# named and fall under "*", which allows them: blocking them is a separate business
+# decision and does not affect search visibility, according to OpenAI and Google.
+#
+# Robots rules are not the whole story: Cloudflare's bot settings (Block AI bots,
+# AI Crawl Control, managed robots.txt) can block crawlers before they read this file.
+
+# Google Search (including AI Overviews and AI Mode)
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+# Bing (also used by Copilot and other assistants)
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+# ChatGPT search results
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+
+# Pages a ChatGPT user asks it to open
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+# Perplexity search
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+# Claude search
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+
 User-agent: *
 Allow: /
 # The audit API only answers POST requests from the audit page.

@@ -3,7 +3,6 @@ title: "AI Agents vs Traditional Chatbots: What Businesses Need to Know"
 short: AI agents vs chatbots
 description: The real difference between scripted chatbots and AI agents, when each one is the right choice, and the guardrails an AI agent needs before it touches your customers.
 date: 2026-11-03
-minutes: 7
 service: ai-agents
 status: draft
 ctaHeading: Considering an AI agent?

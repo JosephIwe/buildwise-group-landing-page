@@ -4,7 +4,6 @@ short: Automating customer support
 seoTitle: "How to Automate Customer Support with AI: A Step-by-Step Guide"
 description: A step-by-step guide to automating customer support with AI without frustrating customers: what to automate, how to ground answers, when to hand over and what to measure.
 date: 2026-11-03
-minutes: 8
 service: ai-agents
 status: draft
 ctaHeading: Want help automating support?

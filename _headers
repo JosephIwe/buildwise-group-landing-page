@@ -5,6 +5,8 @@
   X-Robots-Tag: noindex
 /SECURITY.md
   X-Robots-Tag: noindex
+/CHANGELOG.md
+  X-Robots-Tag: noindex
 /tests/*
   X-Robots-Tag: noindex
 /brief/*
@@ -12,6 +14,10 @@
 /lib/*
   X-Robots-Tag: noindex
 /functions/*
+  X-Robots-Tag: noindex
+/content/*
+  X-Robots-Tag: noindex
+/scripts/*
   X-Robots-Tag: noindex
 # Baseline security headers for every response. Cloudflare Pages joins
 # repeated headers with a comma, so the rules below must not set these again.

@@ -227,7 +227,7 @@ export const SERVICES = [
       paras: [
         'A traditional chatbot follows a script: if the customer says X, reply Y. An <strong>AI agent</strong> uses a language model to understand a request in plain words, decide which steps are needed, use tools you have allowed (such as searching your product list, checking an order or creating a booking) and report back.',
         'That makes agents useful for work that is repetitive but not perfectly predictable: a customer asking three questions in one message, an email that needs classifying and routing, or a sales enquiry that needs qualifying before a person gets involved.',
-        'Agents also make mistakes. Good agent design is mostly about limits: what the agent can see, which actions it may take, when it must ask a person, and how every step is recorded. That is where most of our engineering effort goes. Read more in <a href="/insights/ai-agents-vs-chatbots">AI agents vs traditional chatbots</a>.'
+        'Agents also make mistakes. Good agent design is mostly about limits: what the agent can see, which actions it may take, when it must ask a person, and how every step is recorded. That is where most of our engineering effort goes.'
       ]
     },
     uses: {
@@ -455,9 +455,9 @@ export const SERVICES = [
     navName: 'AI search visibility',
     summary: 'Help search engines and AI assistants understand, trust and cite your business.',
     lastmod: '2026-11-03',
-    title: 'AI Search Visibility & Generative Engine Optimisation | BuildWise Group',
+    title: 'AI Search Visibility & GEO Services | BuildWise Group',
     ogTitle: 'AI Search Visibility Services — BuildWise Group',
-    description: 'Make your business easier for Google, ChatGPT, Gemini and Perplexity to find, understand and cite: technical fixes, clear content, structured data and authority. No guarantees, real work.',
+    description: 'Help Google, ChatGPT, Gemini and Perplexity find, understand and cite your business: technical fixes, clear content, structured data and genuine authority.',
     serviceName: 'AI search visibility and generative engine optimisation',
     serviceType: 'AI search optimisation',
     projectType: 'AI search visibility',
@@ -613,7 +613,7 @@ export const SERVICES = [
     lastmod: '2026-11-03',
     title: 'AI Receptionist & Appointment Booking Automation | BuildWise Group',
     ogTitle: 'AI Receptionists for Enquiries and Bookings — BuildWise Group',
-    description: 'AI receptionists from BuildWise Group answer enquiries, book appointments and send reminders on WhatsApp and web chat, with voice scoped per project and staff always in control.',
+    description: 'AI receptionists from BuildWise Group answer enquiries, book appointments and send reminders on WhatsApp and web chat, with your staff always in control.',
     serviceName: 'AI receptionist and appointment booking automation',
     serviceType: 'AI receptionist and automated customer service',
     projectType: 'AI receptionist or voice agent',

@@ -453,7 +453,7 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), 'the site is not blocked');
   assert.match(robots, new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
   const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`, `${SITE}/cybersecurity`, `${SITE}/security`]);
+  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`, `${SITE}/cybersecurity`, `${SITE}/security`, ...['ai-automation-nigeria', 'ai-automation-lagos', 'ai-agents', 'whatsapp-automation', 'custom-software-development', 'ai-visibility', 'business-automation', 'ai-receptionist'].map(s => `${SITE}/${s}`)]);
   assert.match(robots, /^Disallow: \/api\/$/m);
   assert.ok(!read('sitemap.xml').includes('#'), 'no report links in the sitemap');
   assert.match(read('index.html'), new RegExp(`rel="canonical" href="${locs[0]}"`));
@@ -821,7 +821,8 @@ test('security page: is reachable from the homepage navigation, services list an
   const { page, context, errors } = await open('/');
   assert.equal(await page.locator('.desktop-nav a[href="/cybersecurity"]').count(), 1);
   assert.equal(await page.locator('#mobileNav a[href="/cybersecurity"]').count(), 1);
-  assert.equal(await page.locator('.site-footer a[href="/cybersecurity"]').count(), 1);
+  assert.equal(await page.locator('.site-footer .footer-links a[href="/cybersecurity"]').count(), 1);
+  assert.equal(await page.locator('.site-footer .footer-services a[href="/cybersecurity"]').count(), 1, 'also listed with the other services');
   const cap = page.locator('#solutions .cap-feature');
   assert.equal(await page.locator('#solutions .cap').count(), 6, 'five services, with one security row');
   assert.equal(await cap.locator('h3').textContent(), 'Cybersecurity: Application & Cloud Security');

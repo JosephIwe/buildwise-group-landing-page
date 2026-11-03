@@ -4,7 +4,6 @@ short: Visibility on ChatGPT
 seoTitle: "How to Make Your Business More Visible on ChatGPT and AI Search"
 description: What actually affects whether ChatGPT, Gemini, Perplexity and Google AI Overviews can find and cite your business, based on the providers’ own documentation, and what is myth.
 date: 2026-11-03
-minutes: 9
 service: ai-visibility
 status: draft
 ctaHeading: Find out how AI search sees your website

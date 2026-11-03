@@ -1,6 +1,6 @@
 # BuildWise Group
 
-> BuildWise Group is an independent technology company. It partners with businesses to design, engineer and deploy AI-powered products and operational systems, and it builds and owns its own ventures.
+> BuildWise Group is an independent, remote-first technology company. It builds AI-powered systems, intelligent agents and custom software that help businesses automate operations, serve customers better and unlock new opportunities. It works with businesses across Nigeria and internationally, has no physical office, and builds and owns its own ventures.
 
 This file is a plain-text summary of the public website for AI assistants and other tools that read it. The website itself is the source of truth.
 
@@ -28,6 +28,17 @@ Each area is labelled by where the experience comes from. BuildWise names client
 - [Huntly](https://huntlyagent.com): an AI job-search assistant that helps people evaluate opportunities against their profile and prepare stronger applications.
 - Traider (in development): a crypto research and trading-signals project for structuring market data. Signals are research inputs, not financial advice or a promise of returns.
 - Staff (in validation): an applied-AI employee platform being developed and validated for business workflows such as enquiries and bookings.
+
+## Services
+
+- [AI automation in Nigeria](https://buildwisegroup.dev/ai-automation-nigeria): AI agents, WhatsApp automation and workflow automation for Nigerian businesses, delivered remotely; starts with an AI automation audit.
+- [AI automation in Lagos](https://buildwisegroup.dev/ai-automation-lagos): the same service for Lagos businesses. BuildWise serves Lagos remotely and has no Lagos office.
+- [AI agents](https://buildwisegroup.dev/ai-agents): custom AI agents for customer support, sales, enquiries and internal operations, with limited permissions, logging and human handover.
+- [WhatsApp automation](https://buildwisegroup.dev/whatsapp-automation): WhatsApp assistants on Meta's official WhatsApp Business Platform for enquiries, lead qualification, bookings, notifications and human handover.
+- [AI receptionists](https://buildwisegroup.dev/ai-receptionist): enquiries, appointment booking and reminders on WhatsApp and web chat; voice assessed per project.
+- [Business process automation](https://buildwisegroup.dev/business-automation): workflow automation that connects existing tools and removes manual data entry.
+- [Custom software development](https://buildwisegroup.dev/custom-software-development): web and mobile applications, SaaS products, internal tools and integrations.
+- [AI search visibility](https://buildwisegroup.dev/ai-visibility): technical, content, structured data and authority work to help search engines and AI assistants understand a business. No guaranteed rankings or recommendations.
 
 ## Pages
 

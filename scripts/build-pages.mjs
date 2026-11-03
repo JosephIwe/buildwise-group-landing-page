@@ -146,7 +146,7 @@ ${robots ? `  <meta name="robots" content="${robots}">\n` : ''}  <meta name="des
   <meta property="og:image" content="${SITE}/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="BuildWise Group: building intelligent businesses.">
+  <meta property="og:image:alt" content="BuildWise Group: AI products. Business systems. Real impact.">
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@buildwisex">
@@ -422,7 +422,8 @@ export function loadArticles() {
   const dir = path.join(ROOT, 'content/insights');
   return fs.readdirSync(dir).filter(f => f.endsWith('.md')).sort().map(f => {
     const { meta, body } = parseMd(fs.readFileSync(path.join(dir, f), 'utf8'), f);
-    return { ...meta, slug: f.replace(/^\d+-/, '').replace(/\.md$/, ''), order: parseInt(f, 10), body };
+    const minutes = Math.max(3, Math.round(body.split(/\s+/).filter(Boolean).length / 220));
+    return { ...meta, minutes, slug: f.replace(/^\d+-/, '').replace(/\.md$/, ''), order: parseInt(f, 10), body };
   });
 }
 

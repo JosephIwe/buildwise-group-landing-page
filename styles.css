@@ -115,6 +115,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .btn-sm { min-height: 42px; padding: 0 20px; font-size: 14px; }
 .btn-light { background: var(--warm-white); color: var(--obsidian); }
 .btn-light:hover { background: #fff; box-shadow: 0 10px 30px -12px rgba(71, 100, 255, .55); }
+.btn-dark { background: var(--obsidian); color: var(--warm-white); }
+.btn-dark:hover { background: var(--graphite); }
 .btn:hover .ico { transform: translateX(4px); }
 
 /* ---------- Progress ---------- */
@@ -227,6 +229,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .story-toggle { display: inline-flex; align-items: center; gap: 14px; min-height: 48px; padding: 0 4px 0 0; font-size: 15px; font-weight: 500; color: var(--warm-white); }
 .story-toggle[hidden] { display: none; }
+.hero-link { display: inline-flex; align-items: center; min-height: 48px; font-size: 15px; font-weight: 600; color: var(--warm-white); border-bottom: 1px solid rgba(244, 241, 234, .4); transition: border-color .3s; }
+.hero-link:hover { border-bottom-color: var(--warm-white); }
 .st-btn { position: relative; width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(244, 241, 234, .42); display: grid; place-items: center; transition: border-color .35s var(--ease), background-color .35s var(--ease), transform .5s var(--ease); }
 .st-btn svg { width: 22px; height: 22px; grid-area: 1 / 1; transition: opacity .25s, transform .35s var(--ease); }
 .st-pause { opacity: 0; transform: scale(.6); }
@@ -293,6 +297,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .solutions, .ventures { color: var(--obsidian); }
 .solutions .label, .ventures .label { color: var(--slate); }
 .solutions { background: var(--warm-white); padding: var(--space-6) 0; }
+/* Service directory under the capability list: links to every service page */
+.svc-dir { margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--line-light); display: grid; gap: var(--space-3); }
+.svc-dir-head p { margin-top: 10px; color: var(--slate); max-width: 34em; }
+.svc-dir-list { display: grid; gap: 0 32px; }
+.svc-dir-list a { display: grid; gap: 4px; padding: 18px 0; border-bottom: 1px solid var(--line-light); color: var(--obsidian); }
+.svc-dir-name { font-weight: 600; color: var(--cobalt-deep); }
+.svc-dir-list a:hover .svc-dir-name { text-decoration: underline; }
+.svc-dir-copy { font-size: 14px; color: var(--slate); }
+.svc-dir-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding: 24px; border-radius: 8px; background: var(--paper); }
+.svc-dir-cta p { max-width: 36em; color: var(--graphite); }
+.svc-dir-cta strong { color: var(--obsidian); font-weight: 650; }
+@media (min-width: 720px) { .svc-dir-list { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .svc-dir-list { grid-template-columns: repeat(4, 1fr); } }
 .section-head { margin-bottom: var(--space-5); }
 .section-title { margin-top: 20px; font-size: var(--fs-section); font-weight: 500; letter-spacing: -.035em; line-height: 1.08; max-width: 18ch; }
 .section-head-split { display: grid; gap: 24px; }

@@ -3,7 +3,6 @@ title: AI Automation vs Traditional Business Software
 short: AI automation vs traditional software
 description: How AI automation differs from traditional business software, when each is the better investment, and how the two work together in a modern business.
 date: 2026-11-03
-minutes: 7
 service: custom-software-development
 status: draft
 ctaHeading: Not sure whether to buy, build or automate?
@@ -54,6 +53,16 @@ The AI never decides the price or the stock level. It reads and writes language.
 ## When custom software makes sense
 
 Sometimes neither an off-the-shelf product nor automation glued around it is enough: your process is unusual, you are building a product to sell, or the tools you pay for can’t be connected cleanly. That is when [custom software](/custom-software-development) earns its cost, ideally with AI features built in where they genuinely help.
+
+## A worked example: a growing distribution business
+
+Imagine a distributor that takes most orders over WhatsApp and email and uses an accounting package for invoices.
+
+- **Without automation:** two staff read every message, check stock in a spreadsheet, type the order into the accounting package and send a confirmation by hand. Orders that arrive at night wait until morning.
+- **With traditional software only:** a better inventory system makes stock levels reliable, but someone still reads and retypes every order.
+- **With AI automation added:** an assistant reads each order message, checks stock through the inventory system, asks the customer about anything missing and creates a draft order for a staff member to approve with one click. The accounting package still produces the invoice.
+
+The staff still make the decisions. They just stop retyping.
 
 ## Questions to ask before you spend
 

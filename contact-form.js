@@ -274,6 +274,8 @@
         status.textContent = '';
         form.hidden = true;
         success.hidden = false;
+        // For analytics.js: a lead was delivered. Carries no personal details.
+        try { doc.dispatchEvent(new CustomEvent('bw:enquiry-sent', { detail: { projectType: values.projectType, page: payload.page || '' } })); } catch (e) { /* old browsers */ }
         const heading = success.querySelector('h4, h3');
         if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus(); }
         form.reset();

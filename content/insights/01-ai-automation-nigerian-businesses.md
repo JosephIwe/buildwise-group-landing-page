@@ -4,7 +4,6 @@ short: AI automation for productivity
 seoTitle: How Nigerian Businesses Can Use AI Automation to Boost Productivity
 description: A practical guide to where AI automation saves time in Nigerian businesses, how to pick the first workflow, and how to measure whether it worked.
 date: 2026-11-03
-minutes: 8
 service: ai-automation-nigeria
 status: draft
 ctaHeading: Not sure which workflow to start with?
