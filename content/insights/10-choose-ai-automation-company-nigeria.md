@@ -4,11 +4,11 @@ short: Choosing an AI automation company
 description: A buyer’s checklist for choosing an AI automation company or agency in Nigeria: questions to ask, red flags, how to compare proposals and what a good first project looks like.
 date: 2026-11-03
 service: ai-automation-nigeria
-status: draft
+status: published
 ctaHeading: Put these questions to us
 ctaText: Book a consultation and ask us everything on this list. If we’re not the right fit for your project, we’ll say so.
 ---
-The number of companies and freelancers offering AI automation in Nigeria has grown quickly. Some are excellent. Some are reselling a chatbot template with a new logo. This checklist helps you tell the difference before you sign anything. (Yes, we are one of the companies you might compare. Use the same questions on us.)
+More and more companies and freelancers in Nigeria offer AI automation. Some are excellent. Others resell a chatbot template with a new logo. This checklist helps you tell the difference before you sign anything. (Yes, we are one of the companies you might compare. Use the same questions on us.)
 
 ## Questions about understanding your business
 

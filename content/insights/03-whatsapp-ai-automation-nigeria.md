@@ -5,15 +5,15 @@ seoTitle: "WhatsApp AI Automation for Nigerian Businesses: A Practical Guide"
 description: How WhatsApp automation works on the official WhatsApp Business Platform, what it can do for Nigerian businesses, the rules you must follow, and how to plan running costs.
 date: 2026-11-03
 service: whatsapp-automation
-status: draft
+status: published
 ctaHeading: Ready to automate your WhatsApp inbox?
 ctaText: Tell us how your team uses WhatsApp today. We’ll review a sample of anonymised conversations and recommend what to automate first.
 ---
-For many Nigerian businesses, WhatsApp is the shop front, the call centre and the order book. That is exactly why it gets overwhelmed. This guide explains how WhatsApp automation works properly, what it can and can’t do, and what to plan for before you start.
+For many Nigerian businesses, WhatsApp is the shop front, the call centre and the order book. That is exactly why it gets overwhelmed. This guide explains how WhatsApp automation works properly, what it can and can’t do and what to plan for before you start.
 
 ## The app vs the platform
 
-There are two different products, and confusing them causes most of the problems we see.
+There are two different products, and confusing them causes avoidable problems.
 
 - **WhatsApp Business app.** The free app on a phone. It offers a business profile, a catalogue, quick replies, greeting messages and away messages. It is designed for people replying by hand.
 - **WhatsApp Business Platform.** Meta’s API for businesses, available directly through Meta’s Cloud API or through Meta business partners. This is where real automation happens: chatbots and AI assistants, several staff sharing one number, integrations with your CRM or booking system, and notifications at scale.
@@ -35,7 +35,7 @@ Third-party tools that automate the regular app by imitating a person on a phone
 Meta’s policies shape how WhatsApp automation works. The main ones, which you should confirm in the current [WhatsApp Business Messaging Policy](https://business.whatsapp.com/policy):
 
 - **Opt-in.** You may only message people who have agreed to receive messages from your business.
-- **Customer service window.** When a customer messages you, you can reply freely for a limited period. Outside that window, messages you start must use templates that Meta has approved.
+- **Customer service window.** When a customer messages you, you can reply freely for 24 hours after their last message. Outside that window, any message you start must use a template that Meta has approved.
 - **Business verification.** Higher messaging limits and some features need your business to be verified with Meta.
 - **Quality.** If many customers block or report your messages, your number’s quality rating and limits can drop.
 
@@ -61,7 +61,7 @@ Ask any provider to show all three before you commit.
 
 - **Language:** AI handles Nigerian English and Pidgin reasonably well, and Yoruba, Igbo and Hausa less consistently. Test, and route uncertain cases to staff.
 - **Payments:** send payment links from your payment provider rather than collecting card details in chat, and confirm payment automatically if the provider supports it.
-- **Data protection:** conversations contain personal data. The Nigeria Data Protection Act 2023 applies; keep only what you need, control access and tell customers how their data is used.
+- **Data protection:** conversations contain personal data. The Nigeria Data Protection Act 2023 applies, so keep only what you need, control access and tell customers how their data is used.
 
 ## Getting started
 

@@ -9,7 +9,7 @@ status: draft
 ctaHeading: Not sure which workflow to start with?
 ctaText: Request an AI automation audit. After one call, we send a short written view of the two or three workflows most worth automating in your business, and say plainly if none are yet.
 ---
-Most Nigerian businesses don’t have a technology problem. They have a time problem. The same people who serve customers also answer WhatsApp messages, update spreadsheets, chase payments and prepare reports. AI automation is useful when it gives those hours back. This guide explains where that usually happens, how to choose a first project, and how to tell whether it worked.
+Many Nigerian businesses don’t have a technology problem. They have a time problem. The same people who serve customers also answer WhatsApp messages, update spreadsheets, chase payments and prepare reports. AI automation is useful when it gives those hours back. This guide covers where that usually happens, how to choose a first project and how to tell whether it worked.
 
 ## What AI automation actually means
 
@@ -55,12 +55,12 @@ Write the workflow down step by step as it actually happens today, including the
 - **WhatsApp is the main channel.** Proper automation runs on Meta’s WhatsApp Business Platform, which has rules on customer opt-in and message templates, and charges for some message types. Plan for business verification early.
 - **Language.** AI models handle Nigerian English and Pidgin reasonably well, and Yoruba, Igbo and Hausa less consistently. Test with real customer messages before launch.
 - **Connectivity and devices.** Your customers are mostly on mobile data. Keep messages short and links light.
-- **Data protection.** The Nigeria Data Protection Act 2023 applies to how you collect and use customer data. Collect only what the workflow needs and tell customers how it is used. The [Nigeria Data Protection Commission](https://ndpc.gov.ng/) publishes guidance; confirm your obligations with a professional.
+- **Data protection.** The Nigeria Data Protection Act 2023 applies to how you collect and use customer data. Collect only what the workflow needs and tell customers how it is used. The [Nigeria Data Protection Commission](https://ndpc.gov.ng/) publishes guidance. Confirm your obligations with a professional.
 - **Currency.** Many AI and software tools bill in US dollars. Ask for running costs up front so exchange-rate changes don’t surprise you.
 
 ## How to measure productivity gains honestly
 
-Before you automate, record a baseline for two weeks: how many enquiries arrive, how long replies take, how many leads are followed up, how many hours a task takes. After launch, measure the same things. If the numbers don’t move, the automation isn’t working yet, whatever the demo looked like.
+Before you automate, record a baseline for two weeks: how many enquiries arrive, how long replies take, how many leads are followed up, how many hours a task takes. After launch, measure the same things. If the numbers don’t move, the automation isn’t working yet, however good the demo looked.
 
 Also measure what can go wrong: wrong answers, customers asking for a person, failed steps. Good systems log these so you can fix them.
 

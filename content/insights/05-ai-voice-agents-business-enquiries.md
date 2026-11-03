@@ -8,7 +8,7 @@ status: draft
 ctaHeading: Wondering whether voice is right for you?
 ctaText: Tell us how customers contact you today. We’ll tell you honestly whether a voice agent, a WhatsApp assistant or both makes sense, and what each would cost to run.
 ---
-Some customers will always prefer to call. For businesses that miss calls during busy hours or after closing, an AI voice agent can answer, help with simple requests and take messages. This article explains how they work and where they fall short.
+Some customers will always prefer to call. For businesses that miss calls during busy hours or after closing, an AI voice agent can answer, help with simple requests and take messages. Here is how they work and where they fall short.
 
 ## What an AI voice agent is
 
@@ -22,7 +22,7 @@ A **telephony provider** connects all of this to a phone number, so calls to you
 
 ## What voice agents handle well
 
-- **Frequently asked questions:** opening hours, location of service, prices, what to bring.
+- **Frequently asked questions:** opening hours, where to find you, prices, what to bring.
 - **Appointment requests:** taking the caller’s details and preferred time, and confirming a slot if connected to your calendar.
 - **After-hours answering:** taking messages accurately instead of letting calls ring out.
 - **Call routing:** working out what the caller needs and transferring them to the right person.
