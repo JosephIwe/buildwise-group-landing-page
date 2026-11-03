@@ -1,0 +1,576 @@
+#!/usr/bin/env node
+/*
+ * Builds the service landing pages, the Insights drafts and sitemap.xml from content/.
+ *
+ * The site stays build-free for Cloudflare Pages: this script runs locally and its
+ * output (the .html files and sitemap.xml) is committed. Edit content/services.mjs or
+ * content/insights/*.md, then run:
+ *
+ *   node scripts/build-pages.mjs
+ *
+ * and commit the result. tests/growth.test.js fails if the committed output is stale.
+ *
+ * Shared pieces (icon sprite, enquiry form) are copied from cybersecurity.html so the
+ * form markup, validation hooks and Web3Forms delivery stay identical on every page.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { SERVICES, SITE, WA_NUMBER, STATIC_PAGES } from '../content/services.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
+const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(ROOT, f)), { recursive: true }); fs.writeFileSync(path.join(ROOT, f), s); };
+
+export const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// Content strings may carry a few inline tags (<a>, <strong>, <em>); escape bare ampersands only.
+const html = s => String(s).replace(/&(?![a-z#0-9]+;)/gi, '&amp;');
+const wa = text => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+const ARROW = '<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>';
+
+/* ---------- Shared chunks taken from cybersecurity.html ---------- */
+const CYBER = read('cybersecurity.html');
+const SPRITE = CYBER.match(/  <svg width="0" height="0" class="sprite"[\s\S]*?\n  <\/svg>\n/)[0]
+  .replace('    </defs>', [
+    '      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.8 5.6 13.4h5.8l-.8 7.8 7.6-10.6h-5.8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>',
+    '      <symbol id="i-chat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5.5h16v10H9.5L5 19v-3.5H4Z"/><path d="M8 9.5h8M8 12.5h5"/></g></symbol>',
+    '      <symbol id="i-code" viewBox="0 0 24 24"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5M13.4 4.5l-2.8 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>',
+    '      <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5.5 5.5"/></g></symbol>',
+    '      <symbol id="i-flow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="15" width="6" height="5" rx="1"/><path d="M6 9v4.5h12V15"/></g></symbol>',
+    '      <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h3l1.5 4-2 1.3a10.5 10.5 0 0 0 6.1 6.1l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>',
+    '    </defs>'
+  ].join('\n'));
+const FORM_SRC = CYBER.match(/            <form class="enq"[\s\S]*?            <div class="enq-panel" id="enquiryUnavailable">[\s\S]*?            <\/div>\n/)[0];
+
+function enquiryForm(s) {
+  const waLink = wa(s.waText);
+  let f = FORM_SRC
+    .replace('data-page="https://buildwisegroup.dev/cybersecurity#enquire"', `data-page="${SITE}/${s.slug}#enquire"`)
+    .replace('<option selected>Application and cloud security review</option>', '<option>Application and cloud security review</option>')
+    .replace(`<option>${s.projectType}</option>`, `<option selected>${s.projectType}</option>`)
+    .replace(/<label for="enqMessage">[^<]*/, `<label for="enqMessage">${esc(s.enquire.messageLabel)} `)
+    .replace(/(<p class="enq-hint" id="enq-message-hint">)[^<]*/, `$1${esc(s.enquire.messageHint)}`)
+    .replace(/(<span id="enquirySubmitText">)[^<]*/, `$1${esc(s.cta)}`)
+    .replace(/<h4>Thank you\.[^<]*<\/h4>/, '<h4>Thank you. Your enquiry has been sent.</h4>')
+    .replace(/(<h4>Thank you\. Your enquiry has been sent\.<\/h4>\s*<p>)[^<]*/, '$1We’ll review it and reply to arrange a short discovery conversation.')
+    .replace(/https:\/\/wa\.me\/2349165681202\?text=[^"]*/g, esc(waLink));
+  if (!f.includes(`<option selected>${s.projectType}</option>`)) throw new Error(`${s.slug}: project type "${s.projectType}" is not an option in the enquiry form`);
+  return f;
+}
+
+/* ---------- Page chrome ---------- */
+const NAV = [['/#solutions', 'Solutions'], ['/#ventures', 'Products'], ['/#industries', 'Industries'], ['/cybersecurity', 'Security'], ['/#about', 'About'], ['/#faq', 'FAQ']];
+
+export const FOOTER_SERVICES = () => `  <!-- footer-services:start (generated by scripts/build-pages.mjs) -->
+    <nav class="container footer-services" aria-label="Services">
+      <p class="label">Services</p>
+      <ul>
+${SERVICES.map(s => `        <li><a href="/${s.slug}">${esc(s.navName)}</a></li>`).join('\n')}
+        <li><a href="/cybersecurity">Application &amp; cloud security</a></li>
+      </ul>
+    </nav>
+    <!-- footer-services:end -->`;
+
+function header({ current, ctaHref, ctaLabel, waLink, tagline }) {
+  return `  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="brand" href="/">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word">BuildWise <span>Group</span></span><span class="sr-only">, home</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main">
+${NAV.map(([h, t]) => `        <a href="${h}"${h === current ? ' aria-current="page"' : ''}>${t}</a>`).join('\n')}
+      </nav>
+      <a class="btn btn-light btn-sm header-cta" href="${ctaHref}">${esc(ctaLabel)} ${ARROW}</a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-controls="mobileNav" aria-expanded="false">
+        <span class="sr-only" id="menuLabel">Open menu</span>
+        <span class="bars" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobileNav" hidden>
+    <nav aria-label="Mobile">
+${NAV.map(([h, t], i) => `      <a href="${h}"${h === current ? ' aria-current="page"' : ''}><span class="mn-index" aria-hidden="true">0${i + 1}</span>${t}</a>`).join('\n')}
+    </nav>
+    <div class="mobile-foot">
+      <a class="btn btn-light" href="${ctaHref}">${esc(ctaLabel)} ${ARROW}</a>
+      <a class="mobile-wa" href="${esc(waLink)}" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Chat on WhatsApp<span class="sr-only"> (opens WhatsApp)</span></a>
+      <p class="label">${esc(tagline)}</p>
+    </div>
+  </div>
+`;
+}
+
+function footer({ waLink, enquireHref }) {
+  return `  <footer class="site-footer">
+${FOOTER_SERVICES()}
+    <div class="container footer-inner">
+      <a class="brand" href="/">
+        <svg class="brand-mark" aria-hidden="true"><use href="#bw-mark"/></svg>
+        <span class="brand-word">BuildWise <span>Group</span></span><span class="sr-only">, home</span>
+      </a>
+      <p class="label footer-line">Building intelligent businesses.</p>
+      <ul class="footer-links" aria-label="Site information">
+        <li><a href="${esc(waLink)}" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>WhatsApp<span class="sr-only"> (opens in a new tab)</span></a></li>
+        <li><a href="${enquireHref}">Send a project enquiry</a></li>
+        <li><a href="/#faq">FAQ</a></li>
+        <li><a href="/cybersecurity">Cybersecurity</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/security">Report a vulnerability</a></li>
+      </ul>
+      <ul class="footer-social" data-social-links aria-label="BuildWise Group on social media" hidden></ul>
+      <p class="label footer-copy">© <span id="year">2026</span> BuildWise Group</p>
+    </div>
+  </footer>`;
+}
+
+function head({ title, description, canonical, ogTitle, ogDescription, jsonld, robots, css = [], ogType = 'website' }) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B0D12">
+${robots ? `  <meta name="robots" content="${robots}">\n` : ''}  <meta name="description" content="${esc(description)}">
+  <title>${esc(title)}</title>
+  <link rel="canonical" href="${canonical}">
+  <meta property="og:site_name" content="BuildWise Group">
+  <meta property="og:title" content="${esc(ogTitle || title)}">
+  <meta property="og:description" content="${esc(ogDescription || description)}">
+  <meta property="og:type" content="${ogType}">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:image" content="${SITE}/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="BuildWise Group: building intelligent businesses.">
+  <meta property="og:locale" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@buildwisex">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+${JSON.stringify(jsonld, null, 2).replace(/^/gm, '  ')}
+  </script>
+  <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+${css.map(c => `  <link rel="stylesheet" href="/${c}">`).join('\n')}
+  <script>document.documentElement.classList.add('js');</script>
+  <script defer src="/script.js"></script>
+  <script defer src="/social-links.js"></script>
+  <script defer src="/contact-form.js"></script>
+  <script defer src="/analytics.js"></script>
+</head>`;
+}
+
+const ORG_REF = { '@type': 'Organization', '@id': `${SITE}/#organization`, name: 'BuildWise Group', url: `${SITE}/` };
+const AREA = [{ '@type': 'Country', name: 'Nigeria' }, { '@type': 'Place', name: 'Worldwide' }];
+
+/* ---------- Service page ---------- */
+function servicePage(s) {
+  const url = `${SITE}/${s.slug}`;
+  const waLink = wa(s.waText);
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage', '@id': `${url}#webpage`, url, name: s.title, description: s.description, inLanguage: 'en',
+        isPartOf: { '@id': `${SITE}/#website` }, about: { '@id': `${url}#service` }, breadcrumb: { '@id': `${url}#breadcrumb` }
+      },
+      {
+        '@type': 'Service', '@id': `${url}#service`, name: s.serviceName, serviceType: s.serviceType, url,
+        description: s.schemaDescription || s.description, provider: ORG_REF,
+        areaServed: s.areaServed || AREA, availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${url}#enquire`, availableLanguage: 'en' }
+      },
+      {
+        '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'BuildWise Group', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/#solutions` },
+          { '@type': 'ListItem', position: 3, name: s.navName, item: url }
+        ]
+      }
+    ]
+  };
+  const related = s.related.map(slug => SERVICES.find(x => x.slug === slug) || STATIC_PAGES[slug]).filter(Boolean);
+  const caps = s.caps ? `
+    <section class="sec-band sec-dark" id="capabilities" aria-labelledby="capTitle">
+      <div class="container">
+        <div class="section-head section-head-split">
+          <div>
+            <p class="label" data-reveal>${esc(s.caps.label)}</p>
+            <h2 class="section-title" id="capTitle" data-reveal>${html(s.caps.heading)}</h2>
+          </div>
+          <p class="section-note" data-reveal>${html(s.caps.note)}</p>
+        </div>
+        <div class="sec-caps">
+${s.caps.items.map((c, i) => `          <article class="sec-cap" data-reveal>
+            <svg class="sec-cap-icon" aria-hidden="true"><use href="#${c.icon}"/></svg>
+            <p class="label sec-cap-k">${'ABC'[i]}</p>
+            <h3>${html(c.h)}</h3>
+            <p class="sec-cap-lead">${html(c.lead)}</p>
+            <ul class="sec-ticks">
+${c.ticks.map(t => `              <li>${html(t)}</li>`).join('\n')}
+            </ul>
+          </article>`).join('\n')}
+        </div>
+      </div>
+    </section>
+` : '';
+
+  const body = `
+<body class="sec-page svc-page">
+${SPRITE}
+${header({ current: null, ctaHref: '#enquire', ctaLabel: s.headerCta || 'Book a consultation', waLink, tagline: s.label })}
+  <main id="main">
+    <section class="sec-hero" aria-labelledby="pageTitle">
+      <div class="sec-hero-glow" aria-hidden="true"></div>
+      <div class="container sec-hero-grid">
+        <div class="sec-hero-copy">
+          <nav class="svc-crumbs" aria-label="Breadcrumb" data-enter="1">
+            <ol><li><a href="/">Home</a></li><li><a href="/#solutions">Services</a></li><li aria-current="page">${esc(s.navName)}</li></ol>
+          </nav>
+          <h1 class="sec-title" id="pageTitle">
+${s.h1Lines.map((l, i) => `            <span class="line" data-enter="${i + 2}"><span>${html(l)}</span></span>`).join('\n')}
+          </h1>
+          <p class="sec-lead" data-enter="5">${html(s.lead)}</p>
+          <div class="sec-actions" data-enter="6">
+            <a class="btn btn-light" href="#enquire" data-track="cta_consultation">${esc(s.cta)} ${ARROW}</a>
+            <a class="sec-link" href="#process">How we work <svg class="ico" aria-hidden="true"><use href="#i-down"/></svg></a>
+          </div>
+          <ul class="sec-facts" data-enter="7" aria-label="How we work">
+${s.facts.map(f => `            <li>${html(f)}</li>`).join('\n')}
+          </ul>
+        </div>
+        <aside class="svc-glance" data-enter="5" aria-labelledby="glanceTitle">
+          <p class="label" id="glanceTitle">At a glance</p>
+          <dl>
+${s.glance.map(([k, v]) => `            <div><dt>${esc(k)}</dt><dd>${html(v)}</dd></div>`).join('\n')}
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="sec-band sec-light" id="overview" aria-labelledby="overviewTitle">
+      <div class="container svc-split">
+        <div>
+          <p class="label" data-reveal>${esc(s.intro.label)}</p>
+          <h2 class="section-title" id="overviewTitle" data-reveal>${html(s.intro.heading)}</h2>
+        </div>
+        <div class="svc-prose" data-reveal>
+${s.intro.paras.map(p => `          <p>${html(p)}</p>`).join('\n')}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec-band sec-paper" id="use-cases" aria-labelledby="usesTitle">
+      <div class="container">
+        <div class="section-head section-head-split">
+          <div>
+            <p class="label" data-reveal>${esc(s.uses.label)}</p>
+            <h2 class="section-title" id="usesTitle" data-reveal>${html(s.uses.heading)}</h2>
+          </div>
+          <p class="section-note" data-reveal>${html(s.uses.note)}</p>
+        </div>
+        <ol class="sec-problems">
+${s.uses.items.map((u, i) => `          <li data-reveal><span class="step-n">${String(i + 1).padStart(2, '0')}</span><h3>${html(u.h)}</h3><p>${html(u.p)}</p></li>`).join('\n')}
+        </ol>
+      </div>
+    </section>
+${caps}
+    <section class="sec-band sec-light" id="process" aria-labelledby="processTitle">
+      <div class="container">
+        <div class="section-head section-head-split">
+          <div>
+            <p class="label" data-reveal>How an engagement works</p>
+            <h2 class="section-title" id="processTitle" data-reveal>${html(s.process.heading)}</h2>
+          </div>
+          <p class="section-note" data-reveal>${html(s.process.note)}</p>
+        </div>
+        <ol class="sec-process">
+${s.process.steps.map((p, i) => `          <li data-reveal><span class="step-n">${String(i + 1).padStart(2, '0')}</span><h3>${html(p.h)}</h3><p>${html(p.p)}</p></li>`).join('\n')}
+        </ol>
+        <div class="svc-proof" data-reveal>
+          <div>
+            <p class="label">${esc(s.proof.label)}</p>
+            <h3>${html(s.proof.heading)}</h3>
+          </div>
+          <div class="svc-prose">
+${s.proof.paras.map(p => `            <p>${html(p)}</p>`).join('\n')}
+          </div>
+        </div>
+        <p class="sec-auth" data-reveal><strong>${html(s.honesty.title)}</strong> ${html(s.honesty.text)}</p>
+      </div>
+    </section>
+
+    <section class="sec-band sec-dark" id="faq" aria-labelledby="faqTitle">
+      <div class="container sec-faq-grid">
+        <div>
+          <p class="label" data-reveal>Frequently asked questions</p>
+          <h2 class="section-title" id="faqTitle" data-reveal>${html(s.faqHeading || 'Questions, answered plainly.')}</h2>
+        </div>
+        <div class="sec-faq" data-reveal>
+${s.faq.map(([q, a]) => `          <details>
+            <summary>${html(q)}<svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <p>${html(a)}</p>
+          </details>`).join('\n')}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec-band sec-light" id="related" aria-labelledby="relatedTitle">
+      <div class="container">
+        <div class="section-head">
+          <p class="label" data-reveal>Related services</p>
+          <h2 class="section-title" id="relatedTitle" data-reveal>Often part of the same project.</h2>
+        </div>
+        <ul class="svc-related">
+${related.map(r => `          <li data-reveal><a href="/${r.slug}"><span class="svc-related-name">${esc(r.navName)}</span><span class="svc-related-copy">${html(r.summary)}</span>${ARROW}</a></li>`).join('\n')}
+        </ul>
+      </div>
+    </section>
+
+    <section class="contact" id="enquire" aria-labelledby="enquireTitle">
+      <div class="contact-glow" aria-hidden="true"></div>
+      <div class="contact-sweep" aria-hidden="true" data-reveal></div>
+      <div class="container contact-inner">
+        <p class="label" data-reveal><span class="dot" aria-hidden="true"></span>${esc(s.cta)}</p>
+        <h2 class="contact-title" id="enquireTitle">
+${s.enquire.heading.map(l => `          <span class="line" data-reveal><span>${html(l)}</span></span>`).join('\n')}
+        </h2>
+        <p class="contact-intro" data-reveal>${html(s.enquire.intro)}</p>
+
+        <div class="contact-grid">
+          <div class="contact-routes" data-reveal>
+            <div class="route">
+              <h3>What to include</h3>
+              <ul class="sec-include">
+${s.enquire.include.map(i => `                <li>${html(i)}</li>`).join('\n')}
+              </ul>
+              <p class="sec-dont">Please don’t send passwords, API keys or customer personal data through this form.</p>
+            </div>
+            <div class="route route-wa">
+              <h3>Prefer to talk first?</h3>
+              <p>Message us on WhatsApp to talk it through before writing anything down.</p>
+              <a class="btn btn-light route-btn" id="whatsappCta" href="${esc(waLink)}" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Chat on WhatsApp<span class="sr-only"> (opens WhatsApp)</span></a>
+            </div>
+          </div>
+
+          <div class="enquiry" data-reveal>
+            <h3 class="enquiry-title" id="enquiryTitle">${esc(s.cta)}</h3>
+            <p class="enquiry-sub">Your enquiry reaches the same team as every BuildWise project enquiry. We reply to arrange a short discovery conversation.</p>
+
+${enquiryForm(s)}          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+${footer({ waLink, enquireHref: '#enquire' })}
+</body>
+</html>
+`;
+  return head({ title: s.title, description: s.description, canonical: url, ogTitle: s.ogTitle, jsonld, css: ['cybersecurity.css', 'services.css'] }) + '\n' + body;
+}
+
+/* ---------- Insights (articles) ---------- */
+function parseMd(src, file) {
+  const m = src.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!m) throw new Error(`${file}: missing front matter`);
+  const meta = {};
+  for (const line of m[1].split('\n')) {
+    const kv = line.match(/^(\w+):\s*(.*)$/);
+    if (kv) meta[kv[1]] = kv[2].replace(/^"(.*)"$/, '$1');
+  }
+  return { meta, body: m[2] };
+}
+
+function inline(s) {
+  return esc(s)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s.,;:)!?]|$)/g, '$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => {
+      const ext = /^https?:/.test(u) && !u.startsWith(SITE);
+      return `<a href="${u.replace(SITE, '')}"${ext ? ' target="_blank" rel="noopener noreferrer"' : ''}>${t}${ext ? '<span class="sr-only"> (opens in a new tab)</span>' : ''}</a>`;
+    });
+}
+
+export function mdToHtml(md) {
+  const out = [];
+  const lines = md.trim().split('\n');
+  let list = null, para = [];
+  const flushPara = () => { if (para.length) { out.push(`<p>${inline(para.join(' '))}</p>`); para = []; } };
+  const flushList = () => { if (list) { out.push(`<${list.tag}>${list.items.map(i => `<li>${inline(i)}</li>`).join('')}</${list.tag}>`); list = null; } };
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    let m;
+    if (!line.trim()) { flushPara(); flushList(); continue; }
+    if ((m = line.match(/^(#{2,3}) (.+)$/))) { flushPara(); flushList(); const lvl = m[1].length; const id = m[2].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); out.push(`<h${lvl} id="${id}">${inline(m[2])}</h${lvl}>`); continue; }
+    if ((m = line.match(/^(?:- |\d+\. )(.+)$/))) { flushPara(); const tag = /^\d/.test(line) ? 'ol' : 'ul'; if (!list || list.tag !== tag) { flushList(); list = { tag, items: [] }; } list.items.push(m[1]); continue; }
+    if ((m = line.match(/^> (.+)$/))) { flushPara(); flushList(); out.push(`<p class="art-callout">${inline(m[1])}</p>`); continue; }
+    if (list && /^\s{2,}\S/.test(raw)) { list.items[list.items.length - 1] += ' ' + line.trim(); continue; }
+    flushList(); para.push(line.trim());
+  }
+  flushPara(); flushList();
+  return out.join('\n');
+}
+
+export function loadArticles() {
+  const dir = path.join(ROOT, 'content/insights');
+  return fs.readdirSync(dir).filter(f => f.endsWith('.md')).sort().map(f => {
+    const { meta, body } = parseMd(fs.readFileSync(path.join(dir, f), 'utf8'), f);
+    return { ...meta, slug: f.replace(/^\d+-/, '').replace(/\.md$/, ''), order: parseInt(f, 10), body };
+  });
+}
+
+function articlePage(a, all) {
+  const url = `${SITE}/insights/${a.slug}`;
+  const draft = a.status !== 'published';
+  const service = SERVICES.find(s => s.slug === a.service);
+  const waLink = wa(`Hello Buildwise, I read "${a.title}" and would like to talk about ${service ? service.navName.toLowerCase() : 'a project'}.`);
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article', '@id': `${url}#article`, headline: a.title, description: a.description, url, inLanguage: 'en',
+        datePublished: a.date, dateModified: a.updated || a.date, mainEntityOfPage: url,
+        author: ORG_REF, publisher: { '@id': `${SITE}/#organization` }, image: `${SITE}/assets/og-image.jpg`
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'BuildWise Group', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Insights', item: `${SITE}/insights` },
+          { '@type': 'ListItem', position: 3, name: a.title, item: url }
+        ]
+      }
+    ]
+  };
+  const more = all.filter(x => x.slug !== a.slug && (x.service === a.service || x.order % 3 === a.order % 3)).slice(0, 3);
+  const body = `
+<body class="sec-page svc-page art-page">
+${SPRITE}
+${header({ current: null, ctaHref: service ? `/${service.slug}#enquire` : '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'BuildWise Insights' })}
+  <main id="main">
+    <article class="art" aria-labelledby="pageTitle">
+      <header class="art-head">
+        <div class="container art-narrow">
+          <nav class="svc-crumbs" aria-label="Breadcrumb">
+            <ol><li><a href="/">Home</a></li><li><a href="/insights">Insights</a></li><li aria-current="page">${esc(a.short || a.title)}</li></ol>
+          </nav>
+${draft ? `          <p class="art-draft" role="note"><strong>Draft for review.</strong> Not published: hidden from search engines and not linked from the site until approved.</p>\n` : ''}          <h1 class="art-title" id="pageTitle">${esc(a.title)}</h1>
+          <p class="art-dek">${esc(a.description)}</p>
+          <p class="art-meta">By the BuildWise Group team · <time datetime="${a.date}">${new Date(a.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time> · ${a.minutes} min read</p>
+        </div>
+      </header>
+      <div class="container art-narrow art-body">
+${mdToHtml(a.body).replace(/^/gm, '        ')}
+      </div>
+      <aside class="container art-narrow art-cta" aria-labelledby="artCtaTitle">
+        <p class="label">${service ? esc(service.navName) : 'Work with BuildWise'}</p>
+        <h2 id="artCtaTitle">${esc(a.ctaHeading || 'Talk to us about your business.')}</h2>
+        <p>${esc(a.ctaText || 'Tell us how the work happens today. We’ll tell you plainly whether automation, AI or software is worth it, and what a first version would look like.')}</p>
+        <div class="art-cta-actions">
+          <a class="btn btn-light" href="${service ? `/${service.slug}#enquire` : '/#contact'}" data-track="cta_consultation">Book a consultation ${ARROW}</a>
+          ${service ? `<a class="sec-link" href="/${service.slug}">Explore ${esc(service.navName.toLowerCase())}</a>` : ''}
+        </div>
+      </aside>
+${more.length ? `      <nav class="container art-narrow art-more" aria-label="More insights">
+        <p class="label">Keep reading</p>
+        <ul>
+${more.map(m => `          <li><a href="/insights/${m.slug}">${esc(m.title)}</a></li>`).join('\n')}
+        </ul>
+      </nav>` : ''}
+    </article>
+  </main>
+
+${footer({ waLink, enquireHref: service ? `/${service.slug}#enquire` : '/#contact' })}
+</body>
+</html>
+`;
+  return head({ title: `${a.seoTitle || a.title} | BuildWise Group`, description: a.description, canonical: url, jsonld, robots: draft ? 'noindex, follow' : null, css: ['cybersecurity.css', 'services.css'], ogType: 'article' }) + '\n' + body;
+}
+
+function insightsIndex(all) {
+  const url = `${SITE}/insights`;
+  const anyPublished = all.some(a => a.status === 'published');
+  const jsonld = {
+    '@context': 'https://schema.org',
+    '@graph': [{ '@type': 'CollectionPage', '@id': `${url}#webpage`, url, name: 'Insights — BuildWise Group', isPartOf: { '@id': `${SITE}/#website` }, publisher: { '@id': `${SITE}/#organization` } }]
+  };
+  const waLink = wa('Hello Buildwise, I visited your website and would like to discuss a project.');
+  const body = `
+<body class="sec-page svc-page art-page">
+${SPRITE}
+${header({ current: null, ctaHref: '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'BuildWise Insights' })}
+  <main id="main">
+    <section class="art-head" aria-labelledby="pageTitle">
+      <div class="container art-narrow">
+        <p class="label">Insights</p>
+${anyPublished ? '' : `        <p class="art-draft" role="note"><strong>Drafts for review.</strong> No article is published yet. This page is hidden from search engines until at least one is approved.</p>\n`}
+        <h1 class="art-title" id="pageTitle">Practical guides to AI, automation and software for growing businesses.</h1>
+        <p class="art-dek">Written by the BuildWise Group team for owners and managers in Nigeria and beyond: what works, what it costs in effort, and what to watch out for.</p>
+      </div>
+    </section>
+    <div class="container art-narrow">
+      <ol class="art-list">
+${all.map(a => `        <li><a href="/insights/${a.slug}"><span class="art-list-title">${esc(a.title)}</span><span class="art-list-dek">${esc(a.description)}</span>${a.status !== 'published' ? '<span class="art-tag">Draft</span>' : ''}</a></li>`).join('\n')}
+      </ol>
+    </div>
+  </main>
+
+${footer({ waLink, enquireHref: '/#contact' })}
+</body>
+</html>
+`;
+  return head({ title: 'Insights: AI, Automation & Software Guides | BuildWise Group', description: 'Practical guides from BuildWise Group on AI automation, AI agents, WhatsApp automation, custom software and AI search visibility for businesses in Nigeria and beyond.', canonical: url, jsonld, robots: anyPublished ? null : 'noindex, follow', css: ['cybersecurity.css', 'services.css'] }) + '\n' + body;
+}
+
+/* ---------- Sitemap ---------- */
+function sitemap(articles) {
+  const urls = [
+    ...STATIC_PAGES_ORDER.map(([p, d]) => [p, d]),
+    ...SERVICES.map(s => [`/${s.slug}`, s.lastmod]),
+    ...(articles.some(a => a.status === 'published') ? [['/insights', articles.filter(a => a.status === 'published').map(a => a.updated || a.date).sort().pop()]] : []),
+    ...articles.filter(a => a.status === 'published').map(a => [`/insights/${a.slug}`, a.updated || a.date])
+  ];
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(([p, d]) => `  <url>
+    <loc>${SITE}${p}</loc>
+    <lastmod>${d}</lastmod>
+  </url>`).join('\n')}
+</urlset>
+`;
+}
+const STATIC_PAGES_ORDER = [['/', '2026-11-03'], ['/scan', '2026-10-18'], ['/website-audit', '2026-10-18'], ['/privacy', '2026-10-30'], ['/cybersecurity', '2026-11-03'], ['/security', '2026-10-23']];
+
+/* ---------- Footer service links on the hand-written pages ---------- */
+function injectFooterServices(file) {
+  let s = read(file);
+  const block = FOOTER_SERVICES();
+  if (s.includes('<!-- footer-services:start')) s = s.replace(/  <!-- footer-services:start[\s\S]*?<!-- footer-services:end -->/, block);
+  else s = s.replace('  <footer class="site-footer">\n', `  <footer class="site-footer">\n${block}\n`);
+  write(file, s);
+}
+
+export function build({ check = false } = {}) {
+  const outputs = new Map();
+  for (const s of SERVICES) outputs.set(`${s.slug}.html`, servicePage(s));
+  const articles = loadArticles();
+  for (const a of articles) outputs.set(`insights/${a.slug}.html`, articlePage(a, articles));
+  outputs.set('insights.html', insightsIndex(articles));
+  outputs.set('sitemap.xml', sitemap(articles));
+  if (check) return outputs;
+  for (const [f, s] of outputs) write(f, s);
+  for (const f of ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html', '404.html']) injectFooterServices(f);
+  return outputs;
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const out = build();
+  console.log(`Wrote ${out.size} files.`);
+}

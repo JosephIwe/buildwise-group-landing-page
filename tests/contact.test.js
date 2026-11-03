@@ -76,7 +76,7 @@ test('project type, budget and contact method only accept listed values', () => 
   assert.ok(E.normalizeEnquiry({ ...valid, projectType: 'Crypto mining' }).errors.projectType);
   assert.ok(E.normalizeEnquiry({ ...valid, budget: '$1' }).errors.budget);
   assert.ok(E.normalizeEnquiry({ ...valid, contactMethod: 'Fax' }).errors.contactMethod);
-  assert.equal(E.PROJECT_TYPES.length, 8);
+  assert.equal(E.PROJECT_TYPES.length, 12);
   assert.ok(E.PROJECT_TYPES.includes('Application and cloud security review'));
   assert.ok(E.BUDGETS.includes('Not sure yet'));
 });

@@ -32,6 +32,10 @@
     'Website or digital experience',
     'Business automation and integrations',
     'Existing product improvement',
+    'AI automation audit',
+    'WhatsApp automation',
+    'AI receptionist or voice agent',
+    'AI search visibility',
     'Other'
   ];
   const BUDGETS = ['Under $5,000', '$5,000 to $15,000', '$15,000 to $50,000', 'Over $50,000', 'Not sure yet'];
