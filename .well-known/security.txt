@@ -1,0 +1,8 @@
+# Security contact for BuildWise Group (https://buildwisegroup.dev).
+# Report vulnerabilities privately through GitHub private vulnerability
+# reporting. Please read the policy before testing.
+Contact: https://github.com/JosephIwe/buildwise-group-landing-page/security/advisories/new
+Expires: 2027-10-22T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://buildwisegroup.dev/.well-known/security.txt
+Policy: https://buildwisegroup.dev/security

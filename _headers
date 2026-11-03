@@ -3,6 +3,8 @@
 # out of search results.
 /README.md
   X-Robots-Tag: noindex
+/SECURITY.md
+  X-Robots-Tag: noindex
 /tests/*
   X-Robots-Tag: noindex
 /brief/*
@@ -17,4 +19,8 @@
 /website-audit
   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
   Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+# security.txt (RFC 9116) must be plain text at exactly /.well-known/security.txt.
+/.well-known/security.txt
+  Content-Type: text/plain; charset=utf-8
   X-Content-Type-Options: nosniff
