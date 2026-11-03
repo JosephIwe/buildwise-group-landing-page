@@ -63,4 +63,4 @@ Agents built on language models can misunderstand requests and can be manipulate
 
 Write down the workflow, the systems involved and the worst thing that could happen if the software got it wrong. If the worst case is mild and the volume is high, an agent may be worth it. If the worst case is serious, keep a person in the loop for every action, or use simpler automation.
 
-BuildWise Group designs and builds [custom AI agents](/ai-agents) with these guardrails built in, and reviews the security of AI features through our [Application & Cloud Security Review](/cybersecurity).
+Buildwise Group designs and builds [custom AI agents](/ai-agents) with these guardrails built in, and reviews the security of AI features through our [Application & Cloud Security Review](/cybersecurity).

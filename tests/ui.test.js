@@ -796,7 +796,7 @@ test('security page: loads at /cybersecurity with one h1, its own metadata and t
   const { page, context, errors } = await open('/cybersecurity');
   assert.equal(await page.locator('h1').count(), 1);
   assert.match(await page.locator('h1').textContent(), /apps,\s*APIs and cloud/);
-  assert.equal(await page.title(), 'Application & Cloud Security Review — BuildWise Group');
+  assert.equal(await page.title(), 'Application & Cloud Security Review — Buildwise Group');
   assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), `${SITE}/cybersecurity`);
   assert.equal(await page.locator('meta[property="og:url"]').getAttribute('content'), `${SITE}/cybersecurity`);
   assert.ok((await page.locator('meta[name="description"]').getAttribute('content')).length > 80);
@@ -820,7 +820,7 @@ test('security page: loads at /cybersecurity with one h1, its own metadata and t
   await context.close();
 });
 
-test('security page: structured data is a Service provided by the BuildWise organisation, with a breadcrumb', () => {
+test('security page: structured data is a Service provided by the Buildwise organisation, with a breadcrumb', () => {
   const data = JSON.parse(read('cybersecurity.html').match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   const service = data['@graph'].find(n => n['@type'] === 'Service');
   const crumbs = data['@graph'].find(n => n['@type'] === 'BreadcrumbList');

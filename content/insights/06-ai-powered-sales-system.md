@@ -67,4 +67,4 @@ Track a baseline first, then compare:
 
 If speed improves but conversion doesn’t, the problem is further down the funnel, and that is useful to know too.
 
-BuildWise Group builds sales and lead-handling workflows as part of [business process automation](/business-automation) and [AI agents](/ai-agents).
+Buildwise Group builds sales and lead-handling workflows as part of [business process automation](/business-automation) and [AI agents](/ai-agents).

@@ -1,7 +1,7 @@
 {
   "name": "buildwise-site-tests",
   "private": true,
-  "description": "Tests for the BuildWise Group static site. Kept in tests/ so the site root stays build-free.",
+  "description": "Tests for the Buildwise Group static site. Kept in tests/ so the site root stays build-free.",
   "scripts": {
     "test": "node --test",
     "test:engine": "node --test engine.test.js",

@@ -71,4 +71,4 @@ The staff still make the decisions. They just stop retyping.
 3. Does a reliable product already do this?
 4. What will it cost to run each month, and who will maintain it?
 
-BuildWise Group builds [custom software](/custom-software-development) and [business process automation](/business-automation), and will tell you plainly when buying an existing product is the better choice.
+Buildwise Group builds [custom software](/custom-software-development) and [business process automation](/business-automation), and will tell you plainly when buying an existing product is the better choice.

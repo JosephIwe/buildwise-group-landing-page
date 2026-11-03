@@ -1,4 +1,4 @@
-# BuildWise Group
+# Buildwise Group
 # Every public page is open to search engines and AI search assistants. Scanner answers
 # never appear in a URL a crawler can request: report links keep them after "#", which
 # browsers never send to the server, and a page showing a report is marked noindex.

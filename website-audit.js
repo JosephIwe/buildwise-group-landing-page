@@ -177,7 +177,7 @@
 
   const summaryText = () => {
     const r = report;
-    const lines = ['Hello BuildWise Group,', '', 'I ran the Website & AI Visibility Audit and would like help fixing the issues it found.', '', `Website: ${r.finalUrl}`, `Audited: ${r.auditedAt.slice(0, 10)}`, ''];
+    const lines = ['Hello Buildwise Group,', '', 'I ran the Website & AI Visibility Audit and would like help fixing the issues it found.', '', `Website: ${r.finalUrl}`, `Audited: ${r.auditedAt.slice(0, 10)}`, ''];
     if (r.confirmed.length) { lines.push('Confirmed findings:'); r.confirmed.forEach(f => lines.push(`- [${f.severity}] ${f.title}`)); lines.push(''); }
     if (r.advisory.length) { lines.push('Recommendations:'); r.advisory.forEach(f => lines.push(`- [${f.severity}] ${f.title}`)); lines.push(''); }
     lines.push('Name:', 'Company:', 'Best way to reach me:');
@@ -187,7 +187,7 @@
   const plainText = () => {
     const r = report;
     const rule = '-'.repeat(60);
-    const lines = ['BuildWise Group · Website & AI Visibility Audit', `Website: ${r.finalUrl}`, `Audited: ${r.auditedAt}`, '', r.method, r.disclaimer, ''];
+    const lines = ['Buildwise Group · Website & AI Visibility Audit', `Website: ${r.finalUrl}`, `Audited: ${r.auditedAt}`, '', r.method, r.disclaimer, ''];
     const section = (title, items) => {
       lines.push(rule, title, rule);
       if (!items.length) lines.push('None.');

@@ -79,4 +79,4 @@ The exact timing depends on the workflow and on how quickly accounts such as the
 - Keep people in charge of judgement and exceptions.
 - Measure before and after, and be willing to stop.
 
-BuildWise Group builds AI automation for businesses across Nigeria, remotely. Learn more about [AI automation in Nigeria](/ai-automation-nigeria).
+Buildwise Group builds AI automation for businesses across Nigeria, remotely. Learn more about [AI automation in Nigeria](/ai-automation-nigeria).

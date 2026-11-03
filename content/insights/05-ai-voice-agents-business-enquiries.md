@@ -64,4 +64,4 @@ Many businesses start with WhatsApp and add voice later, once they know the ques
 
 Voice agents are real and useful for answering simple calls, especially after hours. They need careful testing for accents, connection quality and costs, and in Nigeria they often work best alongside WhatsApp rather than instead of it.
 
-BuildWise Group builds [AI receptionists](/ai-receptionist) on WhatsApp and web chat, and assesses voice for each project.
+Buildwise Group builds [AI receptionists](/ai-receptionist) on WhatsApp and web chat, and assesses voice for each project.

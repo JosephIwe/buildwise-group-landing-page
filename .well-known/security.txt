@@ -1,4 +1,4 @@
-# Security contact for BuildWise Group (https://buildwisegroup.dev).
+# Security contact for Buildwise Group (https://buildwisegroup.dev).
 # Report vulnerabilities privately through GitHub private vulnerability
 # reporting. Please read the policy before testing.
 Contact: https://github.com/JosephIwe/buildwise-group-landing-page/security/advisories/new

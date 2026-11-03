@@ -1,10 +1,10 @@
-# BuildWise Group
+# Buildwise Group
 
-> BuildWise Group is an independent, remote-first technology company. It builds AI-powered systems, intelligent agents and custom software that help businesses automate operations, serve customers better and unlock new opportunities. It works with businesses across Nigeria and internationally, has no physical office, and builds and owns its own ventures.
+> Buildwise Group is an independent, remote-first technology company. It builds AI-powered systems, intelligent agents and custom software that help businesses automate operations, serve customers better and unlock new opportunities. It works with businesses across Nigeria and internationally, has no physical office, and builds and owns its own ventures.
 
 This file is a plain-text summary of the public website for AI assistants and other tools that read it. The website itself is the source of truth.
 
-## What BuildWise Group does
+## What Buildwise Group does
 
 - AI product engineering: product definition, architecture and working software for AI-native products.
 - Business automation: operations and customer workflows, with human oversight where it matters.
@@ -15,12 +15,12 @@ This file is a plain-text summary of the public website for AI assistants and ot
 
 ## Industry experience
 
-Each area is labelled by where the experience comes from. BuildWise names clients only with their permission.
+Each area is labelled by where the experience comes from. Buildwise names clients only with their permission.
 
 - Healthcare and aesthetics (client engagement): website maintenance for an aesthetics business, and work with Maya, the AI receptionist from Staff.
-- Recruitment and career technology (BuildWise product): Huntly.
-- Financial technology and trading tools (BuildWise product, in development): Traider.
-- Business operations and automation (BuildWise product, in validation): Staff.
+- Recruitment and career technology (Buildwise product): Huntly.
+- Financial technology and trading tools (Buildwise product, in development): Traider.
+- Business operations and automation (Buildwise product, in validation): Staff.
 - Digital products and software (capability): websites, web applications and tools built in-house, including the scanner and website audit on this site.
 
 ## Ventures
@@ -32,7 +32,7 @@ Each area is labelled by where the experience comes from. BuildWise names client
 ## Services
 
 - [AI automation in Nigeria](https://buildwisegroup.dev/ai-automation-nigeria): AI agents, WhatsApp automation and workflow automation for Nigerian businesses, delivered remotely; starts with an AI automation audit.
-- [AI automation in Lagos](https://buildwisegroup.dev/ai-automation-lagos): the same service for Lagos businesses. BuildWise serves Lagos remotely and has no Lagos office.
+- [AI automation in Lagos](https://buildwisegroup.dev/ai-automation-lagos): the same service for Lagos businesses. Buildwise serves Lagos remotely and has no Lagos office.
 - [AI agents](https://buildwisegroup.dev/ai-agents): custom AI agents for customer support, sales, enquiries and internal operations, with limited permissions, logging and human handover.
 - [WhatsApp automation](https://buildwisegroup.dev/whatsapp-automation): WhatsApp assistants on Meta's official WhatsApp Business Platform for enquiries, lead qualification, bookings, notifications and human handover.
 - [AI receptionists](https://buildwisegroup.dev/ai-receptionist): enquiries, appointment booking and reminders on WhatsApp and web chat; voice assessed per project.
@@ -43,7 +43,7 @@ Each area is labelled by where the experience comes from. BuildWise names client
 ## Pages
 
 - [Homepage](https://buildwisegroup.dev/): services, approach, products, industry experience, frequently asked questions and contact.
-- [AI Business Opportunity Scanner](https://buildwisegroup.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to BuildWise Group.
+- [AI Business Opportunity Scanner](https://buildwisegroup.dev/scan): eight questions that produce a rule-based report on where AI, automation or software could help a business. It runs in the browser; answers are not sent to Buildwise Group.
 - [Application & Cloud Security Review](https://buildwisegroup.dev/cybersecurity): what the security review covers, how it is scoped and authorised, what clients receive, and how to request one.
 - [Website & AI Visibility Audit](https://buildwisegroup.dev/website-audit): an automated, read-only check of a public website's technical SEO, robots.txt rules for search and AI crawlers, and content clarity, with evidence for each finding. It is not a guarantee of rankings or AI citations.
 - [Report a security vulnerability](https://buildwisegroup.dev/security): how to report a vulnerability in this website privately, through GitHub private vulnerability reporting.

@@ -1,4 +1,4 @@
-/* Official BuildWise Group social profiles, in one place.
+/* Official Buildwise Group social profiles, in one place.
  *
  * The footer on every page shows a profile only once its `url` is filled in here
  * with the founder-confirmed address of the official account. While `url` is
@@ -50,7 +50,7 @@
         link.target = '_blank';
         link.rel = 'noopener noreferrer me';
         link.className = 'social-link';
-        link.setAttribute('aria-label', `BuildWise Group on ${profile.label} (opens in a new tab)`);
+        link.setAttribute('aria-label', `Buildwise Group on ${profile.label} (opens in a new tab)`);
         link.innerHTML = `<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONS[profile.id]}</svg>`;
         item.appendChild(link);
         list.appendChild(item);

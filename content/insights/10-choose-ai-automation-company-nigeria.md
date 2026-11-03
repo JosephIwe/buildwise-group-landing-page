@@ -67,4 +67,4 @@ A provider doesn’t need an office near you to do good work. Many strong teams,
 - Testing with real cases before launch.
 - A review after a few weeks of live use, and an honest decision about what comes next.
 
-BuildWise Group is a remote-first technology company building [AI automation for Nigerian businesses](/ai-automation-nigeria) and international clients. Ask us these questions.
+Buildwise Group is a remote-first technology company building [AI automation for Nigerian businesses](/ai-automation-nigeria) and international clients. Ask us these questions.
