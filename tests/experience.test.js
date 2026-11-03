@@ -308,3 +308,27 @@ test('brand links use their visible text as their accessible name', opts, async 
   assert.equal(await page.locator('a.brand[aria-label]').count(), 0);
   await context.close();
 });
+
+/* ---------- Parent company and products ---------- */
+test('products: every product with a live site is linked from its card and its brand node, and only those', () => {
+  // Permanent brand architecture (founder, 2026-11-03). A product joins this list only once its
+  // official domain and ownership are verified; Traider and Staff have no public site yet, and
+  // AskNex waits on the founder confirming how its maker relates to BuildWise.
+  const LIVE = { Huntly: 'https://huntlyagent.com/' };
+  const html = read('index.html');
+  const org = orgOf(html);
+  assert.equal(org['@id'], `${SITE}/#organization`, 'product sites reference this exact @id');
+  assert.equal(org.alternateName, 'Buildwise Group', 'the spelling product sites use resolves to this entity');
+  for (const brand of org.brand) {
+    if (LIVE[brand.name]) {
+      assert.equal(brand.url, LIVE[brand.name]);
+      assert.equal(brand['@id'], `${SITE}/#brand-${brand.name.toLowerCase()}`);
+    } else {
+      assert.ok(!('url' in brand), `${brand.name} has no verified site, so no url`);
+    }
+  }
+  const ventures = section(html, 'ventures');
+  const links = [...ventures.matchAll(/<a class="venture-link" href="([^"]+)"/g)].map(m => m[1].replace(/\/?$/, '/'));
+  assert.deepEqual(links, Object.values(LIVE), 'only verified product sites are linked from the cards');
+  assert.ok(!/asknex/i.test(html), 'AskNex is not listed until its ownership is confirmed');
+});
