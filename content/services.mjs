@@ -36,6 +36,193 @@ const AREA_NG_WORLD = [{ '@type': 'Country', name: 'Nigeria' }, { '@type': 'Plac
 export const SERVICES = [
   /* ------------------------------------------------------------------ */
   {
+    slug: 'ai-employees',
+    navName: 'AI employees',
+    summary: 'AI employees that take on a defined role, such as front desk or lead follow-up, with people in charge.',
+    lastmod: '2026-11-03',
+    title: 'AI Employees for Business Operations | BuildWise Group',
+    ogTitle: 'AI Employees and Business Automation — BuildWise Group',
+    description: 'BuildWise Group builds AI employees: AI agents given one clear role, such as front desk or lead follow-up, connected to your tools and supervised by your team.',
+    serviceName: 'AI employee design and deployment',
+    serviceType: 'AI employees and business automation',
+    projectType: 'AI agents and AI employees',
+    cta: 'Discuss an AI employee',
+    waText: 'Hello Buildwise, I would like to discuss an AI employee for my business.',
+    label: 'AI employees',
+    h1Lines: ['AI employees', 'with a job description,', 'not a magic trick.'],
+    lead: 'An AI employee is an AI agent given one clear role in your business, the tools and information that role needs, and a manager who reviews its work. We design, build and run AI employees for front-desk, sales follow-up and operations work, starting with one role and one workflow.',
+    facts: ['One role, written down', 'Connected to the tools you already use', 'Supervised, logged and easy to correct'],
+    glance: [
+      ['Who it’s for', 'Businesses where a team spends its day answering, chasing, copying and checking the same kinds of request'],
+      ['Typical roles', 'Front desk and bookings, lead follow-up, customer support, operations admin'],
+      ['First step', 'A discovery call to choose one role and write its job description'],
+      ['Related', 'Our own AI employee platform, <a href="/#ventures">Staff</a>, in validation']
+    ],
+    intro: {
+      label: 'What an AI employee is',
+      heading: 'A role, not a chatbot.',
+      paras: [
+        '“AI employee” is a useful way to think about AI in a business, as long as it is taken literally. A human employee has a <strong>job description</strong>, access to the systems the job needs, a manager, and a record of the work they did. An <strong>AI employee</strong>, as we build it, has the same four things: a written role, limited access to your tools, a person who supervises it, and a log of every conversation and action.',
+        'Under the hood an AI employee is one or more <a href="/ai-agents">AI agents</a> plus the <a href="/business-automation">workflow automation</a> around them: the integrations that read and update your CRM, calendar, spreadsheet or inbox, and the rules that decide when a person must take over. The “employee” framing matters because it forces the right questions before anything is built: what exactly is this role responsible for, what is it never allowed to do, and who checks its work?',
+        'It is not a replacement for your team. The work an AI employee does well is high-volume, repetitive and well defined. Judgement, relationships and anything with real risk stay with people, and a good AI employee hands those over quickly, with the context attached.'
+      ]
+    },
+    uses: {
+      label: 'Roles we build',
+      heading: 'Start with the role<br class="br-md"> your team never catches up on.',
+      note: 'Each role starts narrow. When it works reliably, it can take on more of the job, or a second role can be added on the same foundations.',
+      items: [
+        { h: 'Front desk and bookings', p: 'Answers enquiries about services, prices and availability, takes booking requests, confirms and reschedules appointments and sends reminders, on WhatsApp and web chat. See <a href="/ai-receptionist">AI receptionists</a>.' },
+        { h: 'Lead follow-up', p: 'Replies to new leads within minutes, asks your qualifying questions, records answers in your CRM and books a call with the right person, so warm enquiries stop going cold.' },
+        { h: 'Customer support', p: 'Answers common questions from your approved documentation, checks order or account status where your systems allow, and passes complex or emotional cases to your team with a summary.' },
+        { h: 'Operations admin', p: 'Reads incoming emails, forms and documents, extracts the details that matter, updates the right system and drafts the routine replies and reports your team currently writes by hand.' },
+        { h: 'WhatsApp business assistant', p: 'For businesses whose customers live on WhatsApp, an assistant on the official WhatsApp Business Platform that handles enquiries and orders within Meta’s rules. See <a href="/whatsapp-automation">WhatsApp automation</a>.' }
+      ]
+    },
+    caps: {
+      label: 'How we build AI employees',
+      heading: 'Engineered like a system.<br class="br-md"> Managed like a hire.',
+      note: 'The parts that make an AI employee safe to rely on are designed before the first conversation, not added after the demo.',
+      items: [
+        { icon: 'i-ai', h: 'Role and knowledge', lead: 'A clear brief and the right information.', ticks: ['A written role: duties, limits and escalation rules', 'Answers grounded in information you approve', 'Model choice matched to the task, cost and data location', 'Test cases built from real requests, including awkward ones'] },
+        { icon: 'i-flow', h: 'Tools and integrations', lead: 'Access to exactly what the role needs.', ticks: ['Connections to your CRM, calendar, inbox or sheets through their APIs', 'Least-privilege access for every system', 'Confirmation steps for sensitive actions', 'Defences against prompt injection from customer messages and documents'] },
+        { icon: 'i-chat', h: 'Supervision and improvement', lead: 'Your team stays in charge.', ticks: ['Handover to a person with the full conversation', 'A log of every conversation and action', 'Regular review of mistakes and edge cases', 'Changes tested before they go live'] }
+      ]
+    },
+    process: {
+      heading: 'One role.<br class="br-md"> Evidence before scale.',
+      note: 'An AI employee earns more responsibility the same way a new hire does: by doing a narrow job reliably first.',
+      steps: [
+        { h: 'Discovery call', p: 'We look at where your team’s time goes and pick the one role where an AI employee would remove the most repetitive work with the least risk.' },
+        { h: 'Write the job description', p: 'Duties, tone of voice, the systems it may read or update, what it must never do, and exactly when it hands over to a person.' },
+        { h: 'Build and connect', p: 'We build the agent and the integrations around it, with logging and a simple way for your team to review its work.' },
+        { h: 'Supervised trial', p: 'It runs on real (or realistic) cases with a person checking its work, and we fix what goes wrong before anyone depends on it.' },
+        { h: 'Go live and extend', p: 'Once the evidence says it is reliable, it takes on its role fully, and we decide together whether to widen its duties or add a second role.' }
+      ]
+    },
+    proof: {
+      label: 'Built on our own work',
+      heading: 'Staff: our AI employee platform, in validation.',
+      paras: [
+        '<strong>Staff</strong> is the applied-AI employee platform we are building and validating on everyday work such as enquiries and bookings. Its example employee, <strong>Maya</strong>, is an AI receptionist, and we have worked with an aesthetics business on Maya. Staff is not yet generally available, so for clients we build AI employees as projects, using what we learn from Staff.',
+        'We also build and run <strong>Huntly</strong>, a live AI job-search assistant, so the agent, integration and evaluation patterns we use for clients are ones we depend on ourselves.'
+      ]
+    },
+    honesty: { title: 'An AI employee can be wrong.', text: 'Any system built on a language model can misread a request. We design for that with narrow permissions, confirmation steps, logs and fast handover to people, and we will recommend a simpler automation, or no AI at all, where a mistake would be costly.' },
+    faq: [
+      ['What is an AI employee?', 'An AI agent given one defined role in a business, such as front desk or lead follow-up, with access to the tools that role needs, written limits, and a person who supervises its work. It is software, not a person, and it should always say it is an AI assistant.'],
+      ['How is an AI employee different from a chatbot?', 'A scripted chatbot follows a fixed decision tree and usually only talks. An AI employee understands free-form requests and can take actions you allow, such as booking an appointment or updating your CRM, and it hands work to people when it should.'],
+      ['Will an AI employee replace my staff?', 'That is not how we design them. They take on the repetitive, high-volume part of a role so your team can spend time on customers, judgement and the work that needs a person.'],
+      ['Can I buy Staff or Maya today?', 'Not yet. Staff is in validation. We build AI employees for clients as projects in the meantime, and we will say so plainly when Staff is available.'],
+      ['Which tools can an AI employee work with?', 'Usually anything with an API or another reliable integration: WhatsApp Business Platform, website chat, email, calendars, CRMs, spreadsheets and many booking systems. We confirm each connection in discovery and tell you if one cannot be done safely.'],
+      ['How much does an AI employee cost?', 'We quote after discovery. Build cost depends on the role and the integrations; running costs, such as AI model usage and WhatsApp message charges, are shown separately so you can see them.']
+    ],
+    related: ['ai-agents', 'ai-receptionist', 'business-automation', 'whatsapp-automation'],
+    enquire: {
+      heading: ['Describe the role', 'your team can’t keep up with.'],
+      intro: 'Tell us about the work. We’ll reply to arrange a short discovery call and help you decide whether an AI employee is the right answer.',
+      include: ['The role or task, and who does it today', 'How often it happens and where requests arrive', 'The systems it would need to read or update', 'Anything it must always pass to a person'],
+      messageLabel: 'Which role would an AI employee take on?',
+      messageHint: 'Describe the work, the channels and systems involved, and any limits. No passwords or customer data, please.'
+    }
+  },
+
+  /* ------------------------------------------------------------------ */
+  {
+    slug: 'ai-product-engineering',
+    navName: 'AI product engineering',
+    summary: 'Design and engineering for AI-powered products and features, from first prototype to production.',
+    lastmod: '2026-11-03',
+    title: 'AI Product Engineering and Development | BuildWise Group',
+    ogTitle: 'AI Product Engineering — BuildWise Group',
+    description: 'BuildWise Group designs and engineers AI-powered products and features: LLM applications, retrieval, agents and evaluation, taken from prototype to secure production software.',
+    serviceName: 'AI product engineering',
+    serviceType: 'AI product development',
+    projectType: 'AI product development',
+    cta: 'Discuss your AI product',
+    headerCta: 'Discuss a product',
+    waText: 'Hello Buildwise, I would like to discuss an AI product.',
+    label: 'AI product engineering',
+    h1Lines: ['AI products', 'that work after', 'the demo.'],
+    lead: 'A convincing AI demo takes a weekend. A product people rely on needs grounding, evaluation, cost control, security and a user experience that copes with uncertain answers. We engineer AI products and features for founders and businesses, the way we build our own.',
+    facts: ['Evaluation before launch', 'Costs and latency designed in', 'Secure against untrusted input'],
+    glance: [
+      ['Who it’s for', 'Founders building an AI-first product, and companies adding AI features to software they already run'],
+      ['What we build', 'LLM applications, retrieval over your data, agents, document and conversation features'],
+      ['First step', 'A discovery call, then a written scope for a focused first release'],
+      ['Our own products', '<a href="/#ventures">Huntly</a> (live), Traider (in development), Staff (in validation)']
+    ],
+    intro: {
+      label: 'What AI product engineering is',
+      heading: 'The model is the easy part.',
+      paras: [
+        '<strong>AI product engineering</strong> is the work of turning a language model, or another AI capability, into software that real users can depend on. Calling a model is one line of code. The product is everything around it: what information the model sees, how its answers are checked, what happens when it is wrong, what each request costs, how fast it responds, and how it behaves when someone tries to misuse it.',
+        'That is different from general <a href="/custom-software-development">custom software development</a>, because AI output is probabilistic. The same input can produce different answers, quality can drift when a provider updates a model, and costs scale with usage in ways traditional software does not. Those properties have to be designed for from the first release.',
+        'BuildWise Group builds and runs its own AI products, so we have made these trade-offs with our own money and our own users. We bring the same discipline to client products: a narrow first version, a way to measure whether it works, and an architecture that does not lock you into one model provider.'
+      ]
+    },
+    uses: {
+      label: 'What we build',
+      heading: 'From AI-first product<br class="br-md"> to AI feature.',
+      note: 'Typical work. Most projects combine several of these with ordinary web application engineering.',
+      items: [
+        { h: 'AI-first products and MVPs', p: 'A new product where AI is the core of the value, such as an assistant, an analysis tool or a matching service, scoped to a first release real users can try.' },
+        { h: 'Retrieval over your own data', p: 'Search and question answering over documents, policies, catalogues or records, with answers that cite their sources and respect who is allowed to see what.' },
+        { h: 'Agents inside products', p: 'Features that take actions on a user’s behalf, such as drafting, filling in, booking or updating, with limits and confirmation built in. See <a href="/ai-agents">AI agents</a>.' },
+        { h: 'Document and conversation processing', p: 'Extracting, classifying and summarising emails, forms, PDFs and chat transcripts so the rest of your software can act on them.' },
+        { h: 'Rescuing an AI prototype', p: 'Taking a prototype that impressed in a demo and making it reliable: adding evaluation, error handling, monitoring, cost limits and a security review.' }
+      ]
+    },
+    caps: {
+      label: 'Engineering standards',
+      heading: 'What makes an AI product<br class="br-md"> production-ready.',
+      note: 'Included in every AI product we build, scaled to the size of the project.',
+      items: [
+        { icon: 'i-ai', h: 'Quality you can measure', lead: 'We define “good” before we build.', ticks: ['Evaluation sets built from real or realistic cases', 'Grounding and citations where answers must be factual', 'Regression checks when prompts or models change', 'Model choice per task, kept replaceable'] },
+        { icon: 'i-cloud', h: 'Cost and performance', lead: 'Unit economics that survive real usage.', ticks: ['Cost per request estimated and monitored', 'Caching, batching and smaller models where they suffice', 'Latency budgets for each user journey', 'Usage limits to prevent runaway spend'] },
+        { icon: 'i-shield', h: 'Security and data', lead: 'AI features treated as an attack surface.', ticks: ['Untrusted input handled with prompt-injection defences', 'Least-privilege tool and data access', 'Data protection designed in (NDPA, GDPR where relevant)', 'Independent review available: <a href="/cybersecurity">security</a>'] }
+      ]
+    },
+    process: {
+      heading: 'Prove it small.<br class="br-md"> Then build it properly.',
+      note: 'AI projects fail when a demo is mistaken for a product. Each stage ends with evidence you can judge.',
+      steps: [
+        { h: 'Discovery', p: 'The users, the job the product does for them, the data available, the risks, and what “working” means in measurable terms.' },
+        { h: 'Feasibility spike', p: 'A short technical test on real examples to show whether the AI part can reach the quality needed, before the full build is committed.' },
+        { h: 'Scope and architecture', p: 'A written scope for the first release, the key screens and an architecture that keeps models, data and costs under control.' },
+        { h: 'Build and evaluate', p: 'Working software in short increments, with the evaluation set run on every significant change.' },
+        { h: 'Launch and operate', p: 'A controlled launch, monitoring of quality, cost and errors, and improvements based on how people actually use it.' }
+      ]
+    },
+    proof: {
+      label: 'Products we build and run',
+      heading: 'We ship AI products of our own.',
+      paras: [
+        '<strong>Huntly</strong>, our AI job-search assistant, is live: it evaluates opportunities against a person’s profile and helps prepare applications. <strong>Staff</strong>, our AI employee platform, is in validation, with Maya, an AI receptionist, as its example employee. <strong>Traider</strong>, a crypto research and trading-signals project, is in development.',
+        'On this website you can also try two tools we built in-house: the <a href="/scan">AI Business Opportunity Scanner</a> and the <a href="/website-audit">Website &amp; AI Visibility Audit</a>.'
+      ]
+    },
+    honesty: { title: 'Not every product needs AI.', text: 'If a rules-based feature, a search box or a well-designed form solves the problem more cheaply and reliably, we will say so. Where AI is the right tool, we tell you plainly what it can and cannot do before you commit to a build.' },
+    faq: [
+      ['What does an AI product engineer do?', 'Designs and builds the software around an AI model: what data it sees, how its output is checked and shown to users, how costs and speed are controlled, and how the product stays secure. The model is one component; the product is the system.'],
+      ['Can you build our MVP?', 'Yes. We scope a focused first release that real users can try, usually after a short feasibility test on the AI part so you know it can reach the quality you need.'],
+      ['Which AI models and providers do you use?', 'We choose per task from established providers, weighing quality, speed, cost and where data is processed, and we design the product so the model can be changed without a rebuild.'],
+      ['How do you know if the AI is good enough?', 'We build an evaluation set from real or realistic cases and agree the quality bar with you before launch. The same set is rerun when prompts or models change, so quality does not quietly drift.'],
+      ['Can you take over an AI prototype someone else built?', 'Yes. We start with a review of the code, prompts, data handling, costs and security, tell you what we find, then propose a plan to make it production-ready.'],
+      ['Who owns the product?', 'For software we build for you, ownership is set out in the contract. Our default is that you own what you pay us to build.']
+    ],
+    related: ['custom-software-development', 'ai-agents', 'ai-employees', 'cybersecurity'],
+    enquire: {
+      heading: ['Tell us about', 'the product.'],
+      intro: 'Share the idea, the prototype or the problem. We’ll reply to arrange a discovery call.',
+      include: ['Who the product is for and the job it does for them', 'Whether it is a new product, a feature or an existing prototype', 'The data it would use and where it lives', 'Any deadline or launch you are working towards'],
+      messageLabel: 'Describe the AI product or feature',
+      messageHint: 'What should it do, for whom, and what would a good outcome look like? No passwords or customer data, please.'
+    }
+  },
+
+  /* ------------------------------------------------------------------ */
+  {
     slug: 'ai-automation-nigeria',
     navName: 'AI automation in Nigeria',
     summary: 'AI agents, WhatsApp and workflow automation for Nigerian businesses, delivered remotely.',
@@ -268,7 +455,7 @@ export const SERVICES = [
       ['Can an agent work on WhatsApp?', 'Yes, through the WhatsApp Business Platform, subject to Meta’s policies on opt-in, message templates and business verification. See <a href="/whatsapp-automation">WhatsApp automation</a>.'],
       ['How do you stop an agent doing something it shouldn’t?', 'It only gets the permissions the workflow needs, sensitive actions need confirmation, every action is logged, and inputs from customers or documents are treated as untrusted. We test these limits before launch.'],
       ['Can you connect an agent to our existing systems?', 'Usually, if the system offers an API or another reliable way to connect. We check this in discovery, and if a system can’t be connected safely we’ll say so.'],
-      ['Do you build AI employees?', 'Staff, our AI employee platform, is still being validated. For client work we build focused agents for specific workflows, which is the honest way to start.']
+      ['Do you build AI employees?', 'Yes, as focused projects: an agent given one defined role, with written limits and a person supervising it. See <a href="/ai-employees">AI employees</a>. Staff, our own AI employee platform, is still being validated.']
     ],
     related: ['whatsapp-automation', 'ai-receptionist', 'business-automation', 'cybersecurity'],
     enquire: {
@@ -439,7 +626,7 @@ export const SERVICES = [
       ['Do you build mobile apps?', 'Yes, when a mobile app is genuinely needed. For many businesses a fast, mobile-friendly web application is cheaper to build and maintain, and we’ll tell you if that is the case.'],
       ['Do you work with international clients?', 'Yes. We work remotely with clients in Nigeria and abroad, and agree working hours and communication channels at the start.']
     ],
-    related: ['business-automation', 'ai-agents', 'cybersecurity', 'ai-visibility'],
+    related: ['ai-product-engineering', 'business-automation', 'ai-agents', 'cybersecurity'],
     enquire: {
       heading: ['Tell us what', 'you’re building.'],
       intro: 'Share the idea or the problem. We’ll reply to arrange a discovery call.',
