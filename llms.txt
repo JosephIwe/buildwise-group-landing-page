@@ -1,6 +1,6 @@
 # BuildWise Group
 
-> BuildWise Group is an independent, remote-first technology company. It builds AI-powered systems, intelligent agents and custom software that help businesses automate operations, serve customers better and unlock new opportunities. It works with businesses across Nigeria and internationally, has no physical office, and builds and owns its own ventures.
+> BuildWise Group is an independent, remote-first technology company. It builds AI products, AI employees and business systems that help businesses automate operations, serve customers better and unlock new opportunities. It works with businesses across Nigeria and internationally, has no physical office, and builds and owns its own ventures.
 
 This file is a plain-text summary of the public website for AI assistants and other tools that read it. The website itself is the source of truth.
 
@@ -31,6 +31,8 @@ Each area is labelled by where the experience comes from. BuildWise names client
 
 ## Services
 
+- [AI employees](https://buildwisegroup.dev/ai-employees): AI agents given one defined role (front desk, lead follow-up, customer support, operations admin) with limited access to a business's tools, written limits and human supervision. Built as client projects; the Staff platform itself is in validation.
+- [AI product engineering](https://buildwisegroup.dev/ai-product-engineering): design and engineering of AI-powered products and features (LLM applications, retrieval, agents, document processing) with evaluation, cost control and security, from prototype to production.
 - [AI automation in Nigeria](https://buildwisegroup.dev/ai-automation-nigeria): AI agents, WhatsApp automation and workflow automation for Nigerian businesses, delivered remotely; starts with an AI automation audit.
 - [AI automation in Lagos](https://buildwisegroup.dev/ai-automation-lagos): the same service for Lagos businesses. BuildWise serves Lagos remotely and has no Lagos office.
 - [AI agents](https://buildwisegroup.dev/ai-agents): custom AI agents for customer support, sales, enquiries and internal operations, with limited permissions, logging and human handover.

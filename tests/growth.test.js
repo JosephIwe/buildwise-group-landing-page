@@ -27,7 +27,7 @@ test.before(async () => {
   builder = await import(pathToFileURL(path.join(ROOT, 'scripts/build-pages.mjs')));
 });
 
-const SLUGS = ['ai-automation-nigeria', 'ai-automation-lagos', 'ai-agents', 'whatsapp-automation', 'custom-software-development', 'ai-visibility', 'business-automation', 'ai-receptionist'];
+const SLUGS = ['ai-employees', 'ai-product-engineering', 'ai-automation-nigeria', 'ai-automation-lagos', 'ai-agents', 'whatsapp-automation', 'custom-software-development', 'ai-visibility', 'business-automation', 'ai-receptionist'];
 
 /* ---------- Generated output ---------- */
 test('generated pages are up to date with content/ (run `node scripts/build-pages.mjs`)', () => {
@@ -38,7 +38,7 @@ test('generated pages are up to date with content/ (run `node scripts/build-page
   }
 });
 
-test('the eight service pages exist at the agreed URLs, each with its own search intent', () => {
+test('the service pages exist at the agreed URLs, each with its own search intent', () => {
   assert.deepEqual(content.SERVICES.map(s => s.slug).sort(), [...SLUGS].sort());
   const seen = { title: new Set(), description: new Set(), h1: new Set() };
   for (const slug of SLUGS) {
