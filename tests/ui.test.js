@@ -464,6 +464,14 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.match(read('security.html'), new RegExp(`rel="canonical" href="${locs[5]}"`));
 });
 
+test('the pages.dev hosts are noindex, and the canonical domain is not', () => {
+  const h = read('_headers');
+  assert.match(h, /^https:\/\/:project\.pages\.dev\/\*\n\s+X-Robots-Tag: noindex$/m);
+  assert.match(h, /^https:\/\/:version\.:project\.pages\.dev\/\*\n\s+X-Robots-Tag: noindex$/m);
+  assert.ok(!/buildwisegroup\.dev[^\n]*\n\s+X-Robots-Tag/.test(h), 'no noindex rule targets buildwisegroup.dev');
+  assert.ok(!/^\/\*\n(\s+.+\n)*?\s+X-Robots-Tag/m.test(h), 'no site-wide noindex');
+});
+
 test('unknown paths get a real 404 page that is not indexed', () => {
   // Without 404.html, Cloudflare Pages answers every unknown path with the homepage and a 200.
   const html = read('404.html');
