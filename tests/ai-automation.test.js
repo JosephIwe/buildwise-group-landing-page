@@ -1,5 +1,6 @@
 /* Tests for /ai-automation (the commercial AI automation page), its assessment form and
- * the reusable sales proposal. The page is generated from content/ai-automation.mjs; the
+ * the internal sales proposal (checked when PROPOSAL_PATH points to it; it is kept out of
+ * this repository because the repository root is deployed publicly). The page is generated from content/ai-automation.mjs; the
  * staleness check lives in growth.test.js. Web3Forms and every outside host are answered
  * or blocked locally, so nothing is sent anywhere. */
 const test = require('node:test');
@@ -22,6 +23,11 @@ const E = require(path.join(ROOT, 'contact-form.js'));
 const F = require(path.join(ROOT, 'automation-form.js'));
 const PAGE = read('ai-automation.html');
 const BODY = text(PAGE);
+// The proposal is an internal template outside the repo. Point PROPOSAL_PATH at it to check it too.
+const PROPOSAL = process.env.PROPOSAL_PATH && fs.existsSync(process.env.PROPOSAL_PATH) ? fs.readFileSync(process.env.PROPOSAL_PATH, 'utf8') : null;
+const proposalOpts = { skip: !PROPOSAL && 'set PROPOSAL_PATH to the internal proposal template' };
+// The proposal's internal guidance may name the future voice rate; client-facing text may not.
+const clientText = md => md.split('\n').filter(l => !l.startsWith('> **Voice and video (internal pricing note')).join('\n');
 
 let C;
 test.before(async () => { C = await import(pathToFileURL(path.join(ROOT, 'content/ai-automation.mjs'))); });
@@ -66,7 +72,7 @@ test('page: linked from the homepage, every footer and llms.txt; every local lin
   for (const m of PAGE.matchAll(/href="#([^"]+)"/g)) assert.match(PAGE, new RegExp(`id="${m[1]}"`), `#${m[1]} has a target`);
 });
 
-test('pricing: the page, structured data and proposal show the agreed prices, and no others', () => {
+test('pricing: the page and structured data show the agreed prices, and no others', () => {
   const byId = Object.fromEntries(C.PACKAGES.map(p => [p.id, p.price]));
   assert.deepEqual(byId, { assessment: 250, implementation: 1250, staff: 149, operations: 250 });
   assert.equal(C.COMBINED.price, 399);
@@ -75,20 +81,44 @@ test('pricing: the page, structured data and proposal show the agreed prices, an
   assert.ok(shown.length >= 8);
   for (const n of shown) assert.ok(allowed.has(n), `unexpected price $${n}`);
   assert.match(BODY, /\$399 per month/);
-  assert.match(BODY, /Up to 200 minutes a month/);
   const offers = jsonld(PAGE)['@graph'][1].hasOfferCatalog.itemListElement;
   assert.deepEqual(offers.map(o => [o.name, o.price, o.priceCurrency]), C.PACKAGES.map(p => [p.name, p.price, 'USD']));
   for (const o of offers.filter(o => [149, 250].includes(o.price) && o.priceSpecification)) assert.equal(o.priceSpecification.unitText, 'month');
-  const proposal = read('sales/ai-automation-proposal.md');
-  for (const n of ['$250', '$1,250', '$149', '$399', '200 minutes', '$1,500']) assert.ok(proposal.includes(n), `proposal shows ${n}`);
-  for (const n of [...proposal.matchAll(/\$(\d{1,3}(?:,\d{3})*)/g)].map(m => m[1])) assert.ok(new Set([...allowed, '1,500']).has(n), `proposal: unexpected price $${n}`);
+});
+
+test('pricing: the proposal prices agree exactly with the page', proposalOpts, () => {
+  const md = clientText(PROPOSAL);
+  const rows = Object.fromEntries([...md.matchAll(/^\| ([A-D])\. [^|]+\| [^|]+\| \$([\d,]+) \|/gm)].map(m => [m[1], Number(m[2].replace(',', ''))]));
+  assert.deepEqual(rows, Object.fromEntries(C.PACKAGES.map(p => [p.code, p.price])), 'pricing table matches the page packages');
+  assert.match(md, /\*\*One-time total:\*\* \$1,500 \(A \+ B\)/);
+  assert.match(md, new RegExp(`\\*\\*Monthly total:\\*\\* \\$${C.COMBINED.price} \\(C \\+ D\\)`));
+  for (const n of [...md.matchAll(/\$(\d{1,3}(?:,\d{3})*(?:\.\d+)?)/g)].map(m => m[1])) assert.ok(new Set(['250', '1,250', '149', '399', '1,500']).has(n), `proposal: unexpected price $${n}`);
+  assert.ok(!/200 minutes|\$0\.25/.test(md), 'no minute allowance or voice rate in client-facing text');
+  assert.match(PROPOSAL, /additional voice minutes is \*\*\$0\.25 per minute\*\*, offered only in a written amendment/, 'the future voice rate is recorded internally only');
+  assert.match(md, /Staff set-up fee \| Staff \| Waived \(included in B\)/);
+  assert.match(md, /not generative AI/);
+});
+
+test('subscription: covers only what is available now; voice, video and minutes are not sold', () => {
+  const staff = C.PACKAGES.find(p => p.id === 'staff');
+  const inc = staff.includes.join(' | ');
+  for (const cap of [/Guided website chat: scripted/, /Enquiry capture/, /booking, rescheduling and cancellation/, /Owner screens/]) assert.match(inc, cap);
+  assert.ok(!/voice|video|minute/i.test(inc), 'no voice, video or minutes in what the subscription includes');
+  assert.match(staff.excludes.join(' '), /voice and video/);
+  assert.match(staff.note, /not sold or billed until/);
+  assert.ok(!/\b\d+ minutes a month|per minute|\/min\b|\$0\.\d/i.test(BODY), 'no minute allowance or per-minute rate on the page');
+  assert.match(BODY, /setup fee is waived/i);
+  assert.match(BODY, /Email alerts for new enquiries \(not available yet\)/);
+  assert.match(BODY, /new enquiries appear on your owner screens/);
+  assert.match(BODY, /scripted answers, not generative AI/);
+  assert.match(C.PACKAGES.find(p => p.id === 'implementation').excludes[0], /^Early-access features/);
 });
 
 test('pricing: implementation, subscription, operations and third-party costs are kept apart; usage is never unlimited', () => {
   for (const line of ['Buildwise implementation fees', 'Staff product subscription', 'Buildwise managed operations', 'Third-party usage and integrations']) assert.match(BODY, new RegExp(line));
   assert.match(BODY, /Usage is never unlimited/);
   assert.ok(!/\bunlimited (usage|minutes|conversations|messages|calls)\b/i.test(BODY), 'no unlimited promise');
-  assert.match(BODY, /only with your written approval/);
+  assert.match(BODY, /would need your written approval first/);
   assert.match(BODY, /Subject to Staff’s verified production pricing and usage controls/);
   for (const p of C.PACKAGES) assert.ok(p.excludes.length >= 2, `${p.id} lists what is not included`);
 });
@@ -118,9 +148,11 @@ test('claims: no invented results, testimonials, client names, guarantees, email
     /[\w.+-]+@[\w-]+\.(com|dev|ng|io|co)\b/, /mailto:/
   ];
   for (const re of banned) assert.ok(!re.test(BODY) && !re.test(PAGE.replace(/<script[\s\S]*?<\/script>/g, '')), `page breaks a claims rule: ${re}`);
-  const proposal = read('sales/ai-automation-proposal.md');
-  for (const re of [/\bMarvels\b/i, /MeetStaff/i, /\bBuildWise\b/, /[\w.+-]+@[\w-]+\.(com|dev|ng|io|co)\b/, /testimonial(?!s, ratings)/i]) assert.ok(!re.test(proposal), `proposal breaks a claims rule: ${re}`);
-  assert.match(proposal, /Buildwise does not guarantee business outcomes/);
+});
+
+test('claims: the internal proposal follows the same rules', proposalOpts, () => {
+  for (const re of [/\bMarvels\b/i, /MeetStaff/i, /\bBuildWise\b/, /[\w.+-]+@[\w-]+\.(com|dev|ng|io|co)\b/, /testimonial(?!s, ratings)/i]) assert.ok(!re.test(PROPOSAL), `proposal breaks a claims rule: ${re}`);
+  assert.match(PROPOSAL, /Buildwise does not guarantee business outcomes/);
 });
 
 test('structured data: WebPage, Service with priced offers and BreadcrumbList, nothing unsupported', () => {
@@ -193,13 +225,19 @@ test('form: the markup lists exactly the options the validator accepts, with lab
   assert.match(PAGE, /<script defer src="\/contact-form\.js"><\/script>[\s\S]*<script defer src="\/automation-form\.js"><\/script>/, 'loads after the shared enquiry module');
 });
 
-test('proposal: the reusable proposal has all thirteen sections and no unfilled facts presented as real', () => {
-  const md = read('sales/ai-automation-proposal.md');
+test('proposal: the internal template is not in the deployed site', () => {
+  assert.ok(!fs.existsSync(path.join(ROOT, 'sales')), 'no sales/ folder in the repository root, which Pages serves publicly');
+  assert.ok(!/\/sales\//.test(read('_headers')));
+});
+
+test('proposal: the reusable proposal has all thirteen sections and no unfilled facts presented as real', proposalOpts, () => {
+  const md = PROPOSAL;
   const headings = [...md.matchAll(/^## (\d+)\. (.+)$/gm)].map(m => m[2]);
   assert.deepEqual(headings, ['Executive overview', 'Business challenges', 'Proposed solution', 'AI employee capabilities', 'Implementation scope', 'Integration requirements', 'Deployment timeline', 'Pricing breakdown', 'Monthly operating costs', 'Exclusions and assumptions', 'Security and data handling', 'Client responsibilities', 'Acceptance and next steps']);
   for (const industry of ['Aesthetics clinics', 'Dental clinics', 'Salons, spas and barbers', 'Other appointment-based businesses']) assert.ok(md.includes(industry), industry);
   assert.match(md, /\[Client business name\]/, 'template placeholders, not a named client');
-  assert.match(read('_headers'), /^\/sales\/\*\n  X-Robots-Tag: noindex$/m, 'the proposal source is kept out of search');
+  assert.match(md, /Internal template\. Do not publish\./);
+  assert.match(md, /Support hours and response times are stated in the order form/);
 });
 
 /* ---------- Browser ---------- */

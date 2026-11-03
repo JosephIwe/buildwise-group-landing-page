@@ -19,8 +19,6 @@
   X-Robots-Tag: noindex
 /scripts/*
   X-Robots-Tag: noindex
-/sales/*
-  X-Robots-Tag: noindex
 # The buildwise-group.pages.dev host serves the same pages as buildwisegroup.dev.
 # Keep it (and any *.pages.dev alias) out of search results so only the canonical
 # domain is indexed. Cloudflare already adds noindex to branch preview deployments.

@@ -36,7 +36,7 @@ export const HERO = {
     ['Built for', 'Aesthetics and dental clinics, salons, spas and other appointment-based businesses'],
     ['Start with', 'An AI Opportunity Assessment: <strong>$250</strong>, one-time'],
     ['Implementation', 'From <strong>$1,250</strong>, fixed scope agreed in writing'],
-    ['Running costs', '<strong>$399/month</strong> for Staff plus managed operations, before any extra usage']
+    ['Running costs', '<strong>$399/month</strong> for Staff plus managed operations, before any third-party fees']
   ]
 };
 
@@ -56,9 +56,9 @@ export const PROBLEMS = {
 export const HOW = {
   label: 'How AI employees work',
   heading: 'A clear job, approved<br class="br-md"> knowledge, limited powers.',
-  note: 'An AI employee is not a chatbot left to improvise. It has a written role, works only from information you approve, can take only the actions its job allows, and hands over to a person when it should.',
+  note: 'An AI employee is not a chatbot left to improvise. It has a written role, works only from information you approve, can take only the actions its job allows, and hands over to a person when it should. Today its website chat is guided: scripted answers, not generative AI.',
   steps: [
-    { h: 'A customer gets in touch', p: 'On your website, the AI employee greets them, answers in plain language and asks what they need.' },
+    { h: 'A customer gets in touch', p: 'On your website, the AI employee greets them and guides them through their question, a booking or leaving their details.' },
     { h: 'It answers from your information', p: 'Services, prices, durations, opening hours and policies come from what you approved, not from guesswork. If it doesn’t know, it says so.' },
     { h: 'It takes a permitted action', p: 'Take their details, check free times, make or request a booking, reschedule or cancel. Every action is checked against the business’s settings before it runs.' },
     { h: 'It hands over when it should', p: 'Medical questions, complaints, unusual requests and anything sensitive go to your team, with the customer’s details attached.' },
@@ -108,8 +108,8 @@ export const STAFF = {
     {
       key: 'now', label: 'Available now', note: 'Running in Staff’s production service. New businesses are onboarded by invitation, with Buildwise doing the setup.',
       items: [
-        'Website enquiry capture, listed on your owner screens',
-        'Guided website chat that answers common questions from your approved information',
+        'Website enquiry capture: new enquiries appear on your owner screens (email alerts are not available yet)',
+        'Guided website chat: scripted answers to common questions from your approved information (not generative AI)',
         'Online booking, rescheduling and cancellation in Staff’s built-in diary',
         '“Booked” only with a confirmed reference; otherwise a request for your team',
         'Handover to your team’s WhatsApp',
@@ -188,9 +188,10 @@ export const PACKAGES = [
       'Enquiry capture, owner screens and handover to your team’s WhatsApp',
       'Installation on one website (WordPress, Wix, Webflow, Shopify or plain HTML)',
       'Testing, an acceptance session and one team training session',
+      'Staff setup: Staff’s separate setup fee is waived, so setup is never charged twice',
       'Two weeks of adjustments after launch'
     ],
-    excludes: ['Integration with other booking software, CRMs or calendars', 'WhatsApp Business Platform setup and messaging', 'Phone numbers and voice calls', 'Extra locations, AI employees or websites', 'Writing new content beyond the information you provide'],
+    excludes: ['Early-access features: AI language-model chat, voice, video and WhatsApp reminders', 'Integration with other booking software, CRMs or calendars', 'WhatsApp Business Platform setup and messaging', 'Phone numbers and voice calls', 'Extra locations, AI employees or websites', 'Writing new content beyond the information you provide'],
     cta: 'Start with an assessment', ctaPackage: 'AI Business Automation Implementation', featured: true
   },
   {
@@ -199,12 +200,14 @@ export const PACKAGES = [
     includes: [
       'One AI employee and its public page or website installation',
       'Hosting, security updates, bot protection and usage limits',
-      'Owner screens for enquiries and bookings',
-      'Up to 200 minutes a month of AI voice or video conversation, once that channel is enabled for your business',
-      'Written chat, enquiries and bookings are not counted as minutes'
+      'Guided website chat: scripted answers from your approved information',
+      'Enquiry capture',
+      'Online booking, rescheduling and cancellation',
+      'Owner screens where your enquiries and bookings appear',
+      'No separate Staff setup fee: it is waived because the implementation includes setup'
     ],
-    excludes: ['Minutes beyond 200 a month, which run only with your written approval at the rate in your order form', 'Third-party fees such as WhatsApp messages or phone numbers'],
-    note: 'Subject to Staff’s verified production pricing and usage controls, confirmed in your order form before you are billed.'
+    excludes: ['Early-access channels: AI language-model chat, voice and video', 'Email alerts for new enquiries (not available yet)', 'Third-party fees such as WhatsApp messages or phone numbers'],
+    note: 'Covers only the Staff capabilities available today. Voice and video are not sold or billed until their production readiness, capacity and costs are verified. Subject to Staff’s verified production pricing and usage controls, confirmed in your order form before you are billed.'
   },
   {
     id: 'operations', code: 'D', name: 'Buildwise AI Operations', price: 250, period: 'per month', billedBy: 'Buildwise Group',
@@ -214,7 +217,7 @@ export const PACKAGES = [
       'Updates to prices, services, hours and policies when they change',
       'A monthly review of enquiries, bookings and handovers, with recommendations',
       'Tuning answers and handover rules based on real conversations',
-      'Support on WhatsApp during business hours (Monday to Friday, West Africa Time)'
+      'Support on WhatsApp during business hours, with hours and response times set out in your order form'
     ],
     excludes: ['New integrations, AI employees, channels or locations (quoted separately)', 'Work on systems Buildwise did not set up']
   }
@@ -228,10 +231,11 @@ export const BOUNDARIES = {
     ['Buildwise implementation fees', 'The assessment and the implementation. One-time, fixed scope, invoiced by Buildwise Group.'],
     ['Staff product subscription', 'The AI employee on the Staff platform, with its usage limits. Monthly.'],
     ['Buildwise managed operations', 'Monitoring, updates, reviews and support from the Buildwise team. Monthly.'],
-    ['Third-party usage and integrations', 'Fees charged by other providers, such as WhatsApp Business messaging, phone numbers, booking-software add-ons or extra AI minutes, and engineering to connect other systems. Passed through at cost or quoted in writing before any work.']
+    ['Third-party usage and integrations', 'Fees charged by other providers, such as WhatsApp Business messaging, phone numbers, booking-software add-ons, and engineering to connect other systems. Passed through at cost or quoted in writing before any work.']
   ],
   notes: [
-    'Usage is never unlimited. Each AI employee has daily and monthly limits, and extra minutes run only with your written approval.',
+    'Usage is never unlimited. Each AI employee runs within daily and monthly usage limits.',
+    'Voice and video are Early access. They are not included, sold or billed until their production readiness, capacity and costs are verified, and any future charge would need your written approval first.',
     'Prices are in US dollars and exclude any applicable taxes. Ask us about invoicing in naira.',
     'Integrations with other software, extra locations, extra AI employees and new channels are quoted separately after the assessment.'
   ]
@@ -245,7 +249,9 @@ export const FAQ = [
   ['Can it answer phone calls or WhatsApp messages?', 'The standard implementation covers your website. Customers can be handed to your team’s WhatsApp at any time. AI voice, inbound phone calls and automated WhatsApp messages are early-access or integration work: we confirm in the assessment whether they are ready for your business and what they would cost.'],
   ['What do I get from the $250 assessment, and do I have to go ahead?', 'A working session, a review of your current process and tools, and a written plan with a fixed implementation quote. You are under no obligation to proceed.'],
   ['Why are Staff and Buildwise charged separately?', 'They are different things. Staff is the software subscription that runs your AI employee. Buildwise AI Operations is our team looking after it every month. Keeping them separate shows you exactly what you pay for.'],
-  ['What happens if we use more than 200 minutes?', 'Nothing runs up by surprise. Usage limits stop calls at the limit. Extra minutes run only if you approve them in writing, at the rate in your order form. Written chat, enquiries and bookings are not counted as minutes.'],
+  ['Are voice or video calls included?', 'No. Voice and video are in early access and are not part of any package. We won’t sell or bill for them until they are ready for production use, with verified capacity and costs. If you want them later, we will put the price to you in writing first.'],
+  ['Is the chat generative AI?', 'Not today. Staff’s website chat is guided: it gives scripted answers from information you approve and leads customers to book or leave their details. Chat using a language model is in early access and is not part of the standard implementation.'],
+  ['Will I get an email when a new enquiry arrives?', 'Not today. New enquiries and bookings appear on your owner screens, so we show your team how to check them during training.'],
   ['Can it give medical or treatment advice?', 'No. It answers practical questions from information you approve and passes medical, clinical and treatment-suitability questions to your practitioners.'],
   ['How is customer data handled?', 'Only what the job needs is collected. Owner screens are private and never indexed. Action logs record what was done, not what the customer said. Retention periods are agreed with you. See the security section of our proposal, available on request.']
 ];
