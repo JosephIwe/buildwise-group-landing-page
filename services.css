@@ -89,3 +89,4 @@
 @media (max-width: 520px) {
   .art-cta .btn { width: 100%; justify-content: center; }
 }
+.art-more .label, .art-list-wrap .label { color: var(--slate); }
