@@ -31,6 +31,7 @@ Each area is labelled by where the experience comes from. Buildwise names client
 
 ## Services
 
+- [AI business automation and pricing](https://buildwisegroup.dev/ai-automation): enquiry, booking and follow-up automation for clinics, salons and appointment-based businesses, using AI employees on Staff. Published packages: AI Opportunity Assessment $250 one-time; standard implementation $1,250 one-time; Staff AI Employee Subscription $149/month (up to 200 minutes of AI voice or video conversation once enabled); Buildwise AI Operations $250/month. Usage is limited, never unlimited; third-party fees and integrations are extra. Each Staff capability is labelled Available now, Early access or By integration.
 - [AI automation in Nigeria](https://buildwisegroup.dev/ai-automation-nigeria): AI agents, WhatsApp automation and workflow automation for Nigerian businesses, delivered remotely; starts with an AI automation audit.
 - [AI automation in Lagos](https://buildwisegroup.dev/ai-automation-lagos): the same service for Lagos businesses. Buildwise serves Lagos remotely and has no Lagos office.
 - [AI agents](https://buildwisegroup.dev/ai-agents): custom AI agents for customer support, sales, enquiries and internal operations, with limited permissions, logging and human handover.

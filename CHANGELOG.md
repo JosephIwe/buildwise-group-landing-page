@@ -2,6 +2,17 @@
 
 All notable changes to the BuildWise Group website. Newest first.
 
+## Unreleased: AI automation commercial launch (branch `ai-automation-launch`)
+
+### Added
+- `/ai-automation`: the commercial page for AI Business Automation (clinics, salons and appointment-based businesses), generated from `content/ai-automation.mjs`. Problems, how AI employees work, enquiry and booking automation, Staff capabilities labelled *Available now*, *Early access* or *By integration*, industries, implementation process, four priced packages ($250 assessment, $1,250 implementation, $149/month Staff subscription, $250/month AI Operations; $399/month combined), cost boundaries, FAQ and an assessment request form.
+- `automation-form.js`: the assessment request form (business, contact, business email, industry, locations, main challenge, desired automation, details, optional WhatsApp number and package). Validated in the browser and delivered through the existing Web3Forms key and transport in `contact-form.js`; no new key.
+- `sales/ai-automation-proposal.md`: a reusable 13-section client proposal (kept out of search with `X-Robots-Tag: noindex`).
+- `tests/ai-automation.test.js`: page, pricing, claims, structured data, form and proposal tests.
+
+### Changed
+- Footer "Services" lists, the homepage service directory, `llms.txt` and the sitemap link `/ai-automation`. The privacy policy lists the assessment form's fields.
+
 ## Unreleased: SEO, AI visibility and growth upgrade (branch `growth-seo-upgrade`)
 
 Built on top of PR #16 (/security) and PR #17 (experience/SEO upgrade), which are approved to merge first.

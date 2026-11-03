@@ -14,7 +14,7 @@ try { ({ chromium } = require('playwright')); } catch (e) { chromium = null; }
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://buildwisegroup.dev';
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
-const PAGES = ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html', 'ai-automation-nigeria.html', 'ai-automation-lagos.html', 'ai-agents.html', 'whatsapp-automation.html', 'custom-software-development.html', 'ai-visibility.html', 'business-automation.html', 'ai-receptionist.html'];
+const PAGES = ['index.html', 'cybersecurity.html', 'scan.html', 'website-audit.html', 'privacy.html', 'security.html', 'ai-automation-nigeria.html', 'ai-automation-lagos.html', 'ai-agents.html', 'whatsapp-automation.html', 'custom-software-development.html', 'ai-visibility.html', 'business-automation.html', 'ai-receptionist.html', 'ai-automation.html'];
 const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.avif': 'image/avif', '.png': 'image/png', '.jpg': 'image/jpeg', '.woff2': 'font/woff2' };
 const text = html => html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 const section = (html, id) => html.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?</section>`))[0];
@@ -121,7 +121,7 @@ test('palette: the four approved brand colours are the site tokens, and the old 
   for (const [name, value] of [['obsidian', '#0B0D12'], ['warm-white', '#F4F1EA'], ['graphite', '#303640'], ['cobalt', '#4764FF']]) {
     assert.match(root, new RegExp(`--${name}: ${value};`), `--${name} is ${value}`);
   }
-  for (const file of ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css', ...PAGES, '404.html', 'favicon.svg']) {
+  for (const file of ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css', 'ai-automation.css', ...PAGES, '404.html', 'favicon.svg']) {
     assert.ok(!/#0B0D10|#FAFAF8|#1E4FFF|rgba\(30, 79, 255|rgba\(250, 250, 248|rgba\(11, 13, 16,/i.test(read(file)), `${file} uses only the approved palette`);
   }
   const css = ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css'].map(read).join('\n');
@@ -129,7 +129,7 @@ test('palette: the four approved brand colours are the site tokens, and the old 
 });
 
 test('palette: cobalt text on light backgrounds uses the accessible shade, and text on cobalt is solid white', () => {
-  const css = ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css'].map(read).join('\n');
+  const css = ['styles.css', 'scanner.css', 'cybersecurity.css', 'website-audit.css', 'ai-automation.css'].map(read).join('\n');
   const decorative = /^\.(cap:hover \.cap-icon|cap:hover \.cap-arrow|cap-feature \.cap-arrow|dot-blue|faq-list summary \.ico) /;
   const textCobalt = css.split('\n').filter(line => /(?<![-\w])color: var\(--cobalt\)/.test(line) && !decorative.test(line));
   assert.deepEqual(textCobalt, [], 'text uses --cobalt-deep (6.1:1 on warm white), not --cobalt (4.1:1)');
