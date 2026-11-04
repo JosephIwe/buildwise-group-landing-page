@@ -1,0 +1,101 @@
+/* /ai-automation only. Builds on styles.css, cybersecurity.css and services.css; this
+   file adds the status groups, packages, boundaries and the assessment form's checkboxes.
+   Colours are the canonical palette tokens from styles.css. */
+
+/* How it works: principles under the steps */
+.auto-principles { margin-top: var(--space-5); display: grid; gap: 14px; }
+.auto-principles li { padding: 18px 22px; border-left: 2px solid var(--cobalt); background: rgba(71, 100, 255, .06); color: var(--graphite); line-height: 1.6; }
+.auto-principles strong { color: var(--obsidian); font-weight: 650; }
+@media (min-width: 900px) { .auto-principles { grid-template-columns: 1fr 1fr; } }
+
+/* Process: indicative time under each step */
+.auto-time { grid-column: 2; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--cobalt-deep) !important; }
+
+/* Staff: image beside the status groups */
+.auto-staff { display: grid; gap: var(--space-4); align-items: start; }
+.auto-shot { margin: 0; }
+.auto-shot img { display: block; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 30px 60px -36px rgba(11, 13, 18, .55); }
+.auto-shot figcaption { margin-top: 12px; font-size: 13px; line-height: 1.55; color: var(--slate); }
+.auto-status { display: grid; gap: 28px; }
+.auto-status-group { padding-top: 22px; border-top: 1px solid var(--line-light); }
+.auto-status-group h3 { margin: 0; }
+.auto-status-note { margin-top: 10px; color: var(--slate); font-size: 15px; line-height: 1.55; }
+.auto-status-group ul { margin-top: 14px; display: grid; gap: 10px; }
+.auto-status-group li { position: relative; padding-left: 20px; color: var(--graphite); line-height: 1.55; }
+.auto-status-group li::before { content: ""; position: absolute; left: 0; top: .72em; width: 6px; height: 6px; border-radius: 50%; transform: translateY(-50%); background: var(--graphite); }
+.auto-status-now li::before { background: var(--cobalt-deep); }
+.auto-status-early li::before { background: transparent; border: 1px solid var(--cobalt-deep); }
+.auto-status-integration li::before { background: transparent; border: 1px dashed var(--slate); }
+.auto-chip { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.auto-chip-now { background: var(--cobalt-deep); color: #fff; }
+.auto-chip-early { border: 1px solid var(--cobalt-deep); color: var(--cobalt-deep); }
+.auto-chip-integration { border: 1px dashed var(--graphite); color: var(--graphite); }
+.auto-status .sec-auth { margin-top: 0; }
+@media (min-width: 1100px) {
+  .auto-staff { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 64px; }
+  .auto-shot { position: sticky; top: calc(var(--header-h) + 24px); }
+}
+
+/* Industries */
+.auto-industries { display: grid; border-top: 1px solid var(--line-light); }
+.auto-industries li { padding: 28px 0; border-bottom: 1px solid var(--line-light); }
+.auto-industries p { margin-top: 8px; color: var(--slate); max-width: 36em; }
+@media (min-width: 900px) { .auto-industries { grid-template-columns: 1fr 1fr; column-gap: clamp(40px, 6vw, 96px); } }
+
+/* Packages */
+.auto-pkgs { display: grid; gap: 20px; }
+.auto-pkg { display: flex; flex-direction: column; padding: clamp(24px, 2.6vw, 32px); border: 1px solid var(--line-dark); border-radius: 8px; background: linear-gradient(180deg, rgba(244, 241, 234, .045), rgba(244, 241, 234, .012)); }
+.auto-pkg-featured { border-color: rgba(125, 151, 255, .65); box-shadow: 0 30px 60px -40px rgba(71, 100, 255, .7); }
+.auto-pkg-code { color: var(--cobalt-soft) !important; }
+.auto-pkg h3 { margin-top: 10px; font-size: clamp(20px, 1.6vw, 24px); }
+.auto-price { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.auto-price-n { font-size: clamp(36px, 3.4vw, 48px); font-weight: 600; letter-spacing: -.04em; line-height: 1; color: var(--warm-white); }
+.auto-price-p { font-size: 14px; color: var(--slate-light); }
+.auto-pkg-sum { margin-top: 12px; color: rgba(244, 241, 234, .86); }
+.auto-pkg-h { margin-top: 22px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--slate-light); }
+.auto-pkg .sec-ticks { margin-top: 12px; gap: 9px; }
+.auto-pkg .sec-ticks li { color: rgba(244, 241, 234, .86); }
+.auto-x { margin-top: 12px; display: grid; gap: 8px; }
+.auto-x li { position: relative; padding-left: 20px; font-size: 14px; line-height: 1.5; color: var(--slate-light); }
+.auto-x li::before { content: ""; position: absolute; left: 1px; top: .72em; width: 8px; height: 1px; background: var(--slate-light); }
+.auto-pkg-note { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line-dark); font-size: 13px; line-height: 1.55; color: var(--slate-light); }
+.auto-pkg-cta { margin-top: auto; align-self: flex-start; }
+.auto-pkg .sec-ticks + .auto-pkg-h, .auto-pkg-cta { margin-top: 22px; }
+.auto-x + .auto-pkg-cta, .auto-pkg-note + .auto-pkg-cta { margin-top: 26px; }
+.auto-btn-outline { border: 1px solid rgba(244, 241, 234, .4); color: var(--warm-white); }
+.auto-btn-outline:hover { border-color: var(--warm-white); background: rgba(244, 241, 234, .06); }
+.auto-total { margin-top: 28px; display: grid; gap: 10px; padding: clamp(22px, 2.6vw, 30px); border-radius: 8px; background: var(--cobalt-deep); color: #fff; }
+.auto-total .label { color: #fff; }
+.auto-total .auto-price-n { color: #fff; }
+.auto-total .auto-price-p { color: #fff; }
+.auto-total p:last-child { max-width: 52em; color: #fff; }
+@media (min-width: 760px) { .auto-pkgs { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1240px) { .auto-pkgs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .auto-pkg-cta { width: 100%; justify-content: center; } }
+
+/* Boundaries */
+.auto-bounds { display: grid; border-top: 1px solid var(--line-light); }
+.auto-bounds > div { display: grid; gap: 6px; padding: 22px 0; border-bottom: 1px solid var(--line-light); }
+.auto-bounds dt { font-weight: 650; color: var(--obsidian); }
+.auto-bounds dd { margin: 0; color: var(--graphite); line-height: 1.6; max-width: 46em; }
+.auto-notes { margin-top: 28px; display: grid; gap: 10px; }
+.auto-notes li { position: relative; padding-left: 20px; color: var(--graphite); line-height: 1.6; }
+.auto-notes li::before { content: ""; position: absolute; left: 0; top: .78em; width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--cobalt-deep); transform: translateY(-50%); }
+@media (min-width: 900px) { .auto-bounds > div { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 32px; } }
+
+/* Assessment form: multi-select as tick boxes, same look as the contact choices */
+.auto-checks { display: grid; gap: 10px; border-radius: 4px; }
+.auto-check { position: relative; display: grid; }
+.auto-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.auto-check span { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 16px; border: 1px solid rgba(244, 241, 234, .2); border-radius: 4px; font-size: 15px; line-height: 1.35; cursor: pointer; transition: border-color .25s, background-color .25s; }
+.auto-check span::before { content: ""; flex: none; width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid rgba(244, 241, 234, .5); box-sizing: border-box; transition: background-color .2s, border-color .2s; }
+.auto-check:hover span { border-color: rgba(244, 241, 234, .34); }
+.auto-check input:checked + span { border-color: var(--cobalt-soft); background: rgba(71, 100, 255, .16); }
+.auto-check input:checked + span::before { border-color: var(--cobalt-soft); background: var(--cobalt-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 8.2 2.6 2.6L12 5.4' fill='none' stroke='%230B0D12' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.auto-check input:focus-visible + span { outline: 2px solid var(--cobalt-soft); outline-offset: 3px; }
+.auto-checks[aria-invalid="true"] .auto-check span { border-color: #FFB3A6; }
+#automationSuccess { border-color: rgba(125, 151, 255, .5); background: rgba(71, 100, 255, .12); }
+@media (min-width: 640px) { .auto-checks { grid-template-columns: 1fr 1fr; } }
+
+/* Hero: the positioning line is longer than other service headlines */
+.auto-page .sec-title { font-size: clamp(34px, 3.4vw, 52px); }

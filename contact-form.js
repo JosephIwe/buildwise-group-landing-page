@@ -302,5 +302,6 @@
     else start();
   }
 
-  return { ACCESS_KEY, ENDPOINT, SUBJECT, LIMITS, PROJECT_TYPES, BUDGETS, CONTACT_METHODS, FAILURE_TEXT, normalizeEnquiry, buildPayload, submitEnquiry, mount };
+  // clean, EMAIL and PHONE are shared with automation-form.js (the /ai-automation assessment form).
+  return { ACCESS_KEY, ENDPOINT, SUBJECT, LIMITS, PROJECT_TYPES, BUDGETS, CONTACT_METHODS, FAILURE_TEXT, EMAIL, PHONE, clean, normalizeEnquiry, buildPayload, submitEnquiry, mount };
 });

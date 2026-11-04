@@ -453,7 +453,7 @@ test('robots.txt and sitemap.xml list exactly the canonical public pages', () =>
   assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), 'the site is not blocked');
   assert.match(robots, new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
   const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`, `${SITE}/cybersecurity`, `${SITE}/security`, ...['ai-automation-nigeria', 'ai-automation-lagos', 'ai-agents', 'whatsapp-automation', 'custom-software-development', 'ai-visibility', 'business-automation', 'ai-receptionist'].map(s => `${SITE}/${s}`), `${SITE}/insights`, ...['whatsapp-ai-automation-nigeria', 'choose-ai-automation-company-nigeria'].map(s => `${SITE}/insights/${s}`)]);
+  assert.deepEqual(locs, [`${SITE}/`, `${SITE}/scan`, `${SITE}/website-audit`, `${SITE}/privacy`, `${SITE}/cybersecurity`, `${SITE}/security`, `${SITE}/ai-automation`, ...['ai-automation-nigeria', 'ai-automation-lagos', 'ai-agents', 'whatsapp-automation', 'custom-software-development', 'ai-visibility', 'business-automation', 'ai-receptionist'].map(s => `${SITE}/${s}`), `${SITE}/insights`, ...['whatsapp-ai-automation-nigeria', 'choose-ai-automation-company-nigeria'].map(s => `${SITE}/insights/${s}`)]);
   assert.match(robots, /^Disallow: \/api\/$/m);
   assert.ok(!read('sitemap.xml').includes('#'), 'no report links in the sitemap');
   assert.match(read('index.html'), new RegExp(`rel="canonical" href="${locs[0]}"`));
