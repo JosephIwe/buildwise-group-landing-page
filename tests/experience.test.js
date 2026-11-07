@@ -152,7 +152,7 @@ test('homepage metadata and organisation data describe the real business', () =>
   assert.ok(title.length <= 70, 'title fits in search results');
   const org = orgOf(html);
   assert.equal(org.contactPoint.telephone, '+2349165681202', 'the only phone is the published WhatsApp number');
-  assert.deepEqual(org.brand.map(b => b.name), ['Huntly', 'Traider', 'Staff']);
+  assert.deepEqual(org.brand.map(b => b.name), ['Huntly', 'Traider', 'Staff', 'AskNex']);
   assert.ok(!('email' in org) && !/[\w.+-]+@[\w-]+\.[a-z]/i.test(JSON.stringify(org)), 'no email address');
   for (const type of ['AggregateRating', 'Review', 'Offer']) assert.ok(!html.includes(`"@type": "${type}"`), `no ${type} markup`);
   const privacy = read('privacy.html');
@@ -313,8 +313,8 @@ test('brand links use their visible text as their accessible name', opts, async 
 test('products: every product with a live site is linked from its card and its brand node, and only those', () => {
   // Permanent brand architecture (founder, 2026-11-03). A product joins this list only once its
   // official domain and ownership are verified; Traider and Staff have no public site yet, and
-  // AskNex (owner-confirmed 2026-11-03) joins this map in the PR that adds its card.
-  const LIVE = { Huntly: 'https://huntlyagent.com/' };
+  // AskNex was owner-confirmed on 2026-11-03.
+  const LIVE = { Huntly: 'https://huntlyagent.com/', AskNex: 'https://asknex.xyz/' };
   const html = read('index.html');
   const org = orgOf(html);
   assert.equal(org['@id'], `${SITE}/#organization`, 'product sites reference this exact @id');
