@@ -270,13 +270,13 @@ async function ventureImages(page) {
   return page.locator('.venture-media img').evaluateAll(imgs => imgs.map(img => ({ src: img.currentSrc, alt: img.getAttribute('alt'), w: img.naturalWidth, h: img.naturalHeight, box: img.getBoundingClientRect().toJSON(), frame: img.closest('.venture-media').getBoundingClientRect().toJSON() })));
 }
 
-test('ventures: three distinct product images sit uncropped in 4:3 frames', opts, async () => {
-  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 860 }]) {
+test('ventures: four distinct product images sit uncropped in 4:3 frames', opts, async () => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 900, height: 1000 }, { width: 1280, height: 860 }]) {
     const { page, context, errors } = await open('/index.html', { viewport });
     const imgs = await ventureImages(page);
-    assert.equal(imgs.length, 3);
-    assert.equal(new Set(imgs.map(i => i.src)).size, 3, 'each venture has its own image');
-    for (const [i, name] of ['huntly', 'tradr', 'maya'].entries()) {
+    assert.equal(imgs.length, 4);
+    assert.equal(new Set(imgs.map(i => i.src)).size, 4, 'each venture has its own image');
+    for (const [i, name] of ['huntly', 'tradr', 'maya', 'veraus'].entries()) {
       assert.match(imgs[i].src, new RegExp(`assets/ventures/${name}-\\d+\\.(avif|webp)$`));
       assert.ok(imgs[i].alt.length > 10, `${name} product image has alt text`);
       assert.ok(Math.abs(imgs[i].frame.width / imgs[i].frame.height - 4 / 3) < 0.02, `${name} frame keeps 4:3`);
@@ -288,7 +288,8 @@ test('ventures: three distinct product images sit uncropped in 4:3 frames', opts
     if (viewport.width > 720) {
       const frames = imgs.map(i => i.frame);
       const fspread = key => Math.max(...frames.map(f => f[key])) - Math.min(...frames.map(f => f[key]));
-      assert.ok(fspread('top') < 1, 'frames align across the grid');
+      const rows = viewport.width >= 1100 ? [frames] : [frames.slice(0, 2), frames.slice(2)];
+      for (const row of rows) assert.ok(Math.max(...row.map(f => f.top)) - Math.min(...row.map(f => f.top)) < 1, 'frames align across each row');
       assert.ok(fspread('width') < 1 && fspread('height') < 1, 'frames share one size');
     }
     const note = await page.locator('.venture-media-maya .venture-media-note').evaluate(el => ({ text: el.textContent, box: el.getBoundingClientRect().toJSON() }));
@@ -311,7 +312,7 @@ test('ventures: hover lifts the image without moving text or resizing the card',
     const rel = node => { const r = node.getBoundingClientRect(); return [r.left - c.left, r.top - c.top, r.width, r.height]; };
     return { card: [c.width, c.height], title: rel(el.querySelector('h3')), text: rel(el.querySelector('p')), frame: rel(el.querySelector('.venture-media')) };
   });
-  await page.waitForFunction(() => document.querySelectorAll('.venture.is-in').length === 3);
+  await page.waitForFunction(() => document.querySelectorAll('.venture.is-in').length === 4);
   await card.scrollIntoViewIfNeeded();
   await page.waitForTimeout(1200);
   const before = await measure();
@@ -330,7 +331,7 @@ test('ventures: reduced motion and touch show the images without any movement', 
   for (const contextOptions of [{ reducedMotion: 'reduce' }, { hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } }]) {
     const { page, context, errors } = await open('/index.html', contextOptions);
     const imgs = await ventureImages(page);
-    assert.equal(imgs.length, 3);
+    assert.equal(imgs.length, 4);
     const card = page.locator('.venture').first();
     await card.hover();
     await page.waitForTimeout(800);
@@ -442,7 +443,7 @@ test('homepage structured data describes the organisation accurately', opts, asy
   assert.ok(fs.existsSync(path.join(ROOT, org.logo.slice(SITE.length))), 'logo is a local asset');
   const body = await page.locator('body').textContent();
   assert.ok(!('email' in org), 'no personal email address in structured data');
-  for (const name of ['Huntly', 'Traider', 'Staff']) assert.ok(body.includes(name) && org.description.includes(name));
+  for (const name of ['Huntly', 'Traider', 'Staff', 'VERAUS']) assert.ok(body.includes(name) && org.description.includes(name));
   assert.equal(await page.locator('h1').count(), 1, 'one h1 on the homepage');
   await context.close();
 });
@@ -861,7 +862,7 @@ test('security page: makes no unsupported claims and keeps testing authorised', 
   assert.match(text, /written authorisation/i);
   assert.match(text, /don’t accept requests to test third-party systems/);
   assert.match(text, /Not every review includes every check/);
-  for (const name of ['Huntly', 'Traider', 'Staff']) assert.ok(!text.includes(name), 'the ventures are not repositioned here');
+  for (const name of ['Huntly', 'Traider', 'Staff', 'VERAUS']) assert.ok(!text.includes(name), 'the ventures are not repositioned here');
 });
 
 test('security page: no horizontal overflow, readable text and working FAQ on phone, tablet and desktop', opts, async () => {

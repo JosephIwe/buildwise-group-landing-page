@@ -2,6 +2,15 @@
 
 All notable changes to the BuildWise Group website. Newest first.
 
+## Unreleased: VERAUS joins the ventures (branch `add-veraus-venture`)
+
+### Added
+- VERAUS as the fourth venture: a card linking to https://veraus.tech/ (opens in a new tab), a `Brand` node with `@id` `https://buildwisegroup.dev/#brand-veraus` and its url, an industries entry for beauty and service businesses, the FAQ answer and `llms.txt`. veraus.tech is owner-confirmed (2026-11-11), so it joins the `LIVE` list in the brand-architecture test.
+- `assets/ventures/veraus-*`: the VERAUS landing page captured from a local build of the product at 1440px, exported at 480, 800 and 1200px wide as AVIF and WebP.
+
+### Changed
+- The venture grid holds four cards: one column on phones, two at 720px and four at 1100px, with every frame the same size. Image `sizes` updated to match.
+
 ## Unreleased: AI automation commercial launch (branch `ai-automation-launch`)
 
 ### Added
