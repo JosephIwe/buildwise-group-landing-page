@@ -78,15 +78,15 @@ test('industries: every area is labelled as client work, a Buildwise product or 
   const html = section(read('index.html'), 'industries');
   assert.match(html, /<h2 class="section-title" id="industriesTitle"[^>]*>Technology built for real-world industries\.<\/h2>/);
   const items = [...html.matchAll(/<li class="ind"[\s\S]*?<\/li>/g)].map(m => m[0]);
-  assert.equal(items.length, 5);
+  assert.equal(items.length, 6);
   const tagOf = item => [...item.matchAll(/class="ind-tag ind-tag-(client|product|cap)"/g)].map(m => m[1]);
   for (const item of items) assert.equal(tagOf(item).length, 1, 'exactly one evidence label per area');
   const byName = Object.fromEntries(items.map(item => [text(item.match(/<h3>([\s\S]*?)<\/h3>/)[1]).trim(), { tag: tagOf(item)[0], text: text(item) }]));
-  assert.deepEqual(Object.keys(byName), ['Healthcare & aesthetics', 'Recruitment & career technology', 'Financial technology & trading tools', 'Business operations & automation', 'Digital products & software']);
+  assert.deepEqual(Object.keys(byName), ['Healthcare & aesthetics', 'Recruitment & career technology', 'Financial technology & trading tools', 'Business operations & automation', 'Beauty & service businesses', 'Digital products & software']);
   assert.equal(byName['Healthcare & aesthetics'].tag, 'client');
   assert.match(byName['Healthcare & aesthetics'].text, /website maintenance/i);
   assert.match(byName['Healthcare & aesthetics'].text, /Maya/);
-  for (const [name, product] of [['Recruitment & career technology', 'Huntly'], ['Financial technology & trading tools', 'Traider'], ['Business operations & automation', 'Staff']]) {
+  for (const [name, product] of [['Recruitment & career technology', 'Huntly'], ['Financial technology & trading tools', 'Traider'], ['Business operations & automation', 'Staff'], ['Beauty & service businesses', 'VERAUS']]) {
     assert.equal(byName[name].tag, 'product', `${product} is a Buildwise product, not client work`);
     assert.match(byName[name].text, new RegExp(product));
   }
@@ -152,7 +152,7 @@ test('homepage metadata and organisation data describe the real business', () =>
   assert.ok(title.length <= 70, 'title fits in search results');
   const org = orgOf(html);
   assert.equal(org.contactPoint.telephone, '+2349165681202', 'the only phone is the published WhatsApp number');
-  assert.deepEqual(org.brand.map(b => b.name), ['Huntly', 'Traider', 'Staff']);
+  assert.deepEqual(org.brand.map(b => b.name), ['Huntly', 'Traider', 'Staff', 'VERAUS']);
   assert.ok(!('email' in org) && !/[\w.+-]+@[\w-]+\.[a-z]/i.test(JSON.stringify(org)), 'no email address');
   for (const type of ['AggregateRating', 'Review', 'Offer']) assert.ok(!html.includes(`"@type": "${type}"`), `no ${type} markup`);
   const privacy = read('privacy.html');
@@ -314,7 +314,8 @@ test('products: every product with a live site is linked from its card and its b
   // Permanent brand architecture (founder, 2026-11-03). A product joins this list only once its
   // official domain and ownership are verified; Traider and Staff have no public site yet, and
   // AskNex (owner-confirmed 2026-11-03) joins this map in the PR that adds its card.
-  const LIVE = { Huntly: 'https://huntlyagent.com/' };
+  // VERAUS (veraus.tech, owner-confirmed 2026-11-11) joined with its card.
+  const LIVE = { Huntly: 'https://huntlyagent.com/', VERAUS: 'https://veraus.tech/' };
   const html = read('index.html');
   const org = orgOf(html);
   assert.equal(org['@id'], `${SITE}/#organization`, 'product sites reference this exact @id');

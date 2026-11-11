@@ -33,7 +33,7 @@ Then visit `http://localhost:8000`. There is no build step; Cloudflare Pages ser
 - `robots.txt`, `sitemap.xml`, `llms.txt`, `404.html`, `_headers`: discoverability files (see below)
 - `assets/og-image.jpg`: 1200×630 social-sharing image
 - `assets/logo-mark.svg`: standalone vector of the B monogram
-- `assets/ventures/`: one product image per venture, supplied by the founder (Huntly landing page, Traider product page in `tradr-*`, Staff website on a reception display in `maya-*`), kept at their own aspect ratio (uncropped) and exported at 480, 800 and 1200px wide as AVIF and WebP
+- `assets/ventures/`: one product image per venture, supplied by the founder (Huntly landing page, Traider product page in `tradr-*`, Staff website on a reception display in `maya-*`; the VERAUS landing page in `veraus-*`, captured from a local build), kept at their own aspect ratio (uncropped) and exported at 480, 800 and 1200px wide as AVIF and WebP
 - `assets/hero-architecture.svg`: source for the empty architectural stage; `hero-architecture.webp` and `-sm.webp` are rasterised from it so the camera can move it cheaply
 
 ## Hero story
