@@ -2,6 +2,11 @@
 
 All notable changes to the BuildWise Group website. Newest first.
 
+## Unreleased: remove the hero story toggle (branch `remove-story-toggle`)
+
+### Removed
+- The "See how we work" play/pause button under the hero CTAs (founder request, 2026-11-15). The story still autoplays, follows scroll and pauses off screen; the 01–04 rail stays clickable, and reduced motion still shows the finished scene. `hero-story.js` already skips the toggle when it is absent.
+
 ## Unreleased: site review fixes (branch `fix/site-review-nov15`)
 
 ### Added
