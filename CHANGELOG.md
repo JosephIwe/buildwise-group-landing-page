@@ -2,6 +2,16 @@
 
 All notable changes to the BuildWise Group website. Newest first.
 
+## Unreleased: site review fixes (branch `fix/site-review-nov15`)
+
+### Changed
+- The trading venture is named **Tradr** everywhere (card, industries entry, `Brand` node, service pages, `llms.txt`, README and tests); "Traider" was a misspelling.
+- The aesthetics client is named: **Marvels Aesthetics Hub**, with the client's permission (confirmed by the founder on 15 Nov 2026). The homepage industries entry now lists the homepage redesign, website maintenance and Maya. The tests that banned the name on public pages now require it in the industries section; the internal proposal and structured-data bans stay.
+- "Book a consultation" is now "Request a consultation" on every page, because the button opens the enquiry form, not a booking calendar.
+- The Custom Software Systems card describes what is built instead of "scalable, secure and integrated".
+- The FAQ answer on scope and cost links to the published AI automation packages.
+- Homepage meta description ends "Talk to us." to stay within the length the tests allow.
+
 ## Unreleased: VERAUS joins the ventures (branch `add-veraus-venture`)
 
 ### Added

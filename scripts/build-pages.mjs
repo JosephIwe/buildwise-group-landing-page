@@ -230,7 +230,7 @@ ${c.ticks.map(t => `              <li>${html(t)}</li>`).join('\n')}
   const body = `
 <body class="sec-page svc-page">
 ${SPRITE}
-${header({ current: null, ctaHref: '#enquire', ctaLabel: s.headerCta || 'Book a consultation', waLink, tagline: s.label })}
+${header({ current: null, ctaHref: '#enquire', ctaLabel: s.headerCta || 'Request a consultation', waLink, tagline: s.label })}
   <main id="main">
     <section class="sec-hero" aria-labelledby="pageTitle">
       <div class="sec-hero-glow" aria-hidden="true"></div>
@@ -780,7 +780,7 @@ function articlePage(a, all) {
   const body = `
 <body class="sec-page svc-page art-page">
 ${SPRITE}
-${header({ current: null, ctaHref: service ? `/${service.slug}#enquire` : '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'Buildwise Insights' })}
+${header({ current: null, ctaHref: service ? `/${service.slug}#enquire` : '/#contact', ctaLabel: 'Request a consultation', waLink, tagline: 'Buildwise Insights' })}
   <main id="main">
     <article class="art" aria-labelledby="pageTitle">
       <header class="art-head">
@@ -801,7 +801,7 @@ ${mdToHtml(a.body).replace(/^/gm, '        ')}
         <h2 id="artCtaTitle">${esc(a.ctaHeading || 'Talk to us about your business.')}</h2>
         <p>${esc(a.ctaText || 'Tell us how the work happens today. We’ll tell you plainly whether automation, AI or software is worth it, and what a first version would look like.')}</p>
         <div class="art-cta-actions">
-          <a class="btn btn-light" href="${service ? `/${service.slug}#enquire` : '/#contact'}" data-track="cta_consultation">Book a consultation ${ARROW}</a>
+          <a class="btn btn-light" href="${service ? `/${service.slug}#enquire` : '/#contact'}" data-track="cta_consultation">Request a consultation ${ARROW}</a>
           ${service ? `<a class="sec-link" href="/${service.slug}">Explore ${esc(service.navName.toLowerCase())}</a>` : ''}
         </div>
       </aside>
@@ -832,7 +832,7 @@ function insightsIndex(all) {
   const body = `
 <body class="sec-page svc-page art-page">
 ${SPRITE}
-${header({ current: null, ctaHref: '/#contact', ctaLabel: 'Book a consultation', waLink, tagline: 'Buildwise Insights' })}
+${header({ current: null, ctaHref: '/#contact', ctaLabel: 'Request a consultation', waLink, tagline: 'Buildwise Insights' })}
   <main id="main">
     <section class="art-head" aria-labelledby="pageTitle">
       <div class="container art-narrow">

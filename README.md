@@ -33,7 +33,7 @@ Then visit `http://localhost:8000`. There is no build step; Cloudflare Pages ser
 - `robots.txt`, `sitemap.xml`, `llms.txt`, `404.html`, `_headers`: discoverability files (see below)
 - `assets/og-image.jpg`: 1200×630 social-sharing image
 - `assets/logo-mark.svg`: standalone vector of the B monogram
-- `assets/ventures/`: one product image per venture, supplied by the founder (Huntly landing page, Traider product page in `tradr-*`, Staff website on a reception display in `maya-*`; the VERAUS landing page in `veraus-*`, captured from a local build), kept at their own aspect ratio (uncropped) and exported at 480, 800 and 1200px wide as AVIF and WebP
+- `assets/ventures/`: one product image per venture, supplied by the founder (Huntly landing page, Tradr product page in `tradr-*`, Staff website on a reception display in `maya-*`; the VERAUS landing page in `veraus-*`, captured from a local build), kept at their own aspect ratio (uncropped) and exported at 480, 800 and 1200px wide as AVIF and WebP
 - `assets/hero-architecture.svg`: source for the empty architectural stage; `hero-architecture.webp` and `-sm.webp` are rasterised from it so the camera can move it cheaply
 
 ## Hero story
@@ -131,7 +131,7 @@ The site offers exactly two contact routes: **WhatsApp** (`https://wa.me/2349165
 To publish a profile: put its address in `url`, add the same address to `sameAs` in the homepage `Organization` JSON-LD, and for X add `<meta name="twitter:site" content="@handle">`. `tests/ui.test.js` fails until the three agree, and checks that nothing social is published while the URLs are empty. To add another network, add an entry with its hosts and an icon in `ICONS` (LinkedIn and YouTube icons are already there).
 
 ## Industry experience and claims
-The homepage "Technology built for real-world industries." section labels every area as a **client engagement**, a **Buildwise product** or a **capability**. Only client work may be called client work: today that is website maintenance and Maya for an aesthetics business, unnamed until the client gives permission. Huntly, Traider and Staff are Buildwise products, never client engagements. Businesses researched or contacted for outreach are not customers and must not appear. `tests/ui.test.js` checks the labels and bans customer-count, logo and testimonial wording.
+The homepage "Technology built for real-world industries." section labels every area as a **client engagement**, a **Buildwise product** or a **capability**. Only client work may be called client work: today that is a homepage redesign, website maintenance and Maya for Marvels Aesthetics Hub, named with the client's permission (confirmed by the founder on 15 November 2026). Huntly, Tradr and Staff are Buildwise products, never client engagements. Businesses researched or contacted for outreach are not customers and must not appear. `tests/ui.test.js` checks the labels and bans customer-count, logo and testimonial wording.
 
 ## Cloudflare settings
 These live in the Cloudflare dashboard for the `buildwisegroup.dev` zone, not in this repository.

@@ -17,9 +17,9 @@ This file is a plain-text summary of the public website for AI assistants and ot
 
 Each area is labelled by where the experience comes from. Buildwise names clients only with their permission.
 
-- Healthcare and aesthetics (client engagement): website maintenance for an aesthetics business, and work with Maya, the AI receptionist from Staff.
+- Healthcare and aesthetics (client engagement): website maintenance for Marvels Aesthetics Hub, and work with Maya, the AI receptionist from Staff.
 - Recruitment and career technology (Buildwise product): Huntly.
-- Financial technology and trading tools (Buildwise product, in development): Traider.
+- Financial technology and trading tools (Buildwise product, in development): Tradr.
 - Business operations and automation (Buildwise product, in validation): Staff.
 - Beauty and service businesses (Buildwise product): VERAUS.
 - Digital products and software (capability): websites, web applications and tools built in-house, including the scanner and website audit on this site.
@@ -27,7 +27,7 @@ Each area is labelled by where the experience comes from. Buildwise names client
 ## Ventures
 
 - [Huntly](https://huntlyagent.com): an AI job-search assistant that helps people evaluate opportunities against their profile and prepare stronger applications.
-- Traider (in development): a crypto research and trading-signals project for structuring market data. Signals are research inputs, not financial advice or a promise of returns.
+- Tradr (in development): a crypto research and trading-signals project for structuring market data. Signals are research inputs, not financial advice or a promise of returns.
 - Staff (in validation): an applied-AI employee platform being developed and validated for business workflows such as enquiries and bookings.
 - [VERAUS](https://veraus.tech/): business software for physical service businesses such as salons and barbershops. It keeps one record of bookings, staff, services and payments and reconciles them every day, with optional camera intelligence offered as an assisted pilot.
 

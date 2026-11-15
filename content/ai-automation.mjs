@@ -8,7 +8,7 @@
  *   means built and tested but enabled per business only after validation. "By
  *   integration" means it needs engineering or a third-party account first.
  * - No testimonials, client names, results, ratings, uptime figures or guarantees.
- *   The aesthetics business stays unnamed.
+ *   Marvels Aesthetics Hub is named with the client's permission (15 Nov 2026).
  * - Prices are the founder's initial pricing (3 Nov 2026). Every price on the page comes
  *   from PACKAGES below, so the page, the structured data and the tests agree. Usage is
  *   never unlimited.
@@ -121,7 +121,7 @@ export const STAFF = {
       key: 'early', label: 'Early access', note: 'Built and tested, switched on for a business only after it has been validated with that business.',
       items: [
         'AI conversation in written chat, using a language model',
-        'AI video receptionist (Maya), deployed for an aesthetics business',
+        'AI video receptionist (Maya), deployed for Marvels Aesthetics Hub',
         'AI voice conversation in the browser',
         'WhatsApp booking confirmations and reminders (needs your WhatsApp Business Platform account)'
       ]

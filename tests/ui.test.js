@@ -443,7 +443,7 @@ test('homepage structured data describes the organisation accurately', opts, asy
   assert.ok(fs.existsSync(path.join(ROOT, org.logo.slice(SITE.length))), 'logo is a local asset');
   const body = await page.locator('body').textContent();
   assert.ok(!('email' in org), 'no personal email address in structured data');
-  for (const name of ['Huntly', 'Traider', 'Staff', 'VERAUS']) assert.ok(body.includes(name) && org.description.includes(name));
+  for (const name of ['Huntly', 'Tradr', 'Staff', 'VERAUS']) assert.ok(body.includes(name) && org.description.includes(name));
   assert.equal(await page.locator('h1').count(), 1, 'one h1 on the homepage');
   await context.close();
 });
@@ -862,7 +862,7 @@ test('security page: makes no unsupported claims and keeps testing authorised', 
   assert.match(text, /written authorisation/i);
   assert.match(text, /don’t accept requests to test third-party systems/);
   assert.match(text, /Not every review includes every check/);
-  for (const name of ['Huntly', 'Traider', 'Staff', 'VERAUS']) assert.ok(!text.includes(name), 'the ventures are not repositioned here');
+  for (const name of ['Huntly', 'Tradr', 'Staff', 'VERAUS']) assert.ok(!text.includes(name), 'the ventures are not repositioned here');
 });
 
 test('security page: no horizontal overflow, readable text and working FAQ on phone, tablet and desktop', opts, async () => {
