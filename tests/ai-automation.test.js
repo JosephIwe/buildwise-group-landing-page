@@ -144,7 +144,7 @@ test('claims: no invented results, testimonials, client names, guarantees, email
     /\b(industry[- ]leading|market[- ]leading|number[- ]one|award[- ]winning|top[- ]rated)\b/i,
     /\bwe guarantee\b|\bguaranteed\b/i,
     /\b\d{1,3}\s?% (more|less|fewer|increase|reduction|savings|faster)\b/i,
-    /\bMarvels\b/i, /MeetStaff/i, /\bBuildWise\b/, /five[- ]star|★|\bour clients say\b|testimonial/i,
+    /MeetStaff/i, /\bBuildWise\b/, /five[- ]star|★|\bour clients say\b|testimonial/i,
     /[\w.+-]+@[\w-]+\.(com|dev|ng|io|co)\b/, /mailto:/
   ];
   for (const re of banned) assert.ok(!re.test(BODY) && !re.test(PAGE.replace(/<script[\s\S]*?<\/script>/g, '')), `page breaks a claims rule: ${re}`);

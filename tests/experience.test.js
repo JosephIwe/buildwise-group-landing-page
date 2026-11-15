@@ -86,7 +86,7 @@ test('industries: every area is labelled as client work, a Buildwise product or 
   assert.equal(byName['Healthcare & aesthetics'].tag, 'client');
   assert.match(byName['Healthcare & aesthetics'].text, /website maintenance/i);
   assert.match(byName['Healthcare & aesthetics'].text, /Maya/);
-  for (const [name, product] of [['Recruitment & career technology', 'Huntly'], ['Financial technology & trading tools', 'Traider'], ['Business operations & automation', 'Staff'], ['Beauty & service businesses', 'VERAUS']]) {
+  for (const [name, product] of [['Recruitment & career technology', 'Huntly'], ['Financial technology & trading tools', 'Tradr'], ['Business operations & automation', 'Staff'], ['Beauty & service businesses', 'VERAUS']]) {
     assert.equal(byName[name].tag, 'product', `${product} is a Buildwise product, not client work`);
     assert.match(byName[name].text, new RegExp(product));
   }
@@ -94,12 +94,13 @@ test('industries: every area is labelled as client work, a Buildwise product or 
   assert.equal((html.match(/ind-tag-client"/g) || []).length, 2, 'one client engagement, plus the key');
 });
 
-test('industries: no client names, logos, outreach targets or inflated claims', () => {
+test('industries: the client is named (with permission), with no logos, outreach targets or inflated claims', () => {
   const body = text(section(read('index.html'), 'industries'));
-  const banned = [/Marvels/i, /\bclinic\b/i, /London/i, /<img/i, /logo/i, /trusted by/i, /our clients include/i, /testimonial/i, /case stud/i, /\d+\+?\s*(?:clients|customers|projects|businesses)/i, /leading|world[- ]class|award/i, /%/];
+  const banned = [/\bclinic\b/i, /London/i, /<img/i, /logo/i, /trusted by/i, /our clients include/i, /testimonial/i, /case stud/i, /\d+\+?\s*(?:clients|customers|projects|businesses)/i, /leading|world[- ]class|award/i, /%/];
+  assert.match(body, /Marvels Aesthetics Hub/, 'the client gave permission to be named (15 Nov 2026)');
   for (const re of banned) assert.ok(!re.test(body), `no claim matching ${re}`);
   assert.match(body, /We name clients only with their permission/);
-  assert.ok(!/Client engagement[^.]*(Huntly|Traider|Staff ·)/.test(body));
+  assert.ok(!/Client engagement[^.]*(Huntly|Tradr|Staff ·)/.test(body));
 });
 
 /* ---------- FAQ ---------- */
@@ -152,7 +153,7 @@ test('homepage metadata and organisation data describe the real business', () =>
   assert.ok(title.length <= 70, 'title fits in search results');
   const org = orgOf(html);
   assert.equal(org.contactPoint.telephone, '+2349165681202', 'the only phone is the published WhatsApp number');
-  assert.deepEqual(org.brand.map(b => b.name), ['Huntly', 'Traider', 'Staff', 'VERAUS']);
+  assert.deepEqual(org.brand.map(b => b.name), ['Huntly', 'Tradr', 'Staff', 'VERAUS']);
   assert.ok(!('email' in org) && !/[\w.+-]+@[\w-]+\.[a-z]/i.test(JSON.stringify(org)), 'no email address');
   for (const type of ['AggregateRating', 'Review', 'Offer']) assert.ok(!html.includes(`"@type": "${type}"`), `no ${type} markup`);
   const privacy = read('privacy.html');
@@ -312,10 +313,11 @@ test('brand links use their visible text as their accessible name', opts, async 
 /* ---------- Parent company and products ---------- */
 test('products: every product with a live site is linked from its card and its brand node, and only those', () => {
   // Permanent brand architecture (founder, 2026-11-03). A product joins this list only once its
-  // official domain and ownership are verified; Traider and Staff have no public site yet, and
+  // official domain and ownership are verified; Tradr has no public site yet, and
   // AskNex (owner-confirmed 2026-11-03) joins this map in the PR that adds its card.
   // VERAUS (veraus.tech, owner-confirmed 2026-11-11) joined with its card.
-  const LIVE = { Huntly: 'https://huntlyagent.com/', VERAUS: 'https://veraus.tech/' };
+  // Staff (meetstaff.co, owner-confirmed 2026-11-15) joined when its card became a link.
+  const LIVE = { Huntly: 'https://huntlyagent.com/', Staff: 'https://meetstaff.co/', VERAUS: 'https://veraus.tech/' };
   const html = read('index.html');
   const org = orgOf(html);
   assert.equal(org['@id'], `${SITE}/#organization`, 'product sites reference this exact @id');

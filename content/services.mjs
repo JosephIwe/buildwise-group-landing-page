@@ -4,10 +4,10 @@
  * Claims rules (see tests/growth.test.js): no client results, testimonials, prices,
  * turnaround promises, rankings, "leading"/"best"/"number one", guaranteed AI
  * recommendations, office addresses or local staff. Buildwise is remote-first.
- * Evidence comes only from what the site already shows: Huntly (live), Traider (in
+ * Evidence comes only from what the site already shows: Huntly (live), Tradr (in
  * development), Staff with its example employee Maya (in validation), the scanner and
- * website audit on this site, and website maintenance for an aesthetics business
- * (unnamed until the client gives written permission).
+ * website audit on this site, and website maintenance for Marvels Aesthetics Hub
+ * (named with the client's permission, confirmed 15 Nov 2026).
  */
 export const SITE = 'https://buildwisegroup.dev';
 export const WA_NUMBER = '2349165681202';
@@ -96,7 +96,7 @@ export const SERVICES = [
       heading: 'We build and run our own AI products, not just client projects.',
       paras: [
         '<strong>Staff</strong> is our AI employee platform. Its example employee, Maya, is an AI receptionist that is being validated on everyday workflows such as enquiries and bookings. <strong>Huntly</strong>, our AI job-search assistant, is live. The <a href="/scan">AI Business Opportunity Scanner</a> on this site was built in-house too.',
-        'We also maintain the website of an aesthetics business and have worked with them on Maya. We name clients only with their permission, and we don’t publish results we can’t show.'
+        'We also maintain the website of Marvels Aesthetics Hub and have worked with them on Maya. We name clients only with their permission, and we don’t publish results we can’t show.'
       ]
     },
     honesty: { title: 'What we won’t promise.', text: 'We don’t quote percentage savings before we have seen your workflow, and AI is not the answer to every problem. If a spreadsheet, a better form or a clearer process would solve it, the audit will say so.' },
@@ -132,7 +132,7 @@ export const SERVICES = [
     serviceType: 'AI automation services',
     areaServed: [{ '@type': 'City', name: 'Lagos', containedInPlace: { '@type': 'Country', name: 'Nigeria' } }],
     projectType: 'AI automation audit',
-    cta: 'Book a consultation',
+    cta: 'Request a consultation',
     waText: 'Hello Buildwise, I run a business in Lagos and would like to discuss AI automation.',
     label: 'AI automation · Lagos',
     h1Lines: ['AI automation services', 'for businesses in Lagos.'],
@@ -174,7 +174,7 @@ export const SERVICES = [
       label: 'Evidence, labelled plainly',
       heading: 'What we have built so far.',
       paras: [
-        '<strong>Staff</strong>, our AI employee platform, is being validated on everyday workflows such as enquiries and bookings; Maya, an AI receptionist, is its example employee. We have worked with an aesthetics business on Maya and maintain its website. <strong>Huntly</strong>, our AI job-search assistant, is live.',
+        '<strong>Staff</strong>, our AI employee platform, is being validated on everyday workflows such as enquiries and bookings; Maya, an AI receptionist, is its example employee. We have worked with Marvels Aesthetics Hub on Maya and maintain its website. <strong>Huntly</strong>, our AI job-search assistant, is live.',
         'We name clients only with their permission, and we don’t publish figures we can’t show you.'
       ]
     },
@@ -426,8 +426,8 @@ export const SERVICES = [
       label: 'What we have built',
       heading: 'Software we build and run ourselves.',
       paras: [
-        '<strong>Huntly</strong>, our AI job-search assistant, is live. <strong>Traider</strong>, a crypto research and trading-signals project, is in development. <strong>Staff</strong>, our AI employee platform, is in validation.',
-        'On this website you can try two tools we built in-house: the <a href="/scan">AI Business Opportunity Scanner</a> and the <a href="/website-audit">Website &amp; AI Visibility Audit</a>. We also maintain the website of an aesthetics business.'
+        '<strong>Huntly</strong>, our AI job-search assistant, is live. <strong>Tradr</strong>, a crypto research and trading-signals project, is in development. <strong>Staff</strong>, our AI employee platform, is in validation.',
+        'On this website you can try two tools we built in-house: the <a href="/scan">AI Business Opportunity Scanner</a> and the <a href="/website-audit">Website &amp; AI Visibility Audit</a>. We also maintain the website of Marvels Aesthetics Hub.'
       ]
     },
     honesty: { title: 'Honest estimates.', text: 'We don’t give fixed prices or timelines before discovery. After it, you get a written scope, a price and a plan in stages, and we tell you early if anything changes.' },
@@ -635,7 +635,7 @@ export const SERVICES = [
       paras: [
         'An <strong>AI receptionist</strong> is an AI assistant that handles the first contact with your customers: answering questions about services, prices and opening hours, taking booking requests, confirming and rescheduling appointments, and sending reminders. It works from information you approve, and hands over to a person whenever a conversation needs one.',
         'Most of our receptionist work runs on WhatsApp and website chat, because that is where customers in Nigeria already message businesses. <strong>AI voice agents</strong>, which answer phone calls, are possible with telephony and speech providers, but call quality, local number availability and costs vary, so we assess voice for each project rather than promise it.',
-        'Our own AI employee platform, <strong>Staff</strong>, is being validated on exactly this work. Its example employee, Maya, is an AI receptionist, and we have worked with an aesthetics business on Maya.'
+        'Our own AI employee platform, <strong>Staff</strong>, is being validated on exactly this work. Its example employee, Maya, is an AI receptionist, and we have worked with Marvels Aesthetics Hub on Maya.'
       ]
     },
     uses: {
@@ -655,7 +655,7 @@ export const SERVICES = [
       label: 'Built on our own work',
       heading: 'Maya: our AI receptionist, in validation.',
       paras: [
-        '<strong>Staff</strong> is our applied-AI employee platform, being developed and validated on everyday workflows such as enquiries and bookings. Maya, an AI receptionist, is its example employee. We have worked with an aesthetics business on Maya.',
+        '<strong>Staff</strong> is our applied-AI employee platform, being developed and validated on everyday workflows such as enquiries and bookings. Maya, an AI receptionist, is its example employee. We have worked with Marvels Aesthetics Hub on Maya.',
         'Staff is not yet generally available. For clients, we build receptionists for specific workflows, using what we have learned from Staff.'
       ]
     },

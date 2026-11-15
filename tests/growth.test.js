@@ -88,7 +88,6 @@ test('claims rules: no invented results, rankings, offices or guarantees on new 
     /\bwe guarantee\b|\bguaranteed to (rank|appear|be recommended)\b/i,
     /\b\d{1,3}\s?% (more|less|fewer|increase|reduction|savings|faster)\b/i,
     /\b(our|visit our|visit us at our) (Lagos |Abuja )?(office|premises|headquarters)\b/i,
-    /\bMarvels\b/i,
     /five[- ]star|★|\bour clients say\b/i,
     /[\w.+-]+@[\w-]+\.(com|dev|ng|io|co)\b/
   ];
@@ -269,7 +268,7 @@ test('homepage: the new positioning says what, who and where in the first screen
   assert.equal((await page.locator('h1').textContent()).replace(/\s+/g, ' ').trim(), 'Building intelligent businesses.');
   const copy = await page.locator('.hero-copy').textContent();
   for (const words of ['AI-powered systems', 'intelligent agents', 'custom software', 'Nigeria', 'internationally']) assert.ok(copy.includes(words), words);
-  assert.equal(await page.locator('.hero-actions a.btn').textContent().then(t => t.trim()), 'Book a consultation');
+  assert.equal(await page.locator('.hero-actions a.btn').textContent().then(t => t.trim()), 'Request a consultation');
   assert.equal(await page.locator('.hero-actions a.hero-link').getAttribute('href'), '#solutions');
   assert.equal(await page.locator('.svc-dir-cta a').getAttribute('href'), '/ai-automation-nigeria#enquire');
   assert.match(await page.title(), /AI Automation, AI Agents & Custom Software/);
