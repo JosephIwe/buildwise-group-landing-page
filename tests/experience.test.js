@@ -313,10 +313,11 @@ test('brand links use their visible text as their accessible name', opts, async 
 /* ---------- Parent company and products ---------- */
 test('products: every product with a live site is linked from its card and its brand node, and only those', () => {
   // Permanent brand architecture (founder, 2026-11-03). A product joins this list only once its
-  // official domain and ownership are verified; Tradr and Staff have no public site yet, and
+  // official domain and ownership are verified; Tradr has no public site yet, and
   // AskNex (owner-confirmed 2026-11-03) joins this map in the PR that adds its card.
   // VERAUS (veraus.tech, owner-confirmed 2026-11-11) joined with its card.
-  const LIVE = { Huntly: 'https://huntlyagent.com/', VERAUS: 'https://veraus.tech/' };
+  // Staff (meetstaff.co, owner-confirmed 2026-11-15) joined when its card became a link.
+  const LIVE = { Huntly: 'https://huntlyagent.com/', Staff: 'https://meetstaff.co/', VERAUS: 'https://veraus.tech/' };
   const html = read('index.html');
   const org = orgOf(html);
   assert.equal(org['@id'], `${SITE}/#organization`, 'product sites reference this exact @id');
