@@ -2,6 +2,11 @@
 
 All notable changes to the BuildWise Group website. Newest first.
 
+## Unreleased: TechBehemoths verification badge (branch `claude/techbehemoths-verification`)
+
+### Added
+- The TechBehemoths company verification badge in the homepage footer (`index.html`, `.footer-verify`), using the exact snippet from the TechBehemoths dashboard (founder request, 2026-11-16). It is a normal follow link (`rel="noopener"` only, as supplied). `styles.css` puts it on a small warm-white plate so the dark artwork reads on the obsidian footer. Tests lock the snippet byte-for-byte, check it renders on phone and desktop and that no script adds nofollow, sponsored or ugc; the homepage's "no third-party requests" test now allows exactly this one badge image, and browser tests serve a stand-in for it.
+
 ## Unreleased: remove the hero story toggle (branch `remove-story-toggle`)
 
 ### Removed

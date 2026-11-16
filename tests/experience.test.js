@@ -20,6 +20,14 @@ const text = html => html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^
 const section = (html, id) => html.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?</section>`))[0];
 const orgOf = html => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(n => n['@type'] === 'Organization');
 
+/* TechBehemoths company verification: the exact badge snippet from the TechBehemoths dashboard
+ * (pasted by the founder, 2026-11-16). TechBehemoths only accepts follow links, so it must never
+ * gain nofollow, sponsored or ugc, and its markup must stay byte-for-byte as supplied. */
+const TB_BADGE_IMG = 'https://cdn.techbehemoths.com/public/static/validation/tb-verified-logo.svg';
+const TB_BADGE = `<a href="https://techbehemoths.com/company/buildwise-group" target="_blank" rel="noopener" data-techbehemoths-verification>
+    <img src="${TB_BADGE_IMG}" alt="TechBehemoths Verification" />
+  </a>`;
+
 const FAQ = [
   'What does Buildwise Group do?',
   'What types of AI products do you build?',
@@ -297,9 +305,45 @@ test('the homepage loads nothing from other origins and uses the self-hosted fon
   await page.waitForLoadState('load');
   await page.evaluate(() => document.fonts.ready);
   assert.ok(await page.evaluate(() => document.fonts.check('600 16px Manrope')), 'Manrope is loaded');
-  assert.deepEqual(outside, [], 'no third-party requests on load');
+  // The only sanctioned third-party request is the TechBehemoths verification badge image
+  // (exact snippet from the TechBehemoths dashboard, homepage footer).
+  assert.deepEqual(outside, [TB_BADGE_IMG], 'no third-party requests on load except the TechBehemoths badge');
   assert.deepEqual(errors(), []);
   await context.close();
+});
+
+test('TechBehemoths badge: the exact dashboard snippet is in the homepage footer, once, as a follow link', () => {
+  const html = read('index.html');
+  assert.equal(html.split(TB_BADGE).length - 1, 1, 'the snippet appears exactly once, unmodified');
+  const footer = html.match(/<footer[\s\S]*?<\/footer>/)[0];
+  assert.ok(footer.includes(TB_BADGE), 'it sits in the homepage footer, so it is in the served HTML');
+  assert.equal((html.match(/techbehemoths\.com\/company\//g) || []).length, 1, 'no second TechBehemoths link');
+  const tag = TB_BADGE.match(/<a [^>]*>/)[0];
+  assert.doesNotMatch(tag, /nofollow|sponsored|ugc/);
+});
+
+test('TechBehemoths badge: rendered and visible on phone and desktop, rel left untouched by scripts', opts, async () => {
+  for (const viewport of [{ width: 360, height: 780 }, { width: 1440, height: 900 }]) {
+    const { page, context, errors } = await open('/', { viewport, reducedMotion: 'reduce' }, p =>
+      p.route(TB_BADGE_IMG, route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="34" viewBox="0 0 120 34"/>' })));
+    await page.waitForLoadState('load');
+    const link = page.locator('.site-footer a[data-techbehemoths-verification]');
+    assert.equal(await link.count(), 1);
+    await link.scrollIntoViewIfNeeded();
+    assert.ok(await link.isVisible(), `badge visible at ${viewport.width}px`);
+    assert.equal(await link.getAttribute('href'), 'https://techbehemoths.com/company/buildwise-group');
+    assert.equal(await link.getAttribute('rel'), 'noopener', 'no script adds nofollow, sponsored or ugc');
+    assert.equal(await link.getAttribute('target'), '_blank');
+    const img = link.locator('img');
+    assert.equal(await img.getAttribute('src'), TB_BADGE_IMG);
+    assert.equal(await img.getAttribute('alt'), 'TechBehemoths Verification');
+    const box = await link.boundingBox();
+    assert.ok(box.height >= 44, 'comfortable tap target');
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    assert.equal(overflow, 0);
+    assert.deepEqual(errors(), []);
+    await context.close();
+  }
 });
 
 test('brand links use their visible text as their accessible name', opts, async () => {
