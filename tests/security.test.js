@@ -138,6 +138,9 @@ test('the /security page reads well on phone, tablet and desktop, and its report
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/fonts|ERR_FAILED/.test(m.text())) errors.push(m.text()); });
     await page.route(/fonts\.(googleapis|gstatic)\.com/, route => route.abort());
+    // The homepage footer shows the TechBehemoths verification badge from their CDN. Serve a stand-in
+    // so tests stay offline and deterministic.
+    await page.route('https://cdn.techbehemoths.com/**', route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="34" viewBox="0 0 120 34"/>' }));
     await page.goto(`${origin}/security`);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     assert.equal(overflow, 0, `no sideways scroll at ${viewport.width}px`);

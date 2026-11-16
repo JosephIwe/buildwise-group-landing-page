@@ -605,6 +605,12 @@ a.venture-link:hover .ico { transform: translateX(5px); }
 .footer-services a { display: inline-flex; align-items: center; min-height: 40px; font-size: 14px; color: rgba(244, 241, 234, .72); transition: color .3s; }
 .footer-services a:hover { color: var(--warm-white); }
 .footer-social[hidden] { display: none; }
+/* TechBehemoths verification badge (homepage footer). The badge artwork is dark on light,
+   so it sits on a small warm-white plate to stay legible on the obsidian footer.
+   Styling only: the snippet's markup and link attributes are left exactly as supplied. */
+.footer-verify a { display: inline-flex; align-items: center; min-height: 44px; padding: 6px 12px; border-radius: 10px; background: var(--warm-white); transition: opacity .3s; }
+.footer-verify a:hover { opacity: .9; }
+.footer-verify img { display: block; height: 34px; width: auto; max-width: 160px; }
 .social-link { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: rgba(244, 241, 234, .78); border: 1px solid var(--line-dark); transition: color .3s, border-color .3s, background-color .3s; }
 .social-link:hover { color: var(--warm-white); border-color: rgba(244, 241, 234, .4); background: rgba(244, 241, 234, .06); }
 .social-icon { width: 18px; height: 18px; }
